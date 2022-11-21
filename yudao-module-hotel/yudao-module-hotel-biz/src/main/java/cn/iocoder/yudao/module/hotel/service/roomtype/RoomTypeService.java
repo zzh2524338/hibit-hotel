@@ -49,7 +49,14 @@ public interface RoomTypeService {
      * @param ids 编号
      * @return 房间类型列表
      */
-    List<RoomTypeDO> getRoomTypeList(Collection<Long> ids);
+    List<RoomTypeDO> getRoomTypeListByIds(Collection<Long> ids);
+
+    /**
+     * 获得房间类型列表
+     *
+     * @return 房间类型列表
+     */
+    List<RoomTypeDO> getRoomTypeList();
 
     /**
      * 获得房间类型分页

@@ -153,6 +153,15 @@ export default {
         this.loading = false;
       });
     },
+    getBuildingFloor() {
+      this.loading = true;
+      // 执行查询
+      getBuildingFloorcuo(this.queryParams).then(response => {
+        this.list = response.data.list;
+        this.total = response.data.total;
+        this.loading = false;
+      });
+    },
     /** 取消按钮 */
     cancel() {
       this.open = false;

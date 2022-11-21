@@ -64,9 +64,13 @@ public class RoomTypeServiceImpl implements RoomTypeService {
         return roomTypeMapper.selectById(id);
     }
 
-    @Override
-    public List<RoomTypeDO> getRoomTypeList(Collection<Long> ids) {
+    public List<RoomTypeDO> getRoomTypeListByIds(Collection<Long> ids) {
         return roomTypeMapper.selectBatchIds(ids);
+    }
+
+    @Override
+    public List<RoomTypeDO> getRoomTypeList() {
+        return roomTypeMapper.selectList();
     }
 
     @Override

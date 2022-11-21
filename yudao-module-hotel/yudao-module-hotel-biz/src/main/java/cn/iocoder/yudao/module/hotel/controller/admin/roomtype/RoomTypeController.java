@@ -6,7 +6,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.security.access.prepost.PreAuthorize;
 import io.swagger.annotations.*;
 
-import javax.validation.constraints.*;
 import javax.validation.*;
 import javax.servlet.http.*;
 import java.util.*;
@@ -69,11 +68,20 @@ public class RoomTypeController {
     }
 
     @GetMapping("/list")
+    @ApiOperation("获得所有房间类型列表，没有条件")
+    @ApiImplicitParam(name = "ids", value = "编号列表", required = true, example = "1024,2048", dataTypeClass = List.class)
+    @PreAuthorize("@ss.hasPermission('hotel:room-type:query')")
+    public CommonResult<List<RoomTypeRespVO>> getRoomTypeList() {
+        List<RoomTypeDO> list = roomTypeService.getRoomTypeList();
+        return success(RoomTypeConvert.INSTANCE.convertList(list));
+    }
+
+    @GetMapping("/list/ids")
     @ApiOperation("获得房间类型列表")
     @ApiImplicitParam(name = "ids", value = "编号列表", required = true, example = "1024,2048", dataTypeClass = List.class)
     @PreAuthorize("@ss.hasPermission('hotel:room-type:query')")
-    public CommonResult<List<RoomTypeRespVO>> getRoomTypeList(@RequestParam("ids") Collection<Long> ids) {
-        List<RoomTypeDO> list = roomTypeService.getRoomTypeList(ids);
+    public CommonResult<List<RoomTypeRespVO>> getRoomTypeListById(@RequestParam("ids") Collection<Long> ids) {
+        List<RoomTypeDO> list = roomTypeService.getRoomTypeListByIds(ids);
         return success(RoomTypeConvert.INSTANCE.convertList(list));
     }
 
