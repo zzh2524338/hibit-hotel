@@ -3,32 +3,24 @@
 
     <!-- 搜索工作栏 -->
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="房间号" prop="no">
-        <el-input v-model="queryParams.no" placeholder="请输入房间号" clearable @keyup.enter.native="handleQuery"/>
+      <el-form-item label="姓名" prop="name">
+        <el-input v-model="queryParams.name" placeholder="请输入姓名" clearable @keyup.enter.native="handleQuery"/>
       </el-form-item>
-      <el-form-item label="房间类型" prop="roomType">
-        <el-select v-model="queryParams.roomType" placeholder="请选择房间类型表" clearable size="small">
+      <el-form-item label="电话" prop="phone">
+        <el-input v-model="queryParams.phone" placeholder="请输入电话" clearable @keyup.enter.native="handleQuery"/>
+      </el-form-item>
+      <el-form-item label="会员等级" prop="levelId">
+        <el-select v-model="queryParams.levelId" placeholder="请选择会员等级" clearable size="small">
           <el-option
-            v-for="item in roomTypeList"
+            v-for="item in list"
             :key="item.id"
             :label="item.name"
             :value="item.id"
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="楼层" prop="floor">
-        <el-input v-model="queryParams.floor" placeholder="请输入楼层" clearable
-                  @keyup.enter.native="handleQuery"/>
-      </el-form-item>
-      <el-form-item label="状态" prop="status">
-        <el-select v-model="queryParams.status" placeholder="请选择状态" clearable size="small">
-          <el-option v-for="dict in this.getDictDatas(DICT_TYPE.HOTEL_ROOM_STATUS)"
-                     :key="dict.value" :label="dict.label" :value="dict.value"/>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="房间钥匙信息" prop="keyInfo">
-        <el-input v-model="queryParams.keyInfo" placeholder="请输入房间钥匙信息" clearable
-                  @keyup.enter.native="handleQuery"/>
+      <el-form-item label="总花费" prop="cost">
+        <el-input v-model="queryParams.cost" placeholder="请输入总花费" clearable @keyup.enter.native="handleQuery"/>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" @click="handleQuery">搜索</el-button>
@@ -40,13 +32,13 @@
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleAdd"
-                   v-hasPermi="['hotel:room-info:create']">新增
+                   v-hasPermi="['hotel:member-info:create']">新增
         </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport"
                    :loading="exportLoading"
-                   v-hasPermi="['hotel:room-info:export']">导出
+                   v-hasPermi="['hotel:member-info:export']">导出
         </el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
@@ -55,22 +47,26 @@
     <!-- 列表 -->
     <el-table v-loading="loading" :data="list">
       <el-table-column label="id" align="center" prop="id"/>
-      <el-table-column label="房间号" align="center" prop="no"/>
-      <el-table-column label="房间类型" align="center" prop="roomType"/>
-      <el-table-column label="楼层" align="center" prop="floor"/>
-      <el-table-column label="状态" align="center" prop="status">
+      <el-table-column label="昵称" align="center" prop="nickName"/>
+      <el-table-column label="姓名" align="center" prop="name"/>
+      <el-table-column label="电话" align="center" prop="phone"/>
+      <el-table-column label="会员等级" align="center" prop="levelName"/>
+      <el-table-column label="性别" align="center" prop="gender"/>
+      <el-table-column label="总花费" align="center" prop="cost"/>
+      <el-table-column label="总积分" align="center" prop="exp"/>
+      <el-table-column label="剩余积分" align="center" prop="points"/>
+      <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
-          <dict-tag :type="DICT_TYPE.HOTEL_ROOM_STATUS" :value="scope.row.status"/>
+          <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="房间钥匙信息" align="center" prop="keyInfo"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
-                     v-hasPermi="['hotel:room-info:update']">修改
+                     v-hasPermi="['hotel:member-info:update']">修改
           </el-button>
           <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
-                     v-hasPermi="['hotel:room-info:delete']">删除
+                     v-hasPermi="['hotel:member-info:delete']">删除
           </el-button>
         </template>
       </el-table-column>
@@ -82,34 +78,36 @@
     <!-- 对话框(添加 / 修改) -->
     <el-dialog :title="title" :visible.sync="open" width="500px" v-dialogDrag append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="房间号" prop="no">
-          <el-input v-model="form.no" placeholder="请输入房间号"/>
+        <el-form-item label="昵称" prop="nickName">
+          <el-input v-model="form.nickName" placeholder="请输入昵称"/>
         </el-form-item>
-        <el-form-item label="房间类型" prop="roomType">
-          <el-select v-model="form.roomType" placeholder="请选择房间类型表">
-<!--            <el-option label="请选择字典生成" value=""/>-->
+        <el-form-item label="姓名" prop="name">
+          <el-input v-model="form.name" placeholder="请输入姓名"/>
+        </el-form-item>
+        <el-form-item label="电话" prop="phone">
+          <el-input v-model="form.phone" placeholder="请输入电话"/>
+        </el-form-item>
+        <el-form-item label="会员等级" prop="levelId">
+          <el-select v-model="form.levelId" placeholder="请选择会员等级">
             <el-option
-              v-for="item in roomTypeList"
+              v-for="item in levelList"
               :key="item.id"
               :label="item.name"
               :value="item.id"
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="楼层" prop="floor">
-          <el-input v-model="form.floor" placeholder="请输入楼层" style="width: 40%"/>
-        </el-form-item>
-        <el-form-item label="状态" prop="status">
-          <el-select v-model="form.status" placeholder="请选择状态">
-            <el-option v-for="dict in this.getDictDatas(DICT_TYPE.HOTEL_ROOM_STATUS)"
-                       :key="dict.value" :label="dict.label" :value="parseInt(dict.value)"/>
+        <el-form-item label="性别" prop="gender">
+          <el-select v-model="form.gender">
+            <el-option v-for="dict in this.getDictDatas(DICT_TYPE.SYSTEM_USER_SEX)"
+                       :key="dict.value" :label="dict.label" :value="dict.value"/>
           </el-select>
         </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" placeholder="请输入备注"/>
+        <el-form-item label="总花费" prop="cost">
+          <el-input v-model="form.cost" placeholder="请输入总花费"/>
         </el-form-item>
-        <el-form-item label="房间钥匙信息" prop="keyInfo">
-          <el-input v-model="form.keyInfo" placeholder="请输入房间钥匙信息"/>
+        <el-form-item label="积分" prop="points">
+          <el-input v-model="form.points" placeholder="请输入积分"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -122,17 +120,17 @@
 
 <script>
 import {
-  createRoomInfo,
-  updateRoomInfo,
-  deleteRoomInfo,
-  getRoomInfo,
-  getRoomInfoPage,
-  exportRoomInfoExcel
-} from "@/api/hotel/roomInfo";
-import {getRoomTypeList} from "@/api/hotel/roomType";
+  createMemberInfo,
+  updateMemberInfo,
+  deleteMemberInfo,
+  getMemberInfo,
+  getMemberInfoPage,
+  exportMemberInfoExcel
+} from "@/api/hotel/memberInfo";
+import {getMemberLevelPage} from "@/api/hotel/memberLevel";
 
 export default {
-  name: "RoomInfo",
+  name: "MemberInfo",
   components: {},
   data() {
     return {
@@ -144,10 +142,10 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 房间信息列表
+      // 会员信息列表
       list: [],
-      // 房间类型列表
-      roomTypeList:[],
+      // 会员等级列表
+      levelList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -156,20 +154,22 @@ export default {
       queryParams: {
         pageNo: 1,
         pageSize: 10,
-        no: null,
-        roomType: null,
-        floor: null,
-        status: null,
-        keyInfo: null,
+        name: null,
+        phone: null,
+        levelId: null,
+        cost: null,
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {
-        no: [{required: true, message: "房间号不能为空", trigger: "blur"}],
-        roomType: [{required: true, message: "房间类型表不能为空", trigger: "change"}],
-        floor: [{required: true, message: "楼层不能为空", trigger: "blur"}],
-        status: [{required: true, message: "状态不能为空", trigger: "change"}],
+        nickName: [{required: true, message: "昵称不能为空", trigger: "blur"}],
+        name: [{required: true, message: "姓名不能为空", trigger: "blur"}],
+        phone: [{required: true, message: "电话不能为空", trigger: "blur"}],
+        levelId: [{required: true, message: "会员等级不能为空", trigger: "change"}],
+        gender: [{required: true, message: "性别不能为空", trigger: "blur"}],
+        cost: [{required: true, message: "总花费不能为空", trigger: "blur"}],
+        points: [{required: true, message: "积分不能为空", trigger: "blur"}],
       }
     };
   },
@@ -177,26 +177,30 @@ export default {
     this.getList();
   },
   mounted() {
-    this.getRoomTypeList();
+    this.getMemberLevelList();
   },
   methods: {
     /** 查询列表 */
     getList() {
       this.loading = true;
       // 执行查询
-      getRoomInfoPage(this.queryParams).then(response => {
+      getMemberInfoPage(this.queryParams).then(response => {
         this.list = response.data.list;
         this.total = response.data.total;
         this.loading = false;
       });
     },
-    getRoomTypeList() {
-      this.loading = true;
 
-      getRoomTypeList().then(response => {
-        this.roomTypeList = response.data;
+    getMemberLevelList() {
+      this.loading = true;
+      // 执行查询
+      getMemberLevelPage({
+        pageNo: 1,
+        pageSize: 100
+      }).then(response => {
+        this.levelList = response.data.list;
         this.loading = false;
-      })
+      });
     },
     /** 取消按钮 */
     cancel() {
@@ -206,13 +210,13 @@ export default {
     /** 表单重置 */
     reset() {
       this.form = {
-        id: undefined,
-        no: undefined,
-        roomType: undefined,
-        floor: undefined,
-        status: undefined,
-        remark: undefined,
-        keyInfo: undefined,
+        nickName: undefined,
+        name: undefined,
+        phone: undefined,
+        levelId: undefined,
+        gender: undefined,
+        cost: undefined,
+        points: undefined,
       };
       this.resetForm("form");
     },
@@ -230,16 +234,16 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加房间信息";
+      this.title = "添加会员信息";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
       const id = row.id;
-      getRoomInfo(id).then(response => {
+      getMemberInfo(id).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改房间信息";
+        this.title = "修改会员信息";
       });
     },
     /** 提交按钮 */
@@ -250,7 +254,7 @@ export default {
         }
         // 修改的提交
         if (this.form.id != null) {
-          updateRoomInfo(this.form).then(response => {
+          updateMemberInfo(this.form).then(response => {
             this.$modal.msgSuccess("修改成功");
             this.open = false;
             this.getList();
@@ -258,7 +262,7 @@ export default {
           return;
         }
         // 添加的提交
-        createRoomInfo(this.form).then(response => {
+        createMemberInfo(this.form).then(response => {
           this.$modal.msgSuccess("新增成功");
           this.open = false;
           this.getList();
@@ -268,8 +272,8 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const id = row.id;
-      this.$modal.confirm('是否确认删除房间信息编号为"' + id + '"的数据项?').then(function () {
-        return deleteRoomInfo(id);
+      this.$modal.confirm('是否确认删除会员信息编号为"' + id + '"的数据项?').then(function () {
+        return deleteMemberInfo(id);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
@@ -282,11 +286,11 @@ export default {
       let params = {...this.queryParams};
       params.pageNo = undefined;
       params.pageSize = undefined;
-      this.$modal.confirm('是否确认导出所有房间信息数据项?').then(() => {
+      this.$modal.confirm('是否确认导出所有会员信息数据项?').then(() => {
         this.exportLoading = true;
-        return exportRoomInfoExcel(params);
+        return exportMemberInfoExcel(params);
       }).then(response => {
-        this.$download.excel(response, '房间信息.xls');
+        this.$download.excel(response, '会员信息.xls');
         this.exportLoading = false;
       }).catch(() => {
       });

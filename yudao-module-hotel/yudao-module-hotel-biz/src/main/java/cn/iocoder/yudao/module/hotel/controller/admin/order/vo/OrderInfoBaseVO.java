@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.module.hotel.controller.admin.order.vo;
 
+import cn.iocoder.yudao.framework.common.pojo.UpdateReq;
 import lombok.*;
 import java.util.*;
 import java.math.BigDecimal;
@@ -16,6 +17,14 @@ import static cn.iocoder.yudao.framework.common.util.date.DateUtils.FORMAT_YEAR_
 @Data
 public class OrderInfoBaseVO {
 
+    @ApiModelProperty(value = "订单id")
+    // @NotNull(message = "订单Id不能为空", groups = UpdateReq.class)
+    private Long id;
+
+    @ApiModelProperty(value = "订单uuid")
+    // @NotBlank(message = "订单uuid不能为空", groups = UpdateReq.class)
+    private String uuid;
+
     @ApiModelProperty(value = "预定人名称", required = true)
     @NotNull(message = "预定人名称不能为空")
     private String orderGuestName;
@@ -28,13 +37,16 @@ public class OrderInfoBaseVO {
     @NotNull(message = "联系电话不能为空")
     private String contactNumber;
 
-    @ApiModelProperty(value = "房间信息", required = true)
-    @NotNull(message = "房间信息不能为空")
-    private String roomInfo;
+    @ApiModelProperty(value = "房间号", required = true)
+    @NotNull(message = "房间号不能为空")
+    private String roomNo;
 
-    @ApiModelProperty(value = "会员信息快照", required = true)
-    @NotNull(message = "会员信息快照不能为空")
-    private String memberInfo;
+    @ApiModelProperty(value = "房间类型", required = true)
+    @NotNull(message = "房间类型Id不能为空")
+    private Long roomTypeId;
+
+    @ApiModelProperty(value = "会员信息", required = true)
+    private Long memberId;
 
     @ApiModelProperty(value = "订单来源", required = true)
     @NotNull(message = "订单来源不能为空")

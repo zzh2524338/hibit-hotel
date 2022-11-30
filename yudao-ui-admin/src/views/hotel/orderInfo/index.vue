@@ -148,6 +148,9 @@
               <el-form-item label="原价" prop="originalPrice">
                 <span v-if="form.roomType" v-model="form.originalPrice">{{ getOriginalPrice }}</span>
               </el-form-item>
+<!--              <el-form-item label="剩余房间数" prop="remainingRoomNum">-->
+<!--                <span v-if="form.roomType" v-model="form.originalPrice">{{ getOriginalPrice }}</span>-->
+<!--              </el-form-item>-->
             </el-col>
             <el-col :span="10">
               <el-form-item label="房间号" prop="roomNo">
@@ -155,13 +158,86 @@
               </el-form-item>
             </el-col>
           </el-row>
+
+          <el-table :data="tableData" size="mini" height="200px" border>
+            <el-table-column
+              type="index"
+              align="center"
+              label="序号"
+              :index="indexMethod">
+            </el-table-column>
+            <el-table-column
+              align="center"
+              prop="layerStyle"
+              label="层类型">
+              <template v-slot="scope">
+                <el-select v-model="scope.row.layerStyle" clearable placeholder="请输入层类型" size="mini"
+                           v-if="state === 'edit' || state === 'add' || state === 'uploadV'">
+                  <el-option
+                    v-for="item in layerStyleOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
+                <span v-if="state === 'view'">{{ scope.row.layerStyle }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              align="center"
+              prop="kernelSize"
+              label="卷积核大小">
+              <template v-slot="scope">
+                <el-input placeholder="请输入卷积核大小"
+                          size="mini"
+                          v-model="scope.row.kernelSize"
+                          v-if="state === 'edit' || state === 'add' || state === 'uploadV'"></el-input>
+                <span v-if="state === 'view'">{{ scope.row.kernelSize }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              align="center"
+              prop="kernelCount"
+              label="卷积核数量">
+              <template v-slot="scope">
+                <el-input placeholder="请输入卷积核数量"
+                          size="mini"
+                          v-model="scope.row.kernelCount"
+                          v-if="state === 'edit' || state === 'add' || state === 'uploadV'"></el-input>
+                <span v-if="state === 'view'">{{ scope.row.kernelCount }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              align="center"
+              prop="stepSize"
+              label="步长">
+              <template v-slot="scope">
+                <el-input placeholder="请输入步长"
+                          size="mini"
+                          v-model="scope.row.stepSize"
+                          v-if="state === 'edit' || state === 'add' || state === 'uploadV'"></el-input>
+                <span v-if="state === 'view'">{{ scope.row.stepSize }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              align="center"
+              label="操作"
+              width="120"
+              v-if="state === 'edit' || state === 'add' || state === 'uploadV'">
+              <template slot-scope="scope">
+                <el-button type="text" size="small"
+                           @click.native.prevent="addRow">新增
+                </el-button>
+                <el-button type="text" size="small"
+                           @click.native.prevent="deleteRow(scope.$index, tableData)">删除
+                </el-button>
+              </template>
+            </el-table-column>
+          </el-table>
         </el-card>
 
-        <!--        <el-form-item label="房间信息" prop="roomInfo">-->
-        <!--          <el-input v-model="form.roomInfo" placeholder="请输入房间信息" />-->
-        <!--        </el-form-item>-->
-        <el-form-item label="会员信息快照" prop="memberInfo">
-          <el-input v-model="form.memberInfo" placeholder="请输入会员信息快照"/>
+        <el-form-item label="会员信息" prop="memberInfo">
+          <el-input v-model="form.memberInfo" placeholder="请输入会员信息"/>
         </el-form-item>
         <el-form-item label="订单来源" prop="guestSourceId">
           <el-input v-model="form.guestSourceId" placeholder="请输入订单来源"/>
@@ -241,6 +317,13 @@ export default {
       // 是否显示弹出层
       open: false,
       // 查询参数
+      tableData: [/*{
+        layerNo: 1,
+        layerStyle: '卷积层',
+        kernelSize: 3,
+        kernelCount: 20,
+        stepSize: 20,
+      }*/],
       queryParams: {
         pageNo: 1,
         pageSize: 10,
@@ -255,6 +338,13 @@ export default {
         checkInTime: null,
         checkOutTime: null,
         roomType: null
+      },
+      // 客人信息
+      guestInfo: {
+        name: null,
+        idCard: null,
+        address: null,
+        issuingAuthority: null
       },
       // 表单参数
       form: {},
@@ -347,6 +437,22 @@ export default {
         checkOutTime: undefined,
       };
       this.resetForm("form");
+    },
+    // 表格新增行数据
+    addRow() {
+      if (this.tableData == undefined) {
+        this.tableData = new Array();
+      }
+      let obj = {};
+      this.tableData.push(obj);
+    },
+    // 表格清空所有行
+    clearAll() {
+      this.tableData = undefined
+    },
+    // 表格自定义序列号
+    indexMethod(index) {
+      return index + 1;
     },
     /** 搜索按钮操作 */
     handleQuery() {

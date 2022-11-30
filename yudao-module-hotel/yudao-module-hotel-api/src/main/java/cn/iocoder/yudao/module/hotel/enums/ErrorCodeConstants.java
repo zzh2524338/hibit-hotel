@@ -17,13 +17,19 @@ public interface ErrorCodeConstants {
     ErrorCode BUILDING_NOT_EXISTS = new ErrorCode(1010002000, "公司分部不存在");
 
     // ========== 房型  1010003000 ============
-    ErrorCode ROOM_TYPE_NOT_EXISTS = new ErrorCode(1010003000, "房间类型不存在");
+    ErrorCode ROOM_TYPE_NOT_EXISTS = new ErrorCode(1010003000, "该房型已经下架，请刷新页面重新获取");
 
     // ========== 房间信息  1010004000 ============
     ErrorCode ROOM_INFO_NOT_EXISTS = new ErrorCode(1010004000, "房间信息不存在");
 
-    // ========== 房间信息  1010005000 ============
+    // ========== 订单信息  1010005000 ============
     ErrorCode ORDER_INFO_NOT_EXISTS = new ErrorCode(1010005000, "订单不存在");
 
-    
+    // ========== 会员信息 1010006000 ==========
+    ErrorCode MEMBER_INFO_NOT_EXISTS = new ErrorCode(1010006000, "会员信息不存在");
+
+    // ========== 会员等级 1010007000 ==========
+    ErrorCode MEMBER_LEVEL_NOT_EXISTS = new ErrorCode(1010007000, "会员等级不存在");
+
+
 }
