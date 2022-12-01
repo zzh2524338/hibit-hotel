@@ -133,7 +133,7 @@
           <el-row>
             <el-col :span="8">
               <el-form-item label="类型" prop="roomType">
-                <el-select v-model="form.roomType" filterable placeholder="请选择房间类型表" clearable size="small">
+                <el-select v-model="form.roomType" filterable placeholder="请选择房间类型" clearable size="small" @change="roomTypeChange">
                   <el-option
                     v-for="item in roomTypeList"
                     :key="item.id"
@@ -148,13 +148,17 @@
               <el-form-item label="原价" prop="originalPrice">
                 <span v-if="form.roomType" v-model="form.originalPrice">{{ getOriginalPrice }}</span>
               </el-form-item>
-<!--              <el-form-item label="剩余房间数" prop="remainingRoomNum">-->
-<!--                <span v-if="form.roomType" v-model="form.originalPrice">{{ getOriginalPrice }}</span>-->
-<!--              </el-form-item>-->
+              <el-form-item label="剩余房间数" prop="remainingRoomNum">
+                <span v-if="form.roomType" v-model="form.remainNum">{{ this.roomListStatus1.length }}</span>
+              </el-form-item>
             </el-col>
             <el-col :span="10">
               <el-form-item label="房间号" prop="roomNo">
-                <el-input v-model="form.roomNo" placeholder="请输入房间号"/>
+                  <el-select v-model="form.roomId" placeholder="请选择状态" size="small" clearable filterable>
+                    <el-option v-for="item in roomListStatus1 "
+                               :key="item.id" :label="item.label" :value="item.no"/>
+                </el-select>
+                <el-input v-model="form.no" placeholder="请输入房间号"/>
               </el-form-item>
             </el-col>
           </el-row>
@@ -288,6 +292,7 @@ import {
 } from "@/api/hotel/orderInfo";
 import roomInfo from "@/views/hotel/roomInfo";
 import {getRoomTypeList} from "@/api/hotel/roomType";
+import {getRoomInfoPage} from "@/api/hotel/roomInfo";
 
 export default {
   name: "OrderInfo",
@@ -312,6 +317,10 @@ export default {
       list: [],
       // 房间类型列表
       roomTypeList: [],
+      // 根据房间类型查询房间信息
+      roomListByType:[],
+      // 所有可用房间，空净
+      roomListStatus1:[],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -356,6 +365,8 @@ export default {
 
         roomType: [{required: true, message: "房间类型不能为空", trigger: "blur"}],
         roomInfo: [{required: true, message: "房间信息不能为空", trigger: "blur"}],
+        no: [{required: true, message: "房间号不能为空", trigger: "blur"}],
+        roomId: [{required: true, message: "房间编号不能为空", trigger: "blur"}],
         memberInfo: [{required: true, message: "会员信息快照不能为空", trigger: "blur"}],
         guestSourceId: [{required: true, message: "订单来源不能为空", trigger: "blur"}],
         originalPrice: [{required: true, message: "原价不能为空", trigger: "blur"}],
@@ -395,6 +406,23 @@ export default {
 
       getRoomTypeList().then(response => {
         this.roomTypeList = response.data;
+        this.loading = false;
+      })
+    },
+    // 更换房间类型:
+    roomTypeChange(value) {
+      this.loading = true;
+      //  清空房间号
+      this.form.roomInfo = '';
+      this.roomListStatus1 = [];
+      getRoomInfoPage({
+        pageNo: 1,
+        pageSize: 200,
+        roomType: value,
+        // 默认只查询空净
+        status: 1,
+      }).then(response => {
+        this.roomListStatus1 = response.data.list;
         this.loading = false;
       })
     },

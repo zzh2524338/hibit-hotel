@@ -17,7 +17,7 @@ public class RoomInfoPageReqVO extends PageParam {
     @ApiModelProperty(value = "房间号")
     private String no;
 
-    @ApiModelProperty(value = "房间类型表")
+    @ApiModelProperty(value = "房间类型")
     private Integer roomType;
 
     @ApiModelProperty(value = "楼层")
