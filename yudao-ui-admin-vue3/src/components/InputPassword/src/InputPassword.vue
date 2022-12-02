@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, unref, computed, watch, defineEmits } from 'vue'
+import { ref, unref, computed, watch } from 'vue'
 import { ElInput } from 'element-plus'
 import { propTypes } from '@/utils/propTypes'
 import { useConfigGlobal } from '@/hooks/web/useConfigGlobal'
@@ -74,11 +74,11 @@ const getIconName = computed(() => (unref(textType) === 'password' ? 'ep:hide' :
   </div>
 </template>
 
-<style lang="less" scoped>
-@prefix-cls: ~'@{namespace}-input-password';
+<style lang="scss" scoped>
+$prefix-cls: #{$namespace}-input-password;
 
-.@{prefix-cls} {
-  :deep(.@{elNamespace}-input__clear) {
+.#{$prefix-cls} {
+  :deep(.#{$elNamespace}-input__clear) {
     margin-left: 5px;
   }
 

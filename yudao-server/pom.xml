@@ -49,7 +49,7 @@
         </dependency>
         <dependency>
             <groupId>cn.iocoder.boot</groupId>
-            <artifactId>yudao-module-market-biz</artifactId>
+            <artifactId>yudao-module-promotion-biz</artifactId>
             <version>${revision}</version>
         </dependency>
         <dependency>
@@ -60,11 +60,6 @@
         <dependency>
             <groupId>cn.iocoder.boot</groupId>
             <artifactId>yudao-module-trade-biz</artifactId>
-            <version>${revision}</version>
-        </dependency>
-        <dependency>
-            <groupId>cn.iocoder.boot</groupId>
-            <artifactId>yudao-module-coupon-biz</artifactId>
             <version>${revision}</version>
         </dependency>
         <!-- 数据报表 -->
@@ -111,7 +106,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.6.7</version> <!-- 如果 spring.boot.version 版本修改，则这里也要跟着修改 -->
+                <version>2.7.6</version> <!-- 如果 spring.boot.version 版本修改，则这里也要跟着修改 -->
                 <configuration>
                     <fork>true</fork>
                 </configuration>

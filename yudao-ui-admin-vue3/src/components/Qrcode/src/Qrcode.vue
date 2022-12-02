@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PropType, nextTick, ref, watch, computed, unref, defineEmits } from 'vue'
+import { PropType, nextTick, ref, watch, computed, unref } from 'vue'
 import QRCode from 'qrcode'
 import { QRCodeRenderersOptions } from 'qrcode'
 import { cloneDeep } from 'lodash-es'
@@ -237,10 +237,10 @@ const disabledClick = () => {
   </div>
 </template>
 
-<style lang="less" scoped>
-@prefix-cls: ~'@{namespace}-qrcode';
+<style lang="scss" scoped>
+$prefix-cls: #{$namespace}-qrcode;
 
-.@{prefix-cls} {
+.#{$prefix-cls} {
   &--disabled {
     background: rgba(255, 255, 255, 0.95);
 

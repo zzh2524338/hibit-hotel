@@ -20,10 +20,10 @@ import org.springframework.context.annotation.Import;
 
 import javax.annotation.Resource;
 import javax.validation.Validator;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
-import static cn.iocoder.yudao.framework.common.util.date.DateUtils.buildTime;
+import static cn.iocoder.yudao.framework.common.util.date.LocalDateTimeUtils.buildTime;
 import static cn.iocoder.yudao.framework.common.util.object.ObjectUtils.cloneIgnoreId;
 import static cn.iocoder.yudao.framework.test.core.util.AssertUtils.assertPojoEquals;
 import static cn.iocoder.yudao.framework.test.core.util.AssertUtils.assertServiceException;
@@ -264,7 +264,7 @@ public class PayChannelServiceTest extends BaseDbUnitTest {
         reqVO.setMerchantId(1L);
         reqVO.setAppId(1L);
         reqVO.setConfig(JSON.toJSONString(payClientConfig));
-        reqVO.setCreateTime((new Date[]{buildTime(2021,11,19),buildTime(2021,11,21)}));
+        reqVO.setCreateTime((new LocalDateTime[]{buildTime(2021,11,19),buildTime(2021,11,21)}));
 
         // 调用
         PageResult<PayChannelDO> pageResult = channelService.getChannelPage(reqVO);
@@ -337,7 +337,7 @@ public class PayChannelServiceTest extends BaseDbUnitTest {
         reqVO.setMerchantId(1L);
         reqVO.setAppId(1L);
         reqVO.setConfig(JSON.toJSONString(payClientConfig));
-        reqVO.setCreateTime((new Date[]{buildTime(2021,11,19),buildTime(2021,11,21)}));
+        reqVO.setCreateTime((new LocalDateTime[]{buildTime(2021,11,19),buildTime(2021,11,21)}));
 
         // 调用
         List<PayChannelDO> list = channelService.getChannelList(reqVO);

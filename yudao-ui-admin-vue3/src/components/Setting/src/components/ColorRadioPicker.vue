@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PropType, watch, unref, ref, defineEmits } from 'vue'
+import { PropType, watch, unref, ref } from 'vue'
 import { propTypes } from '@/utils/propTypes'
 import { useDesign } from '@/hooks/web/useDesign'
 
@@ -54,10 +54,10 @@ watch(
   </div>
 </template>
 
-<style lang="less" scoped>
-@prefix-cls: ~'@{namespace}-color-radio-picker';
+<style lang="scss" scoped>
+$prefix-cls: #{$namespace}-color-radio-picker;
 
-.@{prefix-cls} {
+.#{$prefix-cls} {
   .is-active {
     border-color: var(--el-color-primary);
   }

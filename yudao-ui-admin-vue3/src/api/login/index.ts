@@ -1,8 +1,6 @@
-import { useAxios } from '@/hooks/web/useAxios'
+import request from '@/config/axios'
 import { getRefreshToken } from '@/utils/auth'
 import type { UserLoginVO } from './types'
-
-const request = useAxios()
 
 export interface CodeImgResult {
   captchaOnOff: boolean
@@ -63,4 +61,13 @@ export const socialAuthRedirectApi = (type: string, redirectUri: string) => {
   return request.get({
     url: '/system/auth/social-auth-redirect?type=' + type + '&redirectUri=' + redirectUri
   })
+}
+// 获取验证图片  以及token
+export const getCodeApi = (data) => {
+  return request.postOriginal({ url: 'system/captcha/get', data })
+}
+
+// 滑动或者点选验证
+export const reqCheckApi = (data) => {
+  return request.postOriginal({ url: 'system/captcha/check', data })
 }
