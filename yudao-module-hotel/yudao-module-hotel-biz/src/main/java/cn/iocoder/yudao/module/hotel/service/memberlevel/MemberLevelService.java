@@ -44,6 +44,14 @@ public interface MemberLevelService {
     MemberLevelDO getMemberLevel(Long id);
 
     /**
+     * 获得下一等级信息
+     *
+     * @param id 编号
+     * @return 会员等级
+     */
+    MemberLevelDO getMemberLevelByLevel(Integer id);
+
+    /**
      * 获得会员等级列表
      *
      * @param ids 编号

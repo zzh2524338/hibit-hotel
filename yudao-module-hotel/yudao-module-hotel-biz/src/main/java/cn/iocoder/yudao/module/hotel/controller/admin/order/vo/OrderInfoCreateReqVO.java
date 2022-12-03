@@ -1,5 +1,7 @@
 package cn.iocoder.yudao.module.hotel.controller.admin.order.vo;
 
+import cn.iocoder.yudao.module.hotel.controller.admin.guestinfo.vo.GuestInfoBaseVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.guestinfo.vo.GuestInfoCreateReqVO;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -35,6 +37,6 @@ public class OrderInfoCreateReqVO extends OrderInfoBaseVO {
 
     @ApiModelProperty(value = "客人信息", required = true)
     @NotNull(message = "客人信息不能为空")
-    private String guestInfo;
+    private List<GuestInfoCreateReqVO> guestInfos;
 
 }

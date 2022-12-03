@@ -125,120 +125,38 @@
           <el-input v-model="form.intermediaryNumber" placeholder="请输入中介号"/>
         </el-form-item>
 
-        <el-card class="box-card">
-          <div slot="header" class="clearfix">
-            <span>房间信息</span>
-          </div>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="类型" prop="roomType">
+              <el-select v-model="form.roomType" filterable placeholder="请选择房间类型" clearable size="small"
+                         @change="roomTypeChange">
+                <el-option
+                  v-for="item in roomTypeList"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
 
-          <el-row>
-            <el-col :span="8">
-              <el-form-item label="类型" prop="roomType">
-                <el-select v-model="form.roomType" filterable placeholder="请选择房间类型" clearable size="small" @change="roomTypeChange">
-                  <el-option
-                    v-for="item in roomTypeList"
-                    :key="item.id"
-                    :label="item.name"
-                    :value="item.id"
-                  />
-                </el-select>
-              </el-form-item>
-            </el-col>
+          <el-col :span="6">
+            <p align="center"> 原价: {{ getOriginalPrice }}, 余:{{ this.roomListStatus1.length }}</p>
+          </el-col>
 
-            <el-col :span="6">
-              <el-form-item label="原价" prop="originalPrice">
-                <span v-if="form.roomType" v-model="form.originalPrice">{{ getOriginalPrice }}</span>
-              </el-form-item>
-              <el-form-item label="剩余房间数" prop="remainingRoomNum">
-                <span v-if="form.roomType" v-model="form.remainNum">{{ this.roomListStatus1.length }}</span>
-              </el-form-item>
-            </el-col>
-            <el-col :span="10">
-              <el-form-item label="房间号" prop="roomNo">
-                  <el-select v-model="form.roomId" placeholder="请选择状态" size="small" clearable filterable>
-                    <el-option v-for="item in roomListStatus1 "
-                               :key="item.id" :label="item.label" :value="item.no"/>
-                </el-select>
-                <el-input v-model="form.no" placeholder="请输入房间号"/>
-              </el-form-item>
-            </el-col>
-          </el-row>
+          <el-col :span="10">
+            <el-form-item label="房间号" prop="roomNo">
+              <el-select v-model="form.roomId" placeholder="请输入房间号" size="small" clearable filterable>
+                <el-option v-for="item in roomListStatus1 "
+                           :key="item.id" :label="item.label" :value="item.no"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
 
-          <el-table :data="tableData" size="mini" height="200px" border>
-            <el-table-column
-              type="index"
-              align="center"
-              label="序号"
-              :index="indexMethod">
-            </el-table-column>
-            <el-table-column
-              align="center"
-              prop="layerStyle"
-              label="层类型">
-              <template v-slot="scope">
-                <el-select v-model="scope.row.layerStyle" clearable placeholder="请输入层类型" size="mini"
-                           v-if="state === 'edit' || state === 'add' || state === 'uploadV'">
-                  <el-option
-                    v-for="item in layerStyleOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                  </el-option>
-                </el-select>
-                <span v-if="state === 'view'">{{ scope.row.layerStyle }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column
-              align="center"
-              prop="kernelSize"
-              label="卷积核大小">
-              <template v-slot="scope">
-                <el-input placeholder="请输入卷积核大小"
-                          size="mini"
-                          v-model="scope.row.kernelSize"
-                          v-if="state === 'edit' || state === 'add' || state === 'uploadV'"></el-input>
-                <span v-if="state === 'view'">{{ scope.row.kernelSize }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column
-              align="center"
-              prop="kernelCount"
-              label="卷积核数量">
-              <template v-slot="scope">
-                <el-input placeholder="请输入卷积核数量"
-                          size="mini"
-                          v-model="scope.row.kernelCount"
-                          v-if="state === 'edit' || state === 'add' || state === 'uploadV'"></el-input>
-                <span v-if="state === 'view'">{{ scope.row.kernelCount }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column
-              align="center"
-              prop="stepSize"
-              label="步长">
-              <template v-slot="scope">
-                <el-input placeholder="请输入步长"
-                          size="mini"
-                          v-model="scope.row.stepSize"
-                          v-if="state === 'edit' || state === 'add' || state === 'uploadV'"></el-input>
-                <span v-if="state === 'view'">{{ scope.row.stepSize }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column
-              align="center"
-              label="操作"
-              width="120"
-              v-if="state === 'edit' || state === 'add' || state === 'uploadV'">
-              <template slot-scope="scope">
-                <el-button type="text" size="small"
-                           @click.native.prevent="addRow">新增
-                </el-button>
-                <el-button type="text" size="small"
-                           @click.native.prevent="deleteRow(scope.$index, tableData)">删除
-                </el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-        </el-card>
+        <el-form-item label="客人信息" prop="guestList">
+          <TableForm :config="form.config" @submit="submit" ref="formList" style="margin:20px;"/>
+        </el-form-item>
 
         <el-form-item label="会员信息" prop="memberInfo">
           <el-input v-model="form.memberInfo" placeholder="请输入会员信息"/>
@@ -293,10 +211,66 @@ import {
 import roomInfo from "@/views/hotel/roomInfo";
 import {getRoomTypeList} from "@/api/hotel/roomType";
 import {getRoomInfoPage} from "@/api/hotel/roomInfo";
+import TableForm from "@/components/Hotel/TableForm";
+
+const repayTypeList = {
+    averageCapital: '等额本金',
+    averageInterest: '等额本息'
+  },
+  columns = [
+    {
+      prop: 'repaymentMethod',
+      label: '还款方式',
+      attr: {width: '160'},
+      format: ({repaymentMethod}) => repayTypeList[repaymentMethod]
+    },
+    {
+      prop: 'productPer',
+      label: '期数',
+      attr: {width: '180'},
+      format: ({productPer}) => `${+productPer + 1}期(${productPer}个月)`
+    },
+    {
+      prop: 'costRate',
+      label: '成本利率',
+      attr: {minWidth: '110'},
+      edit: true,
+      type: 'select',
+      options: [{label: '5%', value: '5'}, {label: '10%', value: '10'}]
+    },
+    {
+      prop: 'price',
+      label: '单价',
+      attr: {minWidth: '140'},
+      edit: true,
+      rules: [{required: true, message: '请输入单价'},
+        {pattern: /^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,})?$/, message: '单价须大于0，若有小数，则小数点后至少1位'}]
+    },
+    {prop: 'company', label: '所属公司', attr: {minWidth: '110'}, edit: true},
+    {
+      prop: 'product',
+      label: '产品',
+      attr: {minWidth: '110'},
+      edit: true,
+      type: 'checkbox',
+      options: [{label: '橘子', value: 'orange'}, {label: '苹果', value: 'apple'}]
+    },
+    {prop: 'date', label: '日期', attr: {minWidth: '110'}, edit: true, type: 'date', required: false},
+    {prop: 'lock', label: '锁定', attr: {minWidth: '110'}, edit: true, type: 'switch'},
+    {
+      prop: 'search', label: '搜索', attr: {minWidth: '110'}, edit: true, type: 'mixInput', cb: row => {
+        console.log(row)
+      }
+    },
+    {prop: 'opt', label: '操作', attr: {minWidth: '110'}, edit: true},
+  ]
 
 export default {
   name: "OrderInfo",
-  components: {},
+  components: {
+    TableForm
+  },
+
   props: {
     originalPrice: {
       type: [Number, String],
@@ -305,6 +279,10 @@ export default {
   },
   data() {
     return {
+      config: {
+        columns,
+        data: [],
+      },
       // 遮罩层
       loading: true,
       // 导出遮罩层
@@ -318,9 +296,9 @@ export default {
       // 房间类型列表
       roomTypeList: [],
       // 根据房间类型查询房间信息
-      roomListByType:[],
+      roomListByType: [],
       // 所有可用房间，空净
-      roomListStatus1:[],
+      roomListStatus1: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -383,11 +361,24 @@ export default {
     this.getList();
   },
   mounted() {
+    const form = [
+      {repaymentMethod: 'averageCapital', productPer: '1', price: '5', company: '谷歌上海', date: '2021-01-03', lock: false},
+      {repaymentMethod: 'averageInterest', productPer: '3', costRate: '10', price: '', company: '雅虎北京', lock: true}
+    ]
+    // 模拟调接口回显数据
+    setTimeout(() => {
+      this.$refs.formList.setData(form)
+    }, 2000)
     this.getRoomTypeList();
   },
   computed: {
     getOriginalPrice() {
-      return this.roomTypeList.find(roomType => roomType.id === this.form.roomType).price
+      let roomType = this.roomTypeList.find(roomType => roomType.id === this.form.roomType);
+      if (roomType) {
+        return roomType.price
+      } else {
+        return '--';
+      }
     }
   },
   methods: {
@@ -466,22 +457,7 @@ export default {
       };
       this.resetForm("form");
     },
-    // 表格新增行数据
-    addRow() {
-      if (this.tableData == undefined) {
-        this.tableData = new Array();
-      }
-      let obj = {};
-      this.tableData.push(obj);
-    },
-    // 表格清空所有行
-    clearAll() {
-      this.tableData = undefined
-    },
-    // 表格自定义序列号
-    indexMethod(index) {
-      return index + 1;
-    },
+
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNo = 1;

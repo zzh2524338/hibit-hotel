@@ -1,10 +1,13 @@
 package cn.iocoder.yudao.module.hotel.service.memberlevel;
 
 import org.springframework.stereotype.Service;
+
 import javax.annotation.Resource;
+
 import org.springframework.validation.annotation.Validated;
 
 import java.util.*;
+
 import cn.iocoder.yudao.module.hotel.controller.admin.memberlevel.vo.*;
 import cn.iocoder.yudao.module.hotel.dal.dataobject.memberlevel.MemberLevelDO;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
@@ -62,6 +65,11 @@ public class MemberLevelServiceImpl implements MemberLevelService {
     @Override
     public MemberLevelDO getMemberLevel(Long id) {
         return memberLevelMapper.selectById(id);
+    }
+
+    @Override
+    public MemberLevelDO getMemberLevelByLevel(Integer level) {
+        memberLevelMapper.selectOne(MemberLevelDO::getLevel, level);
     }
 
     @Override

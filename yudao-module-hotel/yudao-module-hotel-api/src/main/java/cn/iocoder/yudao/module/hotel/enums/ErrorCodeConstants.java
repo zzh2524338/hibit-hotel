@@ -24,12 +24,16 @@ public interface ErrorCodeConstants {
 
     // ========== 订单信息  1010005000 ============
     ErrorCode ORDER_INFO_NOT_EXISTS = new ErrorCode(1010005000, "订单不存在");
+    ErrorCode GUEST_INFO_CANNOT_BE_NULL = new ErrorCode(1010005001, "请检查客人信息是否输入");
 
     // ========== 会员信息 1010006000 ==========
     ErrorCode MEMBER_INFO_NOT_EXISTS = new ErrorCode(1010006000, "会员信息不存在");
 
     // ========== 会员等级 1010007000 ==========
     ErrorCode MEMBER_LEVEL_NOT_EXISTS = new ErrorCode(1010007000, "会员等级不存在");
+
+    // ========== 客史信息 1010008000 ==========
+    ErrorCode GUEST_INFO_NOT_EXISTS = new ErrorCode(1010008000, "客史信息不存在");
 
 
 }

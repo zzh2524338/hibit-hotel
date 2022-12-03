@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.module.hotel.dal.dataobject.roominfo;
 
+import cn.iocoder.yudao.module.hotel.enums.RoomStatusEnum;
 import lombok.*;
 import com.baomidou.mybatisplus.annotation.*;
 import cn.iocoder.yudao.framework.mybatis.core.dataobject.BaseDO;
