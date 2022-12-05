@@ -155,7 +155,7 @@
         </el-row>
 
         <el-form-item label="客人信息" prop="guestList">
-          <TableForm :config="form.config" @submit="submit" ref="formList" style="margin:20px;"/>
+          <TableForm :config="config" @submit="submit" ref="formList" style="margin:20px;"/>
         </el-form-item>
 
         <el-form-item label="会员信息" prop="memberInfo">
@@ -361,14 +361,6 @@ export default {
     this.getList();
   },
   mounted() {
-    const form = [
-      {repaymentMethod: 'averageCapital', productPer: '1', price: '5', company: '谷歌上海', date: '2021-01-03', lock: false},
-      {repaymentMethod: 'averageInterest', productPer: '3', costRate: '10', price: '', company: '雅虎北京', lock: true}
-    ]
-    // 模拟调接口回显数据
-    setTimeout(() => {
-      this.$refs.formList.setData(form)
-    }, 2000)
     this.getRoomTypeList();
   },
   computed: {
@@ -422,6 +414,11 @@ export default {
       this.open = false;
       this.reset();
     },
+
+    submit(res){
+      console.log(res)
+    },
+
     /** 表单重置 */
     reset() {
       this.form = {
@@ -473,6 +470,16 @@ export default {
       this.reset();
       this.open = true;
       this.title = "添加订单";
+
+      const data = [
+        {repaymentMethod: '201602', productPer: '1', price: '5', company: '谷歌上海', date: '2021-01-03', lock: false},
+        {repaymentMethod: '201601', productPer: '3', costRate: '10', price: '', company: '雅虎北京', lock: true}
+      ]
+      // 模拟调接口回显数据
+      setTimeout(() => {
+        this.$refs.formList.setData(data)
+        console.log(this.$refs.formList)
+      }, 2000)
     },
     /** 修改按钮操作 */
     handleUpdate(row) {

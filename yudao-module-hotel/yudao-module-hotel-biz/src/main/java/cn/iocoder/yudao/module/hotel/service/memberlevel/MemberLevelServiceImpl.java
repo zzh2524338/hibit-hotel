@@ -69,7 +69,7 @@ public class MemberLevelServiceImpl implements MemberLevelService {
 
     @Override
     public MemberLevelDO getMemberLevelByLevel(Integer level) {
-        memberLevelMapper.selectOne(MemberLevelDO::getLevel, level);
+        return memberLevelMapper.selectOne(MemberLevelDO::getLevel, level);
     }
 
     @Override

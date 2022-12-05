@@ -16,6 +16,7 @@ import cn.iocoder.yudao.module.hotel.service.guestinfo.GuestInfoService;
 import cn.iocoder.yudao.module.hotel.service.memberinfo.MemberInfoService;
 import cn.iocoder.yudao.module.hotel.service.memberlevel.MemberLevelService;
 import cn.iocoder.yudao.module.hotel.service.roominfo.RoomInfoService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +38,8 @@ import cn.iocoder.yudao.module.hotel.dal.mysql.order.OrderInfoMapper;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
 import static cn.iocoder.yudao.module.hotel.enums.ErrorCodeConstants.*;
+import static cn.iocoder.yudao.module.hotel.enums.RoomStatusEnum.CHECK_IN;
+import static cn.iocoder.yudao.module.hotel.enums.RoomStatusEnum.ORDERED;
 
 /**
  * 订单 Service 实现类
@@ -128,20 +131,23 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             guestInfoDO.setStayNightNum(guestInfoDO.getStayNightNum() + 1);
             guestInfoDO.setLatestCheckin(LocalDateTimeUtil.of(createReqVO.getCheckInTime()));
 
+            guestInfoMapper.updateById(guestInfoDO);
             // idGuestMap 删除相应的用户
             idGuestMap.remove(guestInfoDO.getIdCard());
         });
-        guestInfoService.updateBatchById(guestInfoDOS);
 
         // 没有的信息需要重新创建
         idGuestMap.values().forEach(guestInfoService::createGuestInfo);
 
-
         // 4. 房间状态修改
-         RoomInfoDO.builder()
-                 .status()
-                         .build()
-        roomInfoMapper.update()
+        RoomInfoDO needUpdateRoom = RoomInfoDO.builder()
+                .status(CHECK_IN.getValue())
+                .build();
+
+        roomInfoMapper.update(needUpdateRoom,
+                new LambdaQueryWrapper<RoomInfoDO>()
+                        .eq(RoomInfoDO::getNo, createReqVO.getRoomNo())
+        );
 
         // 插入
         OrderInfoDO orderInfo = OrderInfoConvert.INSTANCE.convert(createReqVO);
