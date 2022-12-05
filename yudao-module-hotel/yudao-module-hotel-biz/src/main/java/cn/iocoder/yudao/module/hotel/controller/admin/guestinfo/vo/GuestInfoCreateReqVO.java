@@ -11,8 +11,8 @@ import javax.validation.constraints.*;
 @ToString(callSuper = true)
 public class GuestInfoCreateReqVO extends GuestInfoBaseVO {
 
-    @ApiModelProperty(value = "身份证颁证机构", required = true)
-    @NotNull(message = "身份证颁证机构不能为空")
+    @ApiModelProperty(value = "身份证颁证机构", required = false)
+    // @NotNull(message = "身份证颁证机构不能为空")
     private String authOrganization;
 
 }

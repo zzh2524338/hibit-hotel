@@ -34,6 +34,7 @@ public interface ErrorCodeConstants {
 
     // ========== 客史信息 1010008000 ==========
     ErrorCode GUEST_INFO_NOT_EXISTS = new ErrorCode(1010008000, "客史信息不存在");
+    ErrorCode ID_CARD_INVALID = new ErrorCode(1010008001, "顾客{},身份证号码不正确，请检查:{}");
 
 
 }

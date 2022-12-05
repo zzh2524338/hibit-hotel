@@ -21,15 +21,15 @@ public class GuestInfoBaseVO {
     @NotNull(message = "姓名不能为空")
     private String name;
 
-    // @ApiModelProperty(value = "生日", required = true)
+    @ApiModelProperty(value = "生日", required = true)
     // @NotNull(message = "生日不能为空")
-    // private LocalDate birthday;
+    private LocalDate birthday;
 
     @ApiModelProperty(value = "电话")
     private String phone;
 
     @ApiModelProperty(value = "性别", required = true)
-    @NotNull(message = "性别不能为空")
+    // @NotNull(message = "性别不能为空")
     private Integer gender;
 
     @ApiModelProperty(value = "身份证", required = true)
@@ -37,7 +37,7 @@ public class GuestInfoBaseVO {
     private String idCard;
 
     @ApiModelProperty(value = "身份证地址", required = true)
-    @NotNull(message = "身份证地址不能为空")
+    // @NotNull(message = "身份证地址不能为空")
     private String address;
 
     @ApiModelProperty(value = "会员ID")

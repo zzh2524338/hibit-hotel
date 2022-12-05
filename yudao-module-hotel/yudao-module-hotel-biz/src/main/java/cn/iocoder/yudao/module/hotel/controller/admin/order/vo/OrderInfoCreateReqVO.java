@@ -23,9 +23,9 @@ public class OrderInfoCreateReqVO extends OrderInfoBaseVO {
     @ApiModelProperty(value = "备注信息")
     private String remark;
 
-    @ApiModelProperty(value = "原价", required = true)
-    @NotNull(message = "原价不能为空")
-    private BigDecimal originalPrice;
+    // @ApiModelProperty(value = "原价", required = true)
+    // @NotNull(message = "原价不能为空")
+    // private BigDecimal originalPrice;
 
     @ApiModelProperty(value = "折后实际价格", required = true)
     @NotNull(message = "折后实际价格不能为空")

@@ -2,6 +2,8 @@ package cn.iocoder.yudao.module.hotel.service.order;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
+import cn.hutool.core.lang.UUID;
+import cn.hutool.core.util.IdUtil;
 import cn.iocoder.yudao.module.hotel.controller.admin.guestinfo.vo.GuestInfoCreateReqVO;
 import cn.iocoder.yudao.module.hotel.dal.dataobject.guestinfo.GuestInfoDO;
 import cn.iocoder.yudao.module.hotel.dal.dataobject.memberinfo.MemberInfoDO;
@@ -141,7 +143,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
 
         // 4. 房间状态修改
         RoomInfoDO needUpdateRoom = RoomInfoDO.builder()
-                .status(CHECK_IN.getValue())
+                .status(ORDERED.getValue())
                 .build();
 
         roomInfoMapper.update(needUpdateRoom,
@@ -151,6 +153,9 @@ public class OrderInfoServiceImpl implements OrderInfoService {
 
         // 插入
         OrderInfoDO orderInfo = OrderInfoConvert.INSTANCE.convert(createReqVO);
+        // 原价从库中查询防止篡改
+        orderInfo.setUuid(IdUtil.getSnowflakeNextIdStr());
+        orderInfo.setOriginalPrice(roomTypeDO.getPrice());
         orderInfoMapper.insert(orderInfo);
         // 返回
         return orderInfo.getId();

@@ -7,7 +7,7 @@
         <el-input v-model="queryParams.uuid" placeholder="请输入订单号" clearable @keyup.enter.native="handleQuery"/>
       </el-form-item>
       <el-form-item label="预定人" prop="orderGuestName">
-        <el-input v-model="queryParams.orderGuestName" placeholder="请输入预定人z电话" clearable
+        <el-input v-model="queryParams.orderGuestName" placeholder="请输入预定人电话" clearable
                   @keyup.enter.native="handleQuery"/>
       </el-form-item>
       <el-form-item label="联系人" prop="contactPerson">
@@ -127,9 +127,9 @@
 
         <el-row>
           <el-col :span="8">
-            <el-form-item label="类型" prop="roomType">
-              <el-select v-model="form.roomType" filterable placeholder="请选择房间类型" clearable size="small"
-                         @change="roomTypeChange">
+            <el-form-item label="类型" prop="roomTypeId">
+              <el-select v-model="form.roomTypeId" filterable placeholder="请选择房间类型" clearable size="small"
+                         @change="roomTypeChange" @clear="clearRoomType">
                 <el-option
                   v-for="item in roomTypeList"
                   :key="item.id"
@@ -146,7 +146,7 @@
 
           <el-col :span="10">
             <el-form-item label="房间号" prop="roomNo">
-              <el-select v-model="form.roomId" placeholder="请输入房间号" size="small" clearable filterable>
+              <el-select v-model="form.roomNo" placeholder="请输入房间号" size="small" clearable filterable>
                 <el-option v-for="item in roomListStatus1 "
                            :key="item.id" :label="item.label" :value="item.no"/>
               </el-select>
@@ -154,7 +154,7 @@
           </el-col>
         </el-row>
 
-        <el-form-item label="客人信息" prop="guestList">
+        <el-form-item label="客人信息" prop="guestInfos">
           <TableForm :config="config" @submit="submit" ref="formList" style="margin:20px;"/>
         </el-form-item>
 
@@ -183,9 +183,6 @@
           <el-date-picker clearable v-model="form.checkInTime" type="date" value-format="timestamp"
                           placeholder="选择入住时间"/>
         </el-form-item>
-        <el-form-item label="客人信息" prop="guestInfo">
-          <el-input v-model="form.guestInfo" placeholder="请输入客人信息"/>
-        </el-form-item>
         <el-form-item label="离店时间" prop="checkOutTime">
           <el-date-picker clearable v-model="form.checkOutTime" type="date" value-format="timestamp"
                           placeholder="选择离店时间"/>
@@ -213,55 +210,66 @@ import {getRoomTypeList} from "@/api/hotel/roomType";
 import {getRoomInfoPage} from "@/api/hotel/roomInfo";
 import TableForm from "@/components/Hotel/TableForm";
 
-const repayTypeList = {
-    averageCapital: '等额本金',
-    averageInterest: '等额本息'
-  },
+const
   columns = [
     {
-      prop: 'repaymentMethod',
-      label: '还款方式',
-      attr: {width: '160'},
-      format: ({repaymentMethod}) => repayTypeList[repaymentMethod]
-    },
-    {
-      prop: 'productPer',
-      label: '期数',
-      attr: {width: '180'},
-      format: ({productPer}) => `${+productPer + 1}期(${productPer}个月)`
-    },
-    {
-      prop: 'costRate',
-      label: '成本利率',
-      attr: {minWidth: '110'},
+      prop: 'name',
+      label: '姓名',
+      attr: {width: '120'},
       edit: true,
-      type: 'select',
-      options: [{label: '5%', value: '5'}, {label: '10%', value: '10'}]
+      rules: [{required: true, message: '请输入姓名'}]
     },
     {
-      prop: 'price',
-      label: '单价',
-      attr: {minWidth: '140'},
+      prop: 'idCard',
+      label: '证件号',
+      attr: {width: '120'},
       edit: true,
-      rules: [{required: true, message: '请输入单价'},
-        {pattern: /^(?!0+(?:\.0+)?$)(?:[1-9]\d*|0)(?:\.\d{1,})?$/, message: '单价须大于0，若有小数，则小数点后至少1位'}]
     },
-    {prop: 'company', label: '所属公司', attr: {minWidth: '110'}, edit: true},
-    {
-      prop: 'product',
-      label: '产品',
-      attr: {minWidth: '110'},
-      edit: true,
-      type: 'checkbox',
-      options: [{label: '橘子', value: 'orange'}, {label: '苹果', value: 'apple'}]
-    },
-    {prop: 'date', label: '日期', attr: {minWidth: '110'}, edit: true, type: 'date', required: false},
-    {prop: 'lock', label: '锁定', attr: {minWidth: '110'}, edit: true, type: 'switch'},
-    {
-      prop: 'search', label: '搜索', attr: {minWidth: '110'}, edit: true, type: 'mixInput', cb: row => {
-        console.log(row)
-      }
-    },
+    // {
+    //   prop: 'authOrganization',
+    //   label: '颁证机构',
+    //   attr: {minWidth: '140'},
+    //   edit: true,
+    // },
+    // {
+    //   prop: 'gender',
+    //   label: '性别',
+    //   attr: {width: '60'},
+    //   type: 'select',
+    //   edit: true,
+    //   options: [{label: '男', value: '1'}, {label: '女', value: '2'}]
+    // },
+    // {
+    //   prop: 'phone',
+    //   label: '手机号',
+    //   attr: {minWidth: '110'},
+    //   edit: true,
+    // },
+    // {prop: 'birthday', label: '出生日期', attr: {minWidth: '110'}, edit: true, type: 'date', required: false},
+
+    // {
+    //   prop: 'costRate',
+    //   label: '成本利率',
+    //   attr: {minWidth: '110'},
+    //   edit: true,
+    //   type: 'select',
+    //   options: [{label: '5%', value: '5'}, {label: '10%', value: '10'}]
+    // },
+    // {prop: 'company', label: '所属公司', attr: {minWidth: '110'}, edit: true},
+    // {
+    //   prop: 'product',
+    //   label: '产品',
+    //   attr: {minWidth: '110'},
+    //   edit: true,
+    //   type: 'checkbox',
+    //   options: [{label: '橘子', value: 'orange'}, {label: '苹果', value: 'apple'}]
+    // },
+    // {prop: 'lock', label: '锁定', attr: {minWidth: '110'}, edit: true, type: 'switch'},
+    // {
+    //   prop: 'search', label: '搜索', attr: {minWidth: '110'}, edit: true, type: 'mixInput', cb: row => {
+    //     console.log(row)
+    //   }
+    // },
     {prop: 'opt', label: '操作', attr: {minWidth: '110'}, edit: true},
   ]
 
@@ -341,7 +349,7 @@ export default {
         contactPerson: [{required: true, message: "联系人不能为空", trigger: "blur"}],
         contactNumber: [{required: true, message: "联系电话不能为空", trigger: "blur"}],
 
-        roomType: [{required: true, message: "房间类型不能为空", trigger: "blur"}],
+        roomTypeId: [{required: true, message: "房间类型不能为空", trigger: "blur"}],
         roomInfo: [{required: true, message: "房间信息不能为空", trigger: "blur"}],
         no: [{required: true, message: "房间号不能为空", trigger: "blur"}],
         roomId: [{required: true, message: "房间编号不能为空", trigger: "blur"}],
@@ -352,7 +360,7 @@ export default {
         actuallyPaid: [{required: true, message: "实际付款不能为空", trigger: "blur"}],
         orderStatus: [{required: true, message: "订单状态不能为空", trigger: "blur"}],
         checkInTime: [{required: true, message: "入住时间不能为空", trigger: "blur"}],
-        guestInfo: [{required: true, message: "客人信息不能为空", trigger: "blur"}],
+        // guestInfos: [{required: true, message: "客人信息不能为空", trigger: "blur"}],
         checkOutTime: [{required: true, message: "离店时间不能为空", trigger: "blur"}],
       }
     };
@@ -365,7 +373,7 @@ export default {
   },
   computed: {
     getOriginalPrice() {
-      let roomType = this.roomTypeList.find(roomType => roomType.id === this.form.roomType);
+      let roomType = this.roomTypeList.find(roomType => roomType.id === this.form.roomTypeId);
       if (roomType) {
         return roomType.price
       } else {
@@ -392,6 +400,15 @@ export default {
         this.loading = false;
       })
     },
+
+    // 清空房间类型时触发
+    clearRoomType() {
+      console.log("safdasdfasd");
+      this.form.roomType = '';
+      this.roomListStatus1 = [];
+      this.form.roomId = '';
+    },
+
     // 更换房间类型:
     roomTypeChange(value) {
       this.loading = true;
@@ -415,7 +432,8 @@ export default {
       this.reset();
     },
 
-    submit(res){
+    submit(res) {
+      this.form.xx = res
       console.log(res)
     },
 
@@ -471,15 +489,6 @@ export default {
       this.open = true;
       this.title = "添加订单";
 
-      const data = [
-        {repaymentMethod: '201602', productPer: '1', price: '5', company: '谷歌上海', date: '2021-01-03', lock: false},
-        {repaymentMethod: '201601', productPer: '3', costRate: '10', price: '', company: '雅虎北京', lock: true}
-      ]
-      // 模拟调接口回显数据
-      setTimeout(() => {
-        this.$refs.formList.setData(data)
-        console.log(this.$refs.formList)
-      }, 2000)
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -490,9 +499,21 @@ export default {
         this.open = true;
         this.title = "修改订单";
       });
+
+      const data = [
+        {repaymentMethod: '201602', productPer: '1', price: '5', company: '谷歌上海', date: '2021-01-03', lock: false},
+        {repaymentMethod: '201601', productPer: '3', costRate: '10', price: '', company: '雅虎北京', lock: true}
+      ]
+      // 模拟调接口回显数据
+      setTimeout(() => {
+        this.$refs.formList.setData(data)
+      }, 2000)
     },
     /** 提交按钮 */
     submitForm() {
+      console.log(this.$refs["formList"])
+      console.log(this.$refs["formList"].form.list)
+      this.form.guestInfos = this.$refs["formList"].form.list;
       this.$refs["form"].validate(valid => {
         if (!valid) {
           return;

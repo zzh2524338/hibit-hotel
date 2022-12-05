@@ -123,7 +123,9 @@ export default {
     },
     // 回显数据
     setData(form){
-      form = (form && form.length > 0) ? form.map(n => this.columns.reduce((r, c) => ({...r, [c.prop]: n[c.prop] == false ? n[c.prop] : (n[c.prop] || (c.type == 'checkbox' ? [] : ''))}), {})) : [columns.reduce((r, c) => ({...r, [c.prop]: c.type == 'checkbox' ? [] : (c.type == 'switch' ? false : '')}), {isAdd: true})]
+      form = (form && form.length > 0) ?
+        form.map(n => this.columns.reduce((r, c) => ({...r, [c.prop]: n[c.prop] == false ? n[c.prop] : (n[c.prop] || (c.type == 'checkbox' ? [] : ''))}), {}))
+        : [columns.reduce((r, c) => ({...r, [c.prop]: c.type == 'checkbox' ? [] : (c.type == 'switch' ? false : '')}), {isAdd: true})]
       Object.assign(this.form, {list: form})
       setTimeout(()=> {this.$refs.form.clearValidate()})
     },
