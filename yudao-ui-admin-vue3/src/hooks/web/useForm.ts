@@ -1,6 +1,5 @@
 import type { Form, FormExpose } from '@/components/Form'
 import type { ElForm } from 'element-plus'
-import { ref, unref, nextTick } from 'vue'
 import type { FormProps } from '@/components/Form/src/types'
 import { FormSchema, FormSetPropsType } from '@/types/form'
 
@@ -41,6 +40,9 @@ export const useForm = (props?: FormProps) => {
     setProps: async (props: FormProps = {}) => {
       const form = await getForm()
       form?.setProps(props)
+      if (props.model) {
+        form?.setValues(props.model)
+      }
     },
 
     setValues: async (data: Recordable) => {

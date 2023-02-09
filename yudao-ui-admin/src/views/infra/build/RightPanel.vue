@@ -545,7 +545,7 @@
             <el-switch v-model="activeData.__config__.required" />
           </el-form-item>
 
-          <template v-if="activeData.__config__.layoutTree">
+          <template v-if="activeData.__config__.layoutTree" v-slot="{ node, data }">
             <el-divider>布局结构树</el-divider>
             <el-tree
               :data="[activeData.__config__]"
@@ -554,7 +554,7 @@
               default-expand-all
               draggable
             >
-              <span slot-scope="{ node, data }">
+              <span>
                 <span class="node-label">
                   <svg-icon class="node-icon" :icon-class="data.__config__?data.__config__.tagIcon:data.tagIcon" />
                   {{ node.label }}
@@ -651,10 +651,10 @@
 <script>
 import { isArray } from 'util'
 import TreeNodeDialog from './TreeNodeDialog'
-import { isNumberStr } from '@/utils/index'
+import { isNumberStr } from '@/utils'
 import IconsDialog from './IconsDialog'
 import {
-  inputComponents, selectComponents, layoutComponents
+  inputComponents, selectComponents
 } from '@/components/generator/config'
 import { saveFormConf } from '@/utils/db'
 
@@ -1021,7 +1021,7 @@ export default {
   .el-date-editor {
     width: 227px;
   }
-  ::v-deep .el-icon-time {
+  :deep(.el-icon-time) {
     display: none;
   }
 }

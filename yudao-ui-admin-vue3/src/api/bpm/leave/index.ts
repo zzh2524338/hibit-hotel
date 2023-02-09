@@ -1,6 +1,15 @@
-import { useAxios } from '@/hooks/web/useAxios'
-import { LeaveVO } from './types'
-const request = useAxios()
+import request from '@/config/axios'
+
+export type LeaveVO = {
+  id: number
+  result: number
+  type: number
+  reason: string
+  processInstanceId: string
+  startTime: string
+  endTime: string
+  createTime: string
+}
 
 // 创建请假申请
 export const createLeaveApi = async (data: LeaveVO) => {

@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { PropType, defineEmits } from 'vue'
-import { Highlight } from '@/components/Highlight'
+import { PropType } from 'vue'
 import { useDesign } from '@/hooks/web/useDesign'
 import { propTypes } from '@/utils/propTypes'
 import { TipSchema } from '@/types/infoTip'

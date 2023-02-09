@@ -110,8 +110,8 @@ import {DICT_TYPE, getDictDatas} from "@/utils/dict";
 import store from "@/store";
 import {decodeFields} from "@/utils/formGenerator";
 import Parser from '@/components/parser/Parser'
-import {createProcessInstance, getProcessInstance} from "@/api/bpm/processInstance";
-import {approveTask, getTaskListByProcessInstanceId, rejectTask, updateTaskAssignee,backTask} from "@/api/bpm/task";
+import {getProcessInstance} from "@/api/bpm/processInstance";
+import {approveTask, getTaskListByProcessInstanceId, rejectTask, updateTaskAssignee} from "@/api/bpm/task";
 import {getDate} from "@/utils/dateUtils";
 import {listSimpleUsers} from "@/api/system/user";
 import {getActivityList} from "@/api/bpm/activity";
@@ -163,10 +163,7 @@ export default {
         rules: {
           assigneeUserId: [{ required: true, message: "新审批人不能为空", trigger: "change" }],
         }
-      },
-
-      // 数据字典
-      categoryDictDatas: getDictDatas(DICT_TYPE.BPM_MODEL_CATEGORY),
+      }
     };
   },
   created() {
@@ -274,23 +271,6 @@ export default {
         // 取消加载中
         this.tasksLoad = false;
       });
-    },
-    /** 处理选择流程的按钮操作 **/
-    handleSelect(row) {
-      // 设置选择的流程
-      this.selectProcessInstance = row;
-
-      // 流程表单
-      if (row.formId) {
-        // 设置对应的表单
-        this.detailForm = {
-          ...JSON.parse(row.formConf),
-          fields: decodeFields(row.formFields)
-        }
-      } else if (row.formCustomCreatePath) {
-        this.$router.push({ path: row.formCustomCreatePath});
-        // 这里暂时无需加载流程图，因为跳出到另外个 Tab；
-      }
     },
     getDateStar(ms) {
       return getDate(ms);

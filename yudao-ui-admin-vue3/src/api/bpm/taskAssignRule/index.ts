@@ -1,6 +1,14 @@
-import { useAxios } from '@/hooks/web/useAxios'
-import { TaskAssignVO } from './types'
-const request = useAxios()
+import request from '@/config/axios'
+
+export type TaskAssignVO = {
+  id: number
+  modelId: string
+  processDefinitionId: string
+  taskDefinitionKey: string
+  taskDefinitionName: string
+  options: string[]
+  type: number
+}
 
 export const getTaskAssignRuleList = async (params) => {
   return await request.get({ url: '/bpm/task-assign-rule/list', params })

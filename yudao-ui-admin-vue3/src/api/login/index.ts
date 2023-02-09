@@ -1,8 +1,6 @@
-import { useAxios } from '@/hooks/web/useAxios'
+import request from '@/config/axios'
 import { getRefreshToken } from '@/utils/auth'
 import type { UserLoginVO } from './types'
-
-const request = useAxios()
 
 export interface CodeImgResult {
   captchaOnOff: boolean
@@ -35,7 +33,7 @@ export const getTenantIdByNameApi = (name: string) => {
 
 // 登出
 export const loginOutApi = () => {
-  return request.delete({ url: '/system/auth/logout' })
+  return request.post({ url: '/system/auth/logout' })
 }
 
 // 获取用户权限信息
@@ -59,8 +57,17 @@ export const smsLoginApi = (data: SmsLoginVO) => {
 }
 
 // 社交授权的跳转
-export const socialAuthRedirectApi = (type: string, redirectUri: string) => {
+export const socialAuthRedirectApi = (type: number, redirectUri: string) => {
   return request.get({
     url: '/system/auth/social-auth-redirect?type=' + type + '&redirectUri=' + redirectUri
   })
+}
+// 获取验证图片  以及token
+export const getCodeApi = (data) => {
+  return request.postOriginal({ url: 'system/captcha/get', data })
+}
+
+// 滑动或者点选验证
+export const reqCheckApi = (data) => {
+  return request.postOriginal({ url: 'system/captcha/check', data })
 }

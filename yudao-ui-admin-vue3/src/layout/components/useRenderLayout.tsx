@@ -1,9 +1,9 @@
 import { computed } from 'vue'
 import { useAppStore } from '@/store/modules/app'
-import { Menu } from '@/components/Menu'
-import { TabMenu } from '@/components/TabMenu'
-import { TagsView } from '@/components/TagsView'
-import { Logo } from '@/components/Logo'
+import { Menu } from '@/layout/components/Menu'
+import { TabMenu } from '@/layout/components/TabMenu'
+import { TagsView } from '@/layout/components/TagsView'
+import { Logo } from '@/layout/components/Logo'
 import AppView from './AppView.vue'
 import ToolHeader from './ToolHeader.vue'
 import { ElScrollbar } from 'element-plus'
@@ -110,7 +110,7 @@ export const useRenderLayout = () => {
     return (
       <>
         <div class="flex items-center bg-[var(--top-header-bg-color)] border-bottom-1 border-solid border-[var(--top-tool-border-color)] dark:border-[var(--el-border-color)]">
-          {logo.value ? <Logo class="hover-tigger !pr-15px"></Logo> : undefined}
+          {logo.value ? <Logo class="hover-trigger !pr-15px"></Logo> : undefined}
 
           <ToolHeader class="flex-1"></ToolHeader>
         </div>
@@ -167,7 +167,7 @@ export const useRenderLayout = () => {
     return (
       <>
         <div class="flex items-center justify-between bg-[var(--top-header-bg-color)] border-bottom-1 border-solid border-[var(--top-tool-border-color)] dark:border-[var(--el-border-color)]">
-          {logo.value ? <Logo class="hover-tigger"></Logo> : undefined}
+          {logo.value ? <Logo class="hover-trigger"></Logo> : undefined}
           <Menu class="flex-1 px-10px h-[var(--top-tool-height)]"></Menu>
           <ToolHeader></ToolHeader>
         </div>
@@ -204,7 +204,7 @@ export const useRenderLayout = () => {
     return (
       <>
         <div class="flex items-center bg-[var(--top-header-bg-color)] border-bottom-1 border-solid border-[var(--top-tool-border-color)] dark:border-[var(--el-border-color)]">
-          {logo.value ? <Logo class="hover-tigger !pr-15px"></Logo> : undefined}
+          {logo.value ? <Logo class="hover-trigger !pr-15px"></Logo> : undefined}
 
           <ToolHeader class="flex-1"></ToolHeader>
         </div>
