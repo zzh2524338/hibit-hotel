@@ -19,6 +19,7 @@ import java.util.*;
 import java.time.LocalDateTime;
 
 import static cn.hutool.core.util.RandomUtil.*;
+import static cn.iocoder.yudao.framework.common.util.date.LocalDateTimeUtils.buildBetweenTime;
 import static cn.iocoder.yudao.module.hotel.enums.ErrorCodeConstants.*;
 import static cn.iocoder.yudao.framework.test.core.util.AssertUtils.*;
 import static cn.iocoder.yudao.framework.test.core.util.RandomUtils.*;
@@ -112,7 +113,6 @@ public class RoomTypeRateServiceImplTest extends BaseDbUnitTest {
            o.setRoomTypeId(null);
            o.setRoomRateTypeId(null);
            o.setRoomRate(null);
-           o.setProRate(null);
            o.setAccDate(null);
            o.setCreateTime(null);
        });
@@ -123,8 +123,6 @@ public class RoomTypeRateServiceImplTest extends BaseDbUnitTest {
        roomTypeRateMapper.insert(cloneIgnoreId(dbRoomTypeRate, o -> o.setRoomRateTypeId(null)));
        // 测试 roomRate 不匹配
        roomTypeRateMapper.insert(cloneIgnoreId(dbRoomTypeRate, o -> o.setRoomRate(null)));
-       // 测试 proRate 不匹配
-       roomTypeRateMapper.insert(cloneIgnoreId(dbRoomTypeRate, o -> o.setProRate(null)));
        // 测试 accDate 不匹配
        roomTypeRateMapper.insert(cloneIgnoreId(dbRoomTypeRate, o -> o.setAccDate(null)));
        // 测试 createTime 不匹配
@@ -154,7 +152,6 @@ public class RoomTypeRateServiceImplTest extends BaseDbUnitTest {
            o.setRoomTypeId(null);
            o.setRoomRateTypeId(null);
            o.setRoomRate(null);
-           o.setProRate(null);
            o.setAccDate(null);
            o.setCreateTime(null);
        });
@@ -165,8 +162,6 @@ public class RoomTypeRateServiceImplTest extends BaseDbUnitTest {
        roomTypeRateMapper.insert(cloneIgnoreId(dbRoomTypeRate, o -> o.setRoomRateTypeId(null)));
        // 测试 roomRate 不匹配
        roomTypeRateMapper.insert(cloneIgnoreId(dbRoomTypeRate, o -> o.setRoomRate(null)));
-       // 测试 proRate 不匹配
-       roomTypeRateMapper.insert(cloneIgnoreId(dbRoomTypeRate, o -> o.setProRate(null)));
        // 测试 accDate 不匹配
        roomTypeRateMapper.insert(cloneIgnoreId(dbRoomTypeRate, o -> o.setAccDate(null)));
        // 测试 createTime 不匹配
