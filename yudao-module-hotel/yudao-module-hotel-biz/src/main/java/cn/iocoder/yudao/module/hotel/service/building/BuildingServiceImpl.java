@@ -39,7 +39,7 @@ public class BuildingServiceImpl implements BuildingService {
     @Override
     public void updateBuilding(BuildingUpdateReqVO updateReqVO) {
         // 校验存在
-        this.validateBuildingExists(updateReqVO.getId());
+        validateBuildingExists(updateReqVO.getId());
         // 更新
         BuildingDO updateObj = BuildingConvert.INSTANCE.convert(updateReqVO);
         buildingMapper.updateById(updateObj);
@@ -48,7 +48,7 @@ public class BuildingServiceImpl implements BuildingService {
     @Override
     public void deleteBuilding(Long id) {
         // 校验存在
-        this.validateBuildingExists(id);
+        validateBuildingExists(id);
         // 删除
         buildingMapper.deleteById(id);
     }

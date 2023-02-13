@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 创建房间类型
+// 创建房型管理
 export function createRoomType(data) {
   return request({
     url: '/hotel/room-type/create',
@@ -9,7 +9,7 @@ export function createRoomType(data) {
   })
 }
 
-// 更新房间类型
+// 更新房型管理
 export function updateRoomType(data) {
   return request({
     url: '/hotel/room-type/update',
@@ -18,7 +18,7 @@ export function updateRoomType(data) {
   })
 }
 
-// 删除房间类型
+// 删除房型管理
 export function deleteRoomType(id) {
   return request({
     url: '/hotel/room-type/delete?id=' + id,
@@ -26,7 +26,7 @@ export function deleteRoomType(id) {
   })
 }
 
-// 获得房间类型
+// 获得房型管理
 export function getRoomType(id) {
   return request({
     url: '/hotel/room-type/get?id=' + id,
@@ -34,7 +34,7 @@ export function getRoomType(id) {
   })
 }
 
-// 获得房间类型分页
+// 获得房型管理分页
 export function getRoomTypePage(query) {
   return request({
     url: '/hotel/room-type/page',
@@ -43,21 +43,12 @@ export function getRoomTypePage(query) {
   })
 }
 
-// 导出房间类型 Excel
+// 导出房型管理 Excel
 export function exportRoomTypeExcel(query) {
   return request({
     url: '/hotel/room-type/export-excel',
     method: 'get',
     params: query,
     responseType: 'blob'
-  })
-}
-
-// 获得所有房间类型列表
-export function getRoomTypeList(query) {
-  return request({
-    url: '/hotel/room-type/list',
-    method: 'get',
-    params: query
   })
 }

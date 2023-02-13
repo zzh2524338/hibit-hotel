@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.module.hotel.service.roomtype;
 
+import cn.hutool.core.util.IdUtil;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
@@ -16,7 +17,7 @@ import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionU
 import static cn.iocoder.yudao.module.hotel.enums.ErrorCodeConstants.*;
 
 /**
- * 房间类型 Service 实现类
+ * 房型管理 Service 实现类
  *
  * @author 芋道源码
  */
@@ -31,6 +32,9 @@ public class RoomTypeServiceImpl implements RoomTypeService {
     public Long createRoomType(RoomTypeCreateReqVO createReqVO) {
         // 插入
         RoomTypeDO roomType = RoomTypeConvert.INSTANCE.convert(createReqVO);
+
+        // 设置默认属性
+        roomType.setUuid("room_type_" + IdUtil.getSnowflake());
         roomTypeMapper.insert(roomType);
         // 返回
         return roomType.getId();
@@ -39,7 +43,7 @@ public class RoomTypeServiceImpl implements RoomTypeService {
     @Override
     public void updateRoomType(RoomTypeUpdateReqVO updateReqVO) {
         // 校验存在
-        this.validateRoomTypeExists(updateReqVO.getId());
+        validateRoomTypeExists(updateReqVO.getId());
         // 更新
         RoomTypeDO updateObj = RoomTypeConvert.INSTANCE.convert(updateReqVO);
         roomTypeMapper.updateById(updateObj);
@@ -48,7 +52,7 @@ public class RoomTypeServiceImpl implements RoomTypeService {
     @Override
     public void deleteRoomType(Long id) {
         // 校验存在
-        this.validateRoomTypeExists(id);
+        validateRoomTypeExists(id);
         // 删除
         roomTypeMapper.deleteById(id);
     }

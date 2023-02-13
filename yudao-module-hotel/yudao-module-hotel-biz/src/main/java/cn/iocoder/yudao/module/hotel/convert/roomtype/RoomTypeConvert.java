@@ -10,7 +10,7 @@ import cn.iocoder.yudao.module.hotel.controller.admin.roomtype.vo.*;
 import cn.iocoder.yudao.module.hotel.dal.dataobject.roomtype.RoomTypeDO;
 
 /**
- * 房间类型 Convert
+ * 房型管理 Convert
  *
  * @author 芋道源码
  */

@@ -1,8 +1,10 @@
 package cn.iocoder.yudao.module.hotel.controller.admin.building.vo;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import java.util.*;
-import io.swagger.annotations.*;
+import java.time.LocalDateTime;
+import java.time.LocalDateTime;
 
 import com.alibaba.excel.annotation.ExcelProperty;
 
@@ -34,5 +36,8 @@ public class BuildingExcelVO {
 
     @ExcelProperty("所属公司")
     private Long companyId;
+
+    @ExcelProperty("创建时间")
+    private LocalDateTime createTime;
 
 }

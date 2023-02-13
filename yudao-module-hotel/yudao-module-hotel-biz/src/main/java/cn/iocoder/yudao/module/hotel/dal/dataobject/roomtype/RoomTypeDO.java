@@ -1,17 +1,15 @@
 package cn.iocoder.yudao.module.hotel.dal.dataobject.roomtype;
 
 import lombok.*;
-
-import java.sql.Blob;
 import java.util.*;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.*;
 import cn.iocoder.yudao.framework.mybatis.core.dataobject.BaseDO;
 
-import static org.apache.ibatis.type.JdbcType.BLOB;
-
 /**
- * 房间类型 DO
+ * 房型管理 DO
  *
  * @author 芋道源码
  */
@@ -26,38 +24,61 @@ import static org.apache.ibatis.type.JdbcType.BLOB;
 public class RoomTypeDO extends BaseDO {
 
     /**
-     * id
+     * id 主键
      */
     @TableId
     private Long id;
+    /**
+     * uuid
+     */
+    private String uuid;
+    /**
+     * 房型名称
+     */
+    private String name;
+    /**
+     * 房型编号
+     */
+    private String code;
+    /**
+     * 大床数量
+     */
+    private Integer bedCount;
+    /**
+     * 入住人数
+     */
+    private Integer maxCheckInCount;
+    /**
+     * 编号，目前与id同号
+     */
+    private Long masterRoomTypeId;
+    /**
+     * 描述
+     */
+    private String remark;
+    /**
+     * 备注
+     */
+    private String description;
+    /**
+     * 排序
+     */
+    private Integer sort;
     /**
      * 面积
      */
     private BigDecimal area;
     /**
-     * 最大入住人数
+     * ota 房间数
      */
-    private Integer livingPopulation;
+    private Integer otaRoomCount;
     /**
-     * name
+     * ota 状态
      */
-    private String name;
+    private Integer otaState;
     /**
-     * 价格
+     * 控房数
      */
-    private BigDecimal price;
-    /**
-     * 描述
-     */
-    @TableField(jdbcType = BLOB, value = "`desc`")
-    private String desc;
-    /**
-     * 图片
-     */
-    private String imgs;
-    /**
-     * 房间总量
-     */
-    private Integer totalRoom;
+    private Integer roomControl;
 
 }

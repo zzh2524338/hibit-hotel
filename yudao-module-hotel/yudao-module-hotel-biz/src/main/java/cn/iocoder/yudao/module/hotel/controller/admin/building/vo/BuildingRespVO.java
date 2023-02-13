@@ -1,16 +1,19 @@
 package cn.iocoder.yudao.module.hotel.controller.admin.building.vo;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
-import java.util.*;
-import io.swagger.annotations.*;
+import java.time.LocalDateTime;
 
-@ApiModel("管理后台 - 公司分部 Response VO")
+@Schema(description = "管理后台 - 公司分部 Response VO")
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class BuildingRespVO extends BuildingBaseVO {
 
-    @ApiModelProperty(value = "id", required = true)
+    @Schema(description = "id", required = true, example = "28296")
     private Long id;
+
+    @Schema(description = "创建时间", required = true)
+    private LocalDateTime createTime;
 
 }
