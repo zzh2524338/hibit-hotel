@@ -1,6 +1,8 @@
 package cn.iocoder.yudao.module.hotel.dal.dataobject.roomtyperate;
 
 import lombok.*;
+
+import java.time.LocalDate;
 import java.util.*;
 import java.math.BigDecimal;
 import java.math.BigDecimal;

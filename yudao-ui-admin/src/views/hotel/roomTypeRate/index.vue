@@ -9,12 +9,6 @@
       <el-form-item label="房价类型编号" prop="roomRateTypeId">
         <el-input v-model="queryParams.roomRateTypeId" placeholder="请输入房价类型编号" clearable @keyup.enter.native="handleQuery"/>
       </el-form-item>
-      <el-form-item label="现在折扣价格" prop="roomRate">
-        <el-input v-model="queryParams.roomRate" placeholder="请输入现在折扣价格" clearable @keyup.enter.native="handleQuery"/>
-      </el-form-item>
-      <el-form-item label="门市价格" prop="proRate">
-        <el-input v-model="queryParams.proRate" placeholder="请输入门市价格" clearable @keyup.enter.native="handleQuery"/>
-      </el-form-item>
       <el-form-item label="生效日期" prop="accDate">
         <el-date-picker v-model="queryParams.accDate" style="width: 240px" value-format="yyyy-MM-dd HH:mm:ss" type="daterange"
                         range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" :default-time="['00:00:00', '23:59:59']" />
@@ -48,7 +42,6 @@
       <el-table-column label="房型编号" align="center" prop="roomTypeId" />
       <el-table-column label="房价类型编号" align="center" prop="roomRateTypeId" />
       <el-table-column label="现在折扣价格" align="center" prop="roomRate" />
-      <el-table-column label="门市价格" align="center" prop="proRate" />
       <el-table-column label="生效日期" align="center" prop="accDate" width="180">
         <template v-slot="scope">
           <span>{{ parseTime(scope.row.accDate) }}</span>
@@ -83,9 +76,6 @@
         </el-form-item>
         <el-form-item label="现在折扣价格" prop="roomRate">
           <el-input v-model="form.roomRate" placeholder="请输入现在折扣价格" />
-        </el-form-item>
-        <el-form-item label="门市价格" prop="proRate">
-          <el-input v-model="form.proRate" placeholder="请输入门市价格" />
         </el-form-item>
         <el-form-item label="生效日期" prop="accDate">
           <el-date-picker clearable v-model="form.accDate" type="date" value-format="timestamp" placeholder="选择生效日期" />
@@ -128,11 +118,6 @@ export default {
         pageSize: 10,
         roomTypeId: null,
         roomRateTypeId: null,
-<<<<<<< Updated upstream
-        roomRate: null,
-        proRate: null,
-=======
->>>>>>> Stashed changes
         accDate: [],
         createTime: [],
       },

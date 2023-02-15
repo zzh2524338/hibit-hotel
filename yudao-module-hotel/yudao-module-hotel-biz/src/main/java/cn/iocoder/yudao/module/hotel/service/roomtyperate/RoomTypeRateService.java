@@ -2,6 +2,8 @@ package cn.iocoder.yudao.module.hotel.service.roomtyperate;
 
 import java.util.*;
 import javax.validation.*;
+
+import cn.iocoder.yudao.module.hotel.controller.admin.roomtyperate.bo.RoomRateCreateReqBO;
 import cn.iocoder.yudao.module.hotel.controller.admin.roomtyperate.vo.*;
 import cn.iocoder.yudao.module.hotel.dal.dataobject.roomtyperate.RoomTypeRateDO;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
@@ -20,6 +22,14 @@ public interface RoomTypeRateService {
      * @return 编号
      */
     Long createRoomTypeRate(@Valid RoomTypeRateCreateReqVO createReqVO);
+
+    /**
+     * 创建房型价格
+     *
+     * @param req 创建信息
+     * @return 编号
+     */
+    Long createRoomTypeRate(@Valid RoomRateCreateReqBO req);
 
     /**
      * 更新房型价格

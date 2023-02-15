@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.module.hotel.controller.admin.roomtyperate;
 
+import cn.iocoder.yudao.module.hotel.controller.admin.roomtyperate.bo.RoomRateCreateReqBO;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
@@ -41,6 +42,13 @@ public class RoomTypeRateController {
     @PreAuthorize("@ss.hasPermission('hotel:room-type-rate:create')")
     public CommonResult<Long> createRoomTypeRate(@Valid @RequestBody RoomTypeRateCreateReqVO createReqVO) {
         return success(roomTypeRateService.createRoomTypeRate(createReqVO));
+    }
+
+    @PostMapping("/create/batch")
+    @Operation(summary = "批量创建房型价格")
+    @PreAuthorize("@ss.hasPermission('hotel:room-type-rate:create')")
+    public CommonResult<Long> createRoomTypeRate(@Valid @RequestBody RoomRateCreateReqBO req) {
+        return success(roomTypeRateService.createRoomTypeRate(req));
     }
 
     @PutMapping("/update")

@@ -1,12 +1,23 @@
 package cn.iocoder.yudao.module.hotel.service.roomtyperate;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
+import cn.hutool.core.date.Week;
+import cn.iocoder.yudao.framework.common.util.collection.SetUtils;
+import cn.iocoder.yudao.framework.mybatis.core.query.LambdaQueryWrapperX;
+import cn.iocoder.yudao.module.hotel.controller.admin.roomtyperate.bo.RoomRateCreateReqBO;
 import cn.iocoder.yudao.module.hotel.dal.mysql.roomtype.RoomTypeMapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
 import javax.annotation.Resource;
+
 import org.springframework.validation.annotation.Validated;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -43,6 +54,50 @@ public class RoomTypeRateServiceImpl implements RoomTypeRateService {
         roomTypeRateMapper.insert(roomTypeRate);
         // 返回
         return roomTypeRate.getId();
+    }
+
+    @Override
+    public Long createRoomTypeRate(RoomRateCreateReqBO req) {
+        log.info("createRoomTypeRate:{}", req);
+
+        Set<Week> weeks = SetUtils.asSet(req.getWeekDay());
+
+        List<RoomTypeRateDO> roomTypeRateDOInserts = new ArrayList<>();
+        List<RoomTypeRateDO> roomTypeRateDOUpdates = new ArrayList<>();
+        for (LocalDate start = req.getStartDate(); !start.isAfter(req.getEndDate()); start = start.plusDays(1)) {
+            for (RoomRateCreateReqBO.RoomRate roomRate : req.getRoomRateList()) {
+                LocalDateTime startDateTime = LocalDateTimeUtil.of(start);
+                RoomTypeRateDO roomTypeRateDO = new RoomTypeRateDO()
+                        .setRoomRateTypeId(roomRate.getRoomRateTypeId())
+                        .setRoomTypeId(roomRate.getRoomTypeId())
+                        .setAccDate(startDateTime);
+                // 今天是否要使用周末价格
+                if (weeks.contains(LocalDateTimeUtil.dayOfWeek(start))) {
+                    roomTypeRateDO.setRoomRate(new BigDecimal(roomRate.getWeekRate()));
+                } else {
+                    roomTypeRateDO.setRoomRate(new BigDecimal(roomRate.getRate()));
+                }
+
+                // 查询表中是否已经有了当天数据，有的话更新，没有新增
+                RoomTypeRateDO roomTypeRateInDB = roomTypeRateMapper.selectOneByTypeIdAndAccDate(
+                        roomRate.getRoomRateTypeId(), roomRate.getRoomTypeId(), startDateTime);
+                if (roomTypeRateInDB != null) {
+                    log.info("当天已有数据, 进行更新操作 roomTypeRateInDB:{}", roomTypeRateInDB);
+                    roomTypeRateDO.setId(roomTypeRateInDB.getId());
+
+                    roomTypeRateDOUpdates.add(roomTypeRateDO);
+                } else {
+                    roomTypeRateDOInserts.add(roomTypeRateDO);
+                }
+            }
+
+            roomTypeRateMapper.insertBatch(roomTypeRateDOInserts);
+            roomTypeRateMapper.updateBatch(roomTypeRateDOUpdates, 1000);
+
+            log.info("createRoomTypeRate success");
+        }
+
+        return null;
     }
 
     @Override
@@ -108,8 +163,8 @@ public class RoomTypeRateServiceImpl implements RoomTypeRateService {
 
             roomTypeRateListRespVOS.add(
                     new RoomTypeRateListRespVO()
-                    .setAccDate(LocalDateTimeUtil.formatNormal(localDateTimeListEntry.getKey()))
-                    .setRoomTypeAndRates(roomTypeAndRates)
+                            .setAccDate(LocalDateTimeUtil.formatNormal(localDateTimeListEntry.getKey()))
+                            .setRoomTypeAndRates(roomTypeAndRates)
             );
         }
 

@@ -1,5 +1,7 @@
 package cn.iocoder.yudao.module.hotel.dal.mysql.roomtyperate;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
@@ -35,6 +37,13 @@ public interface RoomTypeRateMapper extends BaseMapperX<RoomTypeRateDO> {
                 .betweenIfPresent(RoomTypeRateDO::getAccDate, reqVO.getAccDate())
                 .betweenIfPresent(RoomTypeRateDO::getCreateTime, reqVO.getCreateTime())
                 .orderByDesc(RoomTypeRateDO::getId));
+    }
+
+    default RoomTypeRateDO selectOneByTypeIdAndAccDate(Long roomRateTypeId, Long roomTypeId, LocalDateTime start) {
+        return selectOne( new LambdaQueryWrapperX<RoomTypeRateDO>()
+                .eq(RoomTypeRateDO::getRoomRateTypeId, roomRateTypeId)
+                .eq(RoomTypeRateDO::getRoomTypeId, roomTypeId)
+                .eq(RoomTypeRateDO::getAccDate, start));
     }
 
 }
