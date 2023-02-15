@@ -4,8 +4,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.security.access.prepost.PreAuthorize;
-import io.swagger.annotations.*;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Operation;
 
+import javax.validation.constraints.*;
 import javax.validation.*;
 import javax.servlet.http.*;
 import java.util.*;
@@ -25,7 +28,7 @@ import cn.iocoder.yudao.module.hotel.dal.dataobject.roomtype.RoomTypeDO;
 import cn.iocoder.yudao.module.hotel.convert.roomtype.RoomTypeConvert;
 import cn.iocoder.yudao.module.hotel.service.roomtype.RoomTypeService;
 
-@Api(tags = "管理后台 - 房间类型")
+@Tag(name = "管理后台 - 房型管理")
 @RestController
 @RequestMapping("/hotel/room-type")
 @Validated
@@ -35,14 +38,14 @@ public class RoomTypeController {
     private RoomTypeService roomTypeService;
 
     @PostMapping("/create")
-    @ApiOperation("创建房间类型")
+    @Operation(summary = "创建房型管理")
     @PreAuthorize("@ss.hasPermission('hotel:room-type:create')")
     public CommonResult<Long> createRoomType(@Valid @RequestBody RoomTypeCreateReqVO createReqVO) {
         return success(roomTypeService.createRoomType(createReqVO));
     }
 
     @PutMapping("/update")
-    @ApiOperation("更新房间类型")
+    @Operation(summary = "更新房型管理")
     @PreAuthorize("@ss.hasPermission('hotel:room-type:update')")
     public CommonResult<Boolean> updateRoomType(@Valid @RequestBody RoomTypeUpdateReqVO updateReqVO) {
         roomTypeService.updateRoomType(updateReqVO);
@@ -50,8 +53,8 @@ public class RoomTypeController {
     }
 
     @DeleteMapping("/delete")
-    @ApiOperation("删除房间类型")
-    @ApiImplicitParam(name = "id", value = "编号", required = true, dataTypeClass = Long.class)
+    @Operation(summary = "删除房型管理")
+    @Parameter(name = "id", description = "编号", required = true)
     @PreAuthorize("@ss.hasPermission('hotel:room-type:delete')")
     public CommonResult<Boolean> deleteRoomType(@RequestParam("id") Long id) {
         roomTypeService.deleteRoomType(id);
@@ -59,8 +62,8 @@ public class RoomTypeController {
     }
 
     @GetMapping("/get")
-    @ApiOperation("获得房间类型")
-    @ApiImplicitParam(name = "id", value = "编号", required = true, example = "1024", dataTypeClass = Long.class)
+    @Operation(summary = "获得房型管理")
+    @Parameter(name = "id", description = "编号", required = true, example = "1024")
     @PreAuthorize("@ss.hasPermission('hotel:room-type:query')")
     public CommonResult<RoomTypeRespVO> getRoomType(@RequestParam("id") Long id) {
         RoomTypeDO roomType = roomTypeService.getRoomType(id);
@@ -68,17 +71,8 @@ public class RoomTypeController {
     }
 
     @GetMapping("/list")
-    @ApiOperation("获得所有房间类型列表，没有条件")
-    @ApiImplicitParam(name = "ids", value = "编号列表", required = true, example = "1024,2048", dataTypeClass = List.class)
-    @PreAuthorize("@ss.hasPermission('hotel:room-type:query')")
-    public CommonResult<List<RoomTypeRespVO>> getRoomTypeList() {
-        List<RoomTypeDO> list = roomTypeService.getRoomTypeList();
-        return success(RoomTypeConvert.INSTANCE.convertList(list));
-    }
-
-    @GetMapping("/list/ids")
-    @ApiOperation("获得房间类型列表")
-    @ApiImplicitParam(name = "ids", value = "编号列表", required = true, example = "1024,2048", dataTypeClass = List.class)
+    @Operation(summary = "获得房型管理列表")
+    @Parameter(name = "ids", description = "编号列表", required = true, example = "1024,2048")
     @PreAuthorize("@ss.hasPermission('hotel:room-type:query')")
     public CommonResult<List<RoomTypeRespVO>> getRoomTypeListById(@RequestParam("ids") Collection<Long> ids) {
         List<RoomTypeDO> list = roomTypeService.getRoomTypeListByIds(ids);
@@ -86,7 +80,7 @@ public class RoomTypeController {
     }
 
     @GetMapping("/page")
-    @ApiOperation("获得房间类型分页")
+    @Operation(summary = "获得房型管理分页")
     @PreAuthorize("@ss.hasPermission('hotel:room-type:query')")
     public CommonResult<PageResult<RoomTypeRespVO>> getRoomTypePage(@Valid RoomTypePageReqVO pageVO) {
         PageResult<RoomTypeDO> pageResult = roomTypeService.getRoomTypePage(pageVO);
@@ -94,7 +88,7 @@ public class RoomTypeController {
     }
 
     @GetMapping("/export-excel")
-    @ApiOperation("导出房间类型 Excel")
+    @Operation(summary = "导出房型管理 Excel")
     @PreAuthorize("@ss.hasPermission('hotel:room-type:export')")
     @OperateLog(type = EXPORT)
     public void exportRoomTypeExcel(@Valid RoomTypeExportReqVO exportReqVO,
@@ -102,7 +96,7 @@ public class RoomTypeController {
         List<RoomTypeDO> list = roomTypeService.getRoomTypeList(exportReqVO);
         // 导出 Excel
         List<RoomTypeExcelVO> datas = RoomTypeConvert.INSTANCE.convertList02(list);
-        ExcelUtils.write(response, "房间类型.xls", "数据", RoomTypeExcelVO.class, datas);
+        ExcelUtils.write(response, "房型管理.xls", "数据", RoomTypeExcelVO.class, datas);
     }
 
 }

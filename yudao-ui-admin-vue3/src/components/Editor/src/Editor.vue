@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeUnmount, computed, PropType, unref, nextTick, ref, watch, shallowRef } from 'vue'
+import { PropType } from 'vue'
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 import { IDomEditor, IEditorConfig, i18nChangeLanguage } from '@wangeditor/editor'
 import { propTypes } from '@/utils/propTypes'
@@ -23,6 +23,7 @@ const props = defineProps({
     type: Object as PropType<IEditorConfig>,
     default: () => undefined
   },
+  readonly: propTypes.bool.def(false),
   modelValue: propTypes.string.def('')
 })
 
@@ -61,7 +62,7 @@ const editorConfig = computed((): IEditorConfig => {
   return Object.assign(
     {
       placeholder: '请输入内容...',
-      readOnly: false,
+      readOnly: props.readonly,
       customAlert: (s: string, t: string) => {
         switch (t) {
           case 'success':

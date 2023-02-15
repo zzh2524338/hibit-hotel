@@ -1,14 +1,14 @@
 <template>
   <ContentWrap>
     <!-- 列表 -->
-    <vxe-grid ref="xGrid" v-bind="gridOptions" class="xtable-scrollbar">
+    <XTable @register="registerTable">
       <template #toolbar_buttons>
         <XButton
           type="warning"
           preIcon="ep:download"
           :title="t('action.export')"
           v-hasPermi="['infra:job:export']"
-          @click="handleExport()"
+          @click="exportList('定时任务详情.xls')"
         />
       </template>
       <template #beginTime_default="{ row }">
@@ -29,11 +29,11 @@
           @click="handleDetail(row)"
         />
       </template>
-    </vxe-grid>
+    </XTable>
   </ContentWrap>
   <XModal v-model="dialogVisible" :title="dialogTitle">
     <!-- 对话框(详情) -->
-    <Descriptions :schema="allSchemas.detailSchema" :data="detailRef">
+    <Descriptions :schema="allSchemas.detailSchema" :data="detailData">
       <template #retryInterval="{ row }">
         <span>{{ row.retryInterval + '毫秒' }} </span>
       </template>
@@ -48,18 +48,14 @@
   </XModal>
 </template>
 <script setup lang="ts" name="JobLog">
-import { ref } from 'vue'
 import dayjs from 'dayjs'
-import { useI18n } from '@/hooks/web/useI18n'
-import { useVxeGrid } from '@/hooks/web/useVxeGrid'
-import { VxeGridInstance } from 'vxe-table'
+
 import * as JobLogApi from '@/api/infra/jobLog'
 import { allSchemas } from './jobLog.data'
 
 const { t } = useI18n() // 国际化
 // 列表相关的变量
-const xGrid = ref<VxeGridInstance>() // 列表 Grid Ref
-const { gridOptions, exportList } = useVxeGrid<JobLogApi.JobLogVO>({
+const [registerTable, { exportList }] = useXTable({
   allSchemas: allSchemas,
   getListApi: JobLogApi.getJobLogPageApi,
   exportListApi: JobLogApi.exportJobLogApi
@@ -69,18 +65,14 @@ const dialogVisible = ref(false) // 是否显示弹出层
 const dialogTitle = ref('') // 弹出层标题
 
 // ========== 详情相关 ==========
-const detailRef = ref() // 详情 Ref
+const detailData = ref() // 详情 Ref
 
 // 详情操作
 const handleDetail = async (row: JobLogApi.JobLogVO) => {
   // 设置数据
   const res = JobLogApi.getJobLogApi(row.id)
-  detailRef.value = res
+  detailData.value = res
   dialogTitle.value = t('action.detail')
   dialogVisible.value = true
-}
-// 导出操作
-const handleExport = async () => {
-  await exportList(xGrid, '定时任务详情.xls')
 }
 </script>

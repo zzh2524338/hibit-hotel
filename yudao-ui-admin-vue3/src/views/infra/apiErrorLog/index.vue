@@ -1,14 +1,14 @@
 <template>
   <ContentWrap>
     <!-- 列表 -->
-    <vxe-grid ref="xGrid" v-bind="gridOptions" class="xtable-scrollbar">
+    <XTable @register="registerTable">
       <!-- 操作：导出 -->
       <template #toolbar_buttons>
         <XButton
           type="warning"
           preIcon="ep:download"
           :title="t('action.export')"
-          @click="handleExport()"
+          @click="exportList('错误数据.xls')"
         />
       </template>
       <template #duration_default="{ row }">
@@ -40,11 +40,11 @@
           @click="handleProcessClick(row, InfraApiErrorLogProcessStatusEnum.IGNORE, '已忽略')"
         />
       </template>
-    </vxe-grid>
+    </XTable>
   </ContentWrap>
   <XModal v-model="dialogVisible" :title="dialogTitle">
     <!-- 对话框(详情) -->
-    <Descriptions :schema="allSchemas.detailSchema" :data="detailRef" />
+    <Descriptions :schema="allSchemas.detailSchema" :data="detailData" />
     <!-- 操作按钮 -->
     <template #footer>
       <XButton :title="t('dialog.close')" @click="dialogVisible = false" />
@@ -52,40 +52,32 @@
   </XModal>
 </template>
 <script setup lang="ts" name="ApiErrorLog">
-import { ref } from 'vue'
-import { useI18n } from '@/hooks/web/useI18n'
-import { useVxeGrid } from '@/hooks/web/useVxeGrid'
-import { VxeGridInstance } from 'vxe-table'
 import { allSchemas } from './apiErrorLog.data'
 import * as ApiErrorLogApi from '@/api/infra/apiErrorLog'
 import { InfraApiErrorLogProcessStatusEnum } from '@/utils/constants'
-import { useMessage } from '@/hooks/web/useMessage'
-const message = useMessage()
+
 const { t } = useI18n() // 国际化
+const message = useMessage()
 
 // ========== 列表相关 ==========
-const xGrid = ref<VxeGridInstance>() // 列表 Grid Ref
-const { gridOptions, getList, exportList } = useVxeGrid<ApiErrorLogApi.ApiErrorLogVO>({
+const [registerTable, { reload, exportList }] = useXTable({
   allSchemas: allSchemas,
   getListApi: ApiErrorLogApi.getApiErrorLogPageApi,
   exportListApi: ApiErrorLogApi.exportApiErrorLogApi
 })
 // ========== 详情相关 ==========
-const detailRef = ref() // 详情 Ref
+const detailData = ref() // 详情 Ref
 const dialogVisible = ref(false) // 是否显示弹出层
 const dialogTitle = ref('') // 弹出层标题
 
 // 详情操作
 const handleDetail = (row: ApiErrorLogApi.ApiErrorLogVO) => {
   // 设置数据
-  detailRef.value = row
+  detailData.value = row
   dialogTitle.value = t('action.detail')
   dialogVisible.value = true
 }
-// 导出
-const handleExport = async () => {
-  await exportList(xGrid, '错误数据.xls')
-}
+
 // 异常处理操作
 const handleProcessClick = (
   row: ApiErrorLogApi.ApiErrorLogVO,
@@ -95,13 +87,12 @@ const handleProcessClick = (
   message
     .confirm('确认标记为' + type + '?', t('common.reminder'))
     .then(async () => {
-      ApiErrorLogApi.updateApiErrorLogPageApi(row.id, processSttatus).then(() => {
-        message.success(t('common.updateSuccess'))
-      })
+      await ApiErrorLogApi.updateApiErrorLogPageApi(row.id, processSttatus)
+      message.success(t('common.updateSuccess'))
     })
     .finally(async () => {
       // 刷新列表
-      await getList(xGrid)
+      await reload()
     })
     .catch(() => {})
 }

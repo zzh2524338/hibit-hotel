@@ -4,7 +4,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.security.access.prepost.PreAuthorize;
-import io.swagger.annotations.*;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Operation;
 
 import javax.validation.constraints.*;
 import javax.validation.*;
@@ -26,7 +28,7 @@ import cn.iocoder.yudao.module.hotel.dal.dataobject.building.BuildingDO;
 import cn.iocoder.yudao.module.hotel.convert.building.BuildingConvert;
 import cn.iocoder.yudao.module.hotel.service.building.BuildingService;
 
-@Api(tags = "管理后台 - 公司分部")
+@Tag(name = "管理后台 - 公司分部")
 @RestController
 @RequestMapping("/hotel/building")
 @Validated
@@ -36,14 +38,14 @@ public class BuildingController {
     private BuildingService buildingService;
 
     @PostMapping("/create")
-    @ApiOperation("创建公司分部")
+    @Operation(summary = "创建公司分部")
     @PreAuthorize("@ss.hasPermission('hotel:building:create')")
     public CommonResult<Long> createBuilding(@Valid @RequestBody BuildingCreateReqVO createReqVO) {
         return success(buildingService.createBuilding(createReqVO));
     }
 
     @PutMapping("/update")
-    @ApiOperation("更新公司分部")
+    @Operation(summary = "更新公司分部")
     @PreAuthorize("@ss.hasPermission('hotel:building:update')")
     public CommonResult<Boolean> updateBuilding(@Valid @RequestBody BuildingUpdateReqVO updateReqVO) {
         buildingService.updateBuilding(updateReqVO);
@@ -51,8 +53,8 @@ public class BuildingController {
     }
 
     @DeleteMapping("/delete")
-    @ApiOperation("删除公司分部")
-    @ApiImplicitParam(name = "id", value = "编号", required = true, dataTypeClass = Long.class)
+    @Operation(summary = "删除公司分部")
+    @Parameter(name = "id", description = "编号", required = true)
     @PreAuthorize("@ss.hasPermission('hotel:building:delete')")
     public CommonResult<Boolean> deleteBuilding(@RequestParam("id") Long id) {
         buildingService.deleteBuilding(id);
@@ -60,8 +62,8 @@ public class BuildingController {
     }
 
     @GetMapping("/get")
-    @ApiOperation("获得公司分部")
-    @ApiImplicitParam(name = "id", value = "编号", required = true, example = "1024", dataTypeClass = Long.class)
+    @Operation(summary = "获得公司分部")
+    @Parameter(name = "id", description = "编号", required = true, example = "1024")
     @PreAuthorize("@ss.hasPermission('hotel:building:query')")
     public CommonResult<BuildingRespVO> getBuilding(@RequestParam("id") Long id) {
         BuildingDO building = buildingService.getBuilding(id);
@@ -69,8 +71,8 @@ public class BuildingController {
     }
 
     @GetMapping("/list")
-    @ApiOperation("获得公司分部列表")
-    @ApiImplicitParam(name = "ids", value = "编号列表", required = true, example = "1024,2048", dataTypeClass = List.class)
+    @Operation(summary = "获得公司分部列表")
+    @Parameter(name = "ids", description = "编号列表", required = true, example = "1024,2048")
     @PreAuthorize("@ss.hasPermission('hotel:building:query')")
     public CommonResult<List<BuildingRespVO>> getBuildingList(@RequestParam("ids") Collection<Long> ids) {
         List<BuildingDO> list = buildingService.getBuildingList(ids);
@@ -78,7 +80,7 @@ public class BuildingController {
     }
 
     @GetMapping("/page")
-    @ApiOperation("获得公司分部分页")
+    @Operation(summary = "获得公司分部分页")
     @PreAuthorize("@ss.hasPermission('hotel:building:query')")
     public CommonResult<PageResult<BuildingRespVO>> getBuildingPage(@Valid BuildingPageReqVO pageVO) {
         PageResult<BuildingDO> pageResult = buildingService.getBuildingPage(pageVO);
@@ -86,7 +88,7 @@ public class BuildingController {
     }
 
     @GetMapping("/export-excel")
-    @ApiOperation("导出公司分部 Excel")
+    @Operation(summary = "导出公司分部 Excel")
     @PreAuthorize("@ss.hasPermission('hotel:building:export')")
     @OperateLog(type = EXPORT)
     public void exportBuildingExcel(@Valid BuildingExportReqVO exportReqVO,

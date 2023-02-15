@@ -1,8 +1,9 @@
 package cn.iocoder.yudao.module.hotel.controller.admin.roominfo.vo;
 
-import lombok.*;
-import io.swagger.annotations.*;
-import javax.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+
+import javax.validation.constraints.NotNull;
 
 /**
 * 房间信息 Base VO，提供给添加、修改、详细的子 VO 使用
@@ -11,23 +12,23 @@ import javax.validation.constraints.*;
 @Data
 public class RoomInfoBaseVO {
 
-    @ApiModelProperty(value = "房间号", required = true)
+    @Schema(description = "房间号", required = true)
     @NotNull(message = "房间号不能为空")
     private String no;
 
-    @ApiModelProperty(value = "房间类型表", required = true)
+    @Schema(description = "房间类型表", required = true)
     @NotNull(message = "房间类型表不能为空")
     private Integer roomType;
 
-    @ApiModelProperty(value = "楼层", required = true)
+    @Schema(description = "楼层", required = true)
     @NotNull(message = "楼层不能为空")
     private Integer floor;
 
-    @ApiModelProperty(value = "状态", required = true)
+    @Schema(description = "状态", required = true)
     @NotNull(message = "状态不能为空")
     private Integer status;
 
-    @ApiModelProperty(value = "房间钥匙信息")
+    @Schema(description = "房间钥匙信息")
     private String keyInfo;
 
 }

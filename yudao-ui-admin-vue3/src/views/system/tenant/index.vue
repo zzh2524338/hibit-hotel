@@ -1,7 +1,7 @@
 <template>
   <ContentWrap>
     <!-- 列表 -->
-    <vxe-grid ref="xGrid" v-bind="gridOptions" class="xtable-scrollbar">
+    <XTable @register="registerTable">
       <template #toolbar_buttons>
         <!-- 操作：新增 -->
         <XButton
@@ -16,7 +16,7 @@
           preIcon="ep:download"
           :title="t('action.export')"
           v-hasPermi="['system:tenant:export']"
-          @click="handleExport()"
+          @click="exportList('租户列表.xls')"
         />
       </template>
       <template #accountCount_default="{ row }">
@@ -46,10 +46,10 @@
           preIcon="ep:delete"
           :title="t('action.del')"
           v-hasPermi="['system:tenant:delete']"
-          @click="handleDelete(row.id)"
+          @click="deleteData(row.id)"
         />
       </template>
-    </vxe-grid>
+    </XTable>
   </ContentWrap>
   <XModal v-model="dialogVisible" :title="dialogTitle">
     <!-- 对话框(添加 / 修改) -->
@@ -63,7 +63,7 @@
     <Descriptions
       v-if="actionType === 'detail'"
       :schema="allSchemas.detailSchema"
-      :data="detailRef"
+      :data="detailData"
     >
       <template #packageId="{ row }">
         <el-tag v-if="row.packageId === 0" type="danger">系统租户</el-tag>
@@ -86,21 +86,14 @@
   </XModal>
 </template>
 <script setup lang="ts" name="Tenant">
-import { ref, unref } from 'vue'
-import { useI18n } from '@/hooks/web/useI18n'
-import { useMessage } from '@/hooks/web/useMessage'
-import { useVxeGrid } from '@/hooks/web/useVxeGrid'
-import { VxeGridInstance } from 'vxe-table'
-import { ElTag } from 'element-plus'
-import { FormExpose } from '@/components/Form'
+import type { FormExpose } from '@/components/Form'
 import * as TenantApi from '@/api/system/tenant'
 import { rules, allSchemas, tenantPackageOption } from './tenant.data'
 
 const { t } = useI18n() // 国际化
 const message = useMessage() // 消息弹窗
 // 列表相关的变量
-const xGrid = ref<VxeGridInstance>() // 列表 Grid Ref
-const { gridOptions, getList, deleteData, exportList } = useVxeGrid<TenantApi.TenantVO>({
+const [registerTable, { reload, deleteData, exportList }] = useXTable({
   allSchemas: allSchemas,
   getListApi: TenantApi.getTenantPageApi,
   deleteApi: TenantApi.deleteTenantApi,
@@ -112,7 +105,7 @@ const actionType = ref('') // 操作按钮的类型
 const dialogVisible = ref(false) // 是否显示弹出层
 const dialogTitle = ref('edit') // 弹出层标题
 const formRef = ref<FormExpose>() // 表单 Ref
-const detailRef = ref() // 详情 Ref
+const detailData = ref() // 详情 Ref
 const getPackageName = (packageId: number) => {
   for (let item of tenantPackageOption) {
     if (item.value === packageId) {
@@ -147,18 +140,8 @@ const handleUpdate = async (rowId: number) => {
 const handleDetail = async (rowId: number) => {
   // 设置数据
   const res = await TenantApi.getTenantApi(rowId)
-  detailRef.value = res
+  detailData.value = res
   setDialogTile('detail')
-}
-
-// 删除操作
-const handleDelete = async (rowId: number) => {
-  await deleteData(xGrid, rowId)
-}
-
-// 导出操作
-const handleExport = async () => {
-  await exportList(xGrid, '租户列表.xls')
 }
 
 // 提交按钮
@@ -183,7 +166,7 @@ const submitForm = async () => {
       } finally {
         actionLoading.value = false
         // 刷新列表
-        await getList(xGrid)
+        await reload()
       }
     }
   })

@@ -1,10 +1,9 @@
 package cn.iocoder.yudao.module.hotel.controller.admin.company.vo;
 
-import lombok.*;
-import java.util.*;
-import io.swagger.annotations.*;
-
 import com.alibaba.excel.annotation.ExcelProperty;
+import lombok.Data;
+
+import java.util.Date;
 
 /**
  * 公司信息 Excel VO

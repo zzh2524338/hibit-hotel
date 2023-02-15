@@ -1,8 +1,4 @@
-import { reactive } from 'vue'
-import { useI18n } from '@/hooks/web/useI18n'
-import { required } from '@/utils/formRules'
-import { DICT_TYPE } from '@/utils/dict'
-import { VxeCrudSchema, useVxeCrudSchemas } from '@/hooks/web/useVxeCrudSchemas'
+import type { VxeCrudSchema } from '@/hooks/web/useVxeCrudSchemas'
 // 国际化
 const { t } = useI18n()
 // 表单校验
@@ -28,7 +24,8 @@ const crudSchemas = reactive<VxeCrudSchema>({
       title: '角色类型',
       field: 'type',
       dictType: DICT_TYPE.SYSTEM_ROLE_TYPE,
-      dictClass: 'number'
+      dictClass: 'number',
+      isForm: false
     },
     {
       title: '角色标识',
@@ -38,6 +35,21 @@ const crudSchemas = reactive<VxeCrudSchema>({
     {
       title: '显示顺序',
       field: 'sort'
+    },
+    {
+      title: t('form.remark'),
+      field: 'remark',
+      isTable: false,
+      form: {
+        component: 'Input',
+        componentProps: {
+          type: 'textarea',
+          rows: 4
+        },
+        colProps: {
+          span: 24
+        }
+      }
     },
     {
       title: t('common.status'),

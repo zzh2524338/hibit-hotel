@@ -1,7 +1,7 @@
 <template>
   <ContentWrap>
     <!-- 列表 -->
-    <vxe-grid ref="xGrid" v-bind="gridOptions" class="xtable-scrollbar">
+    <XTable @register="registerTable">
       <template #toolbar_buttons>
         <!-- 操作：新增 -->
         <XButton
@@ -35,21 +35,16 @@
           @click="handleMaster(row)"
         />
         <!-- 操作：测试 -->
-        <XTextButton
-          preIcon="ep:share"
-          :title="t('action.test')"
-          v-hasPermi="['infra:file-config:update']"
-          @click="handleUpdate(row.id)"
-        />
+        <XTextButton preIcon="ep:share" :title="t('action.test')" @click="handleTest(row.id)" />
         <!-- 操作：删除 -->
         <XTextButton
           preIcon="ep:delete"
           :title="t('action.del')"
           v-hasPermi="['infra:file-config:delete']"
-          @click="handleDelete(row.id)"
+          @click="deleteData(row.id)"
         />
       </template>
-    </vxe-grid>
+    </XTable>
   </ContentWrap>
   <XModal v-model="dialogVisible" :title="dialogTitle">
     <!-- 对话框(添加 / 修改) -->
@@ -69,8 +64,8 @@
       <el-form-item label="存储器" prop="storage">
         <el-select v-model="form.storage" placeholder="请选择存储器" :disabled="form.id !== 0">
           <el-option
-            v-for="dict in getIntDictOptions(DICT_TYPE.INFRA_FILE_STORAGE)"
-            :key="dict.value"
+            v-for="(dict, index) in getIntDictOptions(DICT_TYPE.INFRA_FILE_STORAGE)"
+            :key="index"
             :label="dict.label"
             :value="dict.value"
           />
@@ -163,23 +158,7 @@
   </XModal>
 </template>
 <script setup lang="ts" name="FileConfig">
-// 全局相关的 import
-import { reactive, ref } from 'vue'
-import {
-  ElForm,
-  ElFormItem,
-  FormInstance,
-  ElSelect,
-  ElOption,
-  ElInput,
-  ElInputNumber,
-  ElRadio,
-  ElRadioGroup
-} from 'element-plus'
-import { useI18n } from '@/hooks/web/useI18n'
-import { useMessage } from '@/hooks/web/useMessage'
-import { useVxeGrid } from '@/hooks/web/useVxeGrid'
-import { VxeGridInstance } from 'vxe-table'
+import type { FormInstance } from 'element-plus'
 // 业务相关的 import
 import * as FileConfigApi from '@/api/infra/fileConfig'
 import { rules, allSchemas } from './fileConfig.data'
@@ -188,8 +167,7 @@ import { getIntDictOptions, DICT_TYPE } from '@/utils/dict'
 const { t } = useI18n() // 国际化
 const message = useMessage() // 消息弹窗
 // 列表相关的变量
-const xGrid = ref<VxeGridInstance>() // 列表 Grid Ref
-const { gridOptions, getList, deleteData } = useVxeGrid<FileConfigApi.FileConfigVO>({
+const [registerTable, { reload, deleteData }] = useXTable({
   allSchemas: allSchemas,
   getListApi: FileConfigApi.getFileConfigPageApi,
   deleteApi: FileConfigApi.deleteFileConfigApi
@@ -202,7 +180,7 @@ const dialogVisible = ref(false) // 是否显示弹出层
 const dialogTitle = ref('edit') // 弹出层标题
 const formRef = ref<FormInstance>() // 表单 Ref
 const detailData = ref() // 详情 Ref
-let form = reactive<FileConfigApi.FileConfigVO>({
+const form = ref<FileConfigApi.FileConfigVO>({
   id: 0,
   name: '',
   storage: 0,
@@ -211,7 +189,7 @@ let form = reactive<FileConfigApi.FileConfigVO>({
   config: {
     basePath: '',
     host: '',
-    port: '',
+    port: 0,
     username: '',
     password: '',
     mode: '',
@@ -222,7 +200,7 @@ let form = reactive<FileConfigApi.FileConfigVO>({
     domain: ''
   },
   remark: '',
-  createTime: ''
+  createTime: new Date()
 })
 // 设置标题
 const setDialogTile = (type: string) => {
@@ -235,13 +213,35 @@ const setDialogTile = (type: string) => {
 const handleCreate = (formEl: FormInstance | undefined) => {
   setDialogTile('create')
   formEl?.resetFields()
+  form.value = {
+    id: 0,
+    name: '',
+    storage: 0,
+    master: false,
+    visible: false,
+    config: {
+      basePath: '',
+      host: '',
+      port: 0,
+      username: '',
+      password: '',
+      mode: '',
+      endpoint: '',
+      bucket: '',
+      accessKey: '',
+      accessSecret: '',
+      domain: ''
+    },
+    remark: '',
+    createTime: new Date()
+  }
 }
 
 // 修改操作
 const handleUpdate = async (rowId: number) => {
   // 设置数据
   const res = await FileConfigApi.getFileConfigApi(rowId)
-  form = res
+  form.value = res
   setDialogTile('update')
 }
 
@@ -259,13 +259,13 @@ const handleMaster = (row: FileConfigApi.FileConfigVO) => {
     .confirm('是否确认修改配置【 ' + row.name + ' 】为主配置?', t('common.reminder'))
     .then(async () => {
       await FileConfigApi.updateFileConfigMasterApi(row.id)
-      await getList(xGrid)
+      await reload()
     })
 }
 
-// 删除操作
-const handleDelete = async (rowId: number) => {
-  await deleteData(xGrid, rowId)
+const handleTest = async (rowId: number) => {
+  const res = await FileConfigApi.testFileConfigApi(rowId)
+  message.alert('测试通过，上传文件成功！访问地址：' + res)
 }
 
 // 提交按钮
@@ -277,16 +277,16 @@ const submitForm = async (formEl: FormInstance | undefined) => {
       // 提交请求
       try {
         if (actionType.value === 'create') {
-          await FileConfigApi.createFileConfigApi(form)
+          await FileConfigApi.createFileConfigApi(form.value)
           message.success(t('common.createSuccess'))
         } else {
-          await FileConfigApi.updateFileConfigApi(form)
+          await FileConfigApi.updateFileConfigApi(form.value)
           message.success(t('common.updateSuccess'))
         }
         dialogVisible.value = false
       } finally {
         actionLoading.value = false
-        await getList(xGrid)
+        await reload()
       }
     }
   })

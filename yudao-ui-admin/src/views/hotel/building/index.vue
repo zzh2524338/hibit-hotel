@@ -12,14 +12,15 @@
       <el-form-item label="电话" prop="phone">
         <el-input v-model="queryParams.phone" placeholder="请输入电话" clearable @keyup.enter.native="handleQuery"/>
       </el-form-item>
-      <el-form-item label="总楼层" prop="floorNum">
-        <el-input v-model="queryParams.floorNum" placeholder="请输入总楼层" clearable @keyup.enter.native="handleQuery"/>
-      </el-form-item>
       <el-form-item label="地址" prop="address">
         <el-input v-model="queryParams.address" placeholder="请输入地址" clearable @keyup.enter.native="handleQuery"/>
       </el-form-item>
       <el-form-item label="所属公司" prop="companyId">
         <el-input v-model="queryParams.companyId" placeholder="请输入所属公司" clearable @keyup.enter.native="handleQuery"/>
+      </el-form-item>
+      <el-form-item label="创建时间" prop="createTime">
+        <el-date-picker v-model="queryParams.createTime" style="width: 240px" value-format="yyyy-MM-dd HH:mm:ss" type="daterange"
+                        range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" :default-time="['00:00:00', '23:59:59']" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" @click="handleQuery">搜索</el-button>
@@ -49,8 +50,13 @@
       <el-table-column label="总楼层" align="center" prop="floorNum" />
       <el-table-column label="地址" align="center" prop="address" />
       <el-table-column label="所属公司" align="center" prop="companyId" />
+      <el-table-column label="创建时间" align="center" prop="createTime" width="180">
+        <template v-slot="scope">
+          <span>{{ parseTime(scope.row.createTime) }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
+        <template v-slot="scope">
           <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
                      v-hasPermi="['hotel:building:update']">修改</el-button>
           <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
@@ -122,9 +128,9 @@ export default {
         name: null,
         manager: null,
         phone: null,
-        floorNum: null,
         address: null,
         companyId: null,
+        createTime: [],
       },
       // 表单参数
       form: {},

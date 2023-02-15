@@ -60,11 +60,11 @@
 </template>
 <script setup lang="ts">
 import { underlineToHump } from '@/utils'
-import { useI18n } from '@/hooks/web/useI18n'
+
 import { useDesign } from '@/hooks/web/useDesign'
 import { useAppStore } from '@/store/modules/app'
-import { ThemeSwitch } from '@/components/ThemeSwitch'
-import { LocaleDropdown } from '@/components/LocaleDropdown'
+import { ThemeSwitch } from '@/layout/components/ThemeSwitch'
+import { LocaleDropdown } from '@/layout/components/LocaleDropdown'
 import { LoginForm, MobileForm, RegisterForm, QrCodeForm } from './components'
 
 const { t } = useI18n()

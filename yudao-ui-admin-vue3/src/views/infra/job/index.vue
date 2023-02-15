@@ -1,7 +1,7 @@
 <template>
   <ContentWrap>
     <!-- 列表 -->
-    <vxe-grid ref="xGrid" v-bind="gridOptions" class="xtable-scrollbar">
+    <XTable @register="registerTable">
       <template #toolbar_buttons>
         <!-- 操作：新增 -->
         <XButton
@@ -17,14 +17,14 @@
           preIcon="ep:download"
           :title="t('action.export')"
           v-hasPermi="['infra:job:export']"
-          @click="handleExport()"
+          @click="exportList('定时任务.xls')"
         />
         <XButton
           type="info"
           preIcon="ep:zoom-in"
           title="执行日志"
           v-hasPermi="['infra:job:query']"
-          @click="handleJobLog"
+          @click="handleJobLog()"
         />
       </template>
       <template #actionbtns_default="{ row }">
@@ -46,7 +46,7 @@
           preIcon="ep:delete"
           :title="t('action.del')"
           v-hasPermi="['infra:job:delete']"
-          @click="handleDelete(row.id)"
+          @click="deleteData(row.id)"
         />
         <el-dropdown class="p-0.5" v-hasPermi="['infra:job:trigger', 'infra:job:query']">
           <XTextButton :title="t('action.more')" postIcon="ep:arrow-down" />
@@ -83,7 +83,7 @@
           </template>
         </el-dropdown>
       </template>
-    </vxe-grid>
+    </XTable>
   </ContentWrap>
   <XModal v-model="dialogVisible" :title="dialogTitle">
     <!-- 对话框(添加 / 修改) -->
@@ -93,15 +93,15 @@
       :rules="rules"
       ref="formRef"
     >
-      <template #cronExpression>
-        <Crontab v-model="cronExpression" :shortcuts="shortcuts" />
+      <template #cronExpression="form">
+        <Crontab v-model="form['cronExpression']" :shortcuts="shortcuts" />
       </template>
     </Form>
     <!-- 对话框(详情) -->
     <Descriptions
       v-if="actionType === 'detail'"
       :schema="allSchemas.detailSchema"
-      :data="detailRef"
+      :data="detailData"
     >
       <template #retryInterval="{ row }">
         <span>{{ row.retryInterval + '毫秒' }} </span>
@@ -129,15 +129,7 @@
   </XModal>
 </template>
 <script setup lang="ts" name="Job">
-import { ref, unref } from 'vue'
-import { useRouter } from 'vue-router'
-import { ElDropdown, ElDropdownMenu, ElDropdownItem } from 'element-plus'
-import { useI18n } from '@/hooks/web/useI18n'
-import { useMessage } from '@/hooks/web/useMessage'
-import { useVxeGrid } from '@/hooks/web/useVxeGrid'
-import { VxeGridInstance } from 'vxe-table'
-import { FormExpose } from '@/components/Form'
-import { Crontab } from '@/components/Crontab'
+import type { FormExpose } from '@/components/Form'
 import * as JobApi from '@/api/infra/job'
 import { rules, allSchemas } from './job.data'
 import { InfraJobStatusEnum } from '@/utils/constants'
@@ -147,8 +139,7 @@ const message = useMessage() // 消息弹窗
 const { push } = useRouter()
 
 // 列表相关的变量
-const xGrid = ref<VxeGridInstance>() // 列表 Grid Ref
-const { gridOptions, getList, deleteData, exportList } = useVxeGrid<JobApi.JobVO>({
+const [registerTable, { reload, deleteData, exportList }] = useXTable({
   allSchemas: allSchemas,
   getListApi: JobApi.getJobPageApi,
   deleteApi: JobApi.deleteJobApi,
@@ -161,8 +152,7 @@ const actionType = ref('') // 操作按钮的类型
 const dialogVisible = ref(false) // 是否显示弹出层
 const dialogTitle = ref('edit') // 弹出层标题
 const formRef = ref<FormExpose>() // 表单 Ref
-const detailRef = ref() // 详情 Ref
-const cronExpression = ref('')
+const detailData = ref() // 详情 Ref
 const nextTimes = ref([])
 const shortcuts = ref([
   {
@@ -179,13 +169,7 @@ const setDialogTile = (type: string) => {
 
 // 新增操作
 const handleCreate = () => {
-  cronExpression.value = ''
   setDialogTile('create')
-}
-
-// 导出操作
-const handleExport = async () => {
-  await exportList(xGrid, '定时任务.xls')
 }
 
 // 修改操作
@@ -193,7 +177,6 @@ const handleUpdate = async (rowId: number) => {
   setDialogTile('update')
   // 设置数据
   const res = await JobApi.getJobApi(rowId)
-  cronExpression.value = res.cronExpression
   unref(formRef)?.setValues(res)
 }
 
@@ -201,7 +184,7 @@ const handleUpdate = async (rowId: number) => {
 const handleDetail = async (rowId: number) => {
   // 设置数据
   const res = await JobApi.getJobApi(rowId)
-  detailRef.value = res
+  detailData.value = res
   // 后续执行时长
   const jobNextTime = await JobApi.getJobNextTimesApi(rowId)
   nextTimes.value = jobNextTime
@@ -253,10 +236,6 @@ const parseTime = (time) => {
   return time_str
 }
 
-// 删除操作
-const handleDelete = async (rowId: number) => {
-  await deleteData(xGrid, rowId)
-}
 const handleChangeStatus = async (row: JobApi.JobVO) => {
   const text = row.status === InfraJobStatusEnum.STOP ? '开启' : '关闭'
   const status =
@@ -270,7 +249,7 @@ const handleChangeStatus = async (row: JobApi.JobVO) => {
           : InfraJobStatusEnum.STOP
       await JobApi.updateJobStatusApi(row.id, status)
       message.success(text + '成功')
-      await getList(xGrid)
+      await reload()
     })
     .catch(() => {
       row.status =
@@ -280,7 +259,7 @@ const handleChangeStatus = async (row: JobApi.JobVO) => {
     })
 }
 // 执行日志
-const handleJobLog = (rowId: number) => {
+const handleJobLog = (rowId?: number) => {
   if (rowId) {
     push('/job/job-log?id=' + rowId)
   } else {
@@ -292,7 +271,7 @@ const handleRun = (row: JobApi.JobVO) => {
   message.confirm('确认要立即执行一次' + row.name + '?', t('common.reminder')).then(async () => {
     await JobApi.runJobApi(row.id)
     message.success('执行成功')
-    await getList(xGrid)
+    await reload()
   })
 }
 // 提交按钮
@@ -305,7 +284,6 @@ const submitForm = async () => {
       // 提交请求
       try {
         const data = unref(formRef)?.formModel as JobApi.JobVO
-        data.cronExpression = cronExpression.value
         if (actionType.value === 'create') {
           await JobApi.createJobApi(data)
           message.success(t('common.createSuccess'))
@@ -316,7 +294,7 @@ const submitForm = async () => {
         dialogVisible.value = false
       } finally {
         actionLoading.value = false
-        await getList(xGrid)
+        await reload()
       }
     }
   })

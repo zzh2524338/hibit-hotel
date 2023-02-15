@@ -1,16 +1,10 @@
-import axios, {
-  AxiosInstance,
-  AxiosRequestConfig,
-  AxiosRequestHeaders,
-  AxiosResponse,
-  AxiosError
-} from 'axios'
+import axios, { AxiosInstance, AxiosRequestHeaders, AxiosResponse, AxiosError } from 'axios'
 import { ElMessage, ElMessageBox, ElNotification } from 'element-plus'
 import qs from 'qs'
 import { config } from '@/config/axios/config'
 import { getAccessToken, getRefreshToken, getTenantId, removeToken, setToken } from '@/utils/auth'
 import errorCode from './errorCode'
-import { useI18n } from '@/hooks/web/useI18n'
+
 import { resetRouter } from '@/router'
 import { useCache } from '@/hooks/web/useCache'
 
@@ -41,7 +35,7 @@ const service: AxiosInstance = axios.create({
 
 // request拦截器
 service.interceptors.request.use(
-  (config: AxiosRequestConfig) => {
+  (config) => {
     // 是否需要设置 token
     let isToken = (config!.headers || {}).isToken === false
     whiteList.some((v) => {
@@ -168,15 +162,19 @@ service.interceptors.response.use(
       ElMessage.error(t('sys.api.errMsg500'))
       return Promise.reject(new Error(msg))
     } else if (code === 901) {
-      ElMessage.error(
-        '<div>' +
+      ElMessage.error({
+        duration: 5,
+        offset: 300,
+        dangerouslyUseHTMLString: true,
+        message:
+          '<div>' +
           t('sys.api.errMsg901') +
           '</div>' +
           '<div> &nbsp; </div>' +
           '<div>参考 https://doc.iocoder.cn/ 教程</div>' +
           '<div> &nbsp; </div>' +
           '<div>5 分钟搭建本地环境</div>'
-      )
+      })
       return Promise.reject(new Error(msg))
     } else if (code !== 200) {
       if (msg === '无效的刷新令牌') {

@@ -20,22 +20,22 @@ public interface BuildingMapper extends BaseMapperX<BuildingDO> {
     default PageResult<BuildingDO> selectPage(BuildingPageReqVO reqVO) {
         return selectPage(reqVO, new LambdaQueryWrapperX<BuildingDO>()
                 .likeIfPresent(BuildingDO::getName, reqVO.getName())
-                .eqIfPresent(BuildingDO::getManager, reqVO.getManager())
-                .eqIfPresent(BuildingDO::getPhone, reqVO.getPhone())
-                .eqIfPresent(BuildingDO::getFloorNum, reqVO.getFloorNum())
-                .eqIfPresent(BuildingDO::getAddress, reqVO.getAddress())
+                .likeIfPresent(BuildingDO::getManager, reqVO.getManager())
+                .likeIfPresent(BuildingDO::getPhone, reqVO.getPhone())
+                .likeIfPresent(BuildingDO::getAddress, reqVO.getAddress())
                 .eqIfPresent(BuildingDO::getCompanyId, reqVO.getCompanyId())
+                .betweenIfPresent(BuildingDO::getCreateTime, reqVO.getCreateTime())
                 .orderByDesc(BuildingDO::getId));
     }
 
     default List<BuildingDO> selectList(BuildingExportReqVO reqVO) {
         return selectList(new LambdaQueryWrapperX<BuildingDO>()
                 .likeIfPresent(BuildingDO::getName, reqVO.getName())
-                .eqIfPresent(BuildingDO::getManager, reqVO.getManager())
-                .eqIfPresent(BuildingDO::getPhone, reqVO.getPhone())
-                .eqIfPresent(BuildingDO::getFloorNum, reqVO.getFloorNum())
-                .eqIfPresent(BuildingDO::getAddress, reqVO.getAddress())
+                .likeIfPresent(BuildingDO::getManager, reqVO.getManager())
+                .likeIfPresent(BuildingDO::getPhone, reqVO.getPhone())
+                .likeIfPresent(BuildingDO::getAddress, reqVO.getAddress())
                 .eqIfPresent(BuildingDO::getCompanyId, reqVO.getCompanyId())
+                .betweenIfPresent(BuildingDO::getCreateTime, reqVO.getCreateTime())
                 .orderByDesc(BuildingDO::getId));
     }
 

@@ -1,7 +1,7 @@
 <template>
   <ContentWrap>
     <!-- 列表 -->
-    <vxe-grid ref="xGrid" v-bind="gridOptions" class="xtable-scrollbar">
+    <XTable @register="registerTable">
       <!-- 操作：新增 -->
       <template #toolbar_buttons>
         <XButton
@@ -32,10 +32,10 @@
           preIcon="ep:delete"
           :title="t('action.del')"
           v-hasPermi="['system:notice:delete']"
-          @click="handleDelete(row.id)"
+          @click="deleteData(row.id)"
         />
       </template>
-    </vxe-grid>
+    </XTable>
   </ContentWrap>
   <!-- 弹窗 -->
   <XModal id="noticeModel" v-model="dialogVisible" :title="dialogTitle">
@@ -50,10 +50,10 @@
     <Descriptions
       v-if="actionType === 'detail'"
       :schema="allSchemas.detailSchema"
-      :data="detailRef"
+      :data="detailData"
     >
       <template #content="{ row }">
-        <Editor :model-value="row.content" read-only="true" />
+        <Editor :model-value="row.content" :readonly="true" />
       </template>
     </Descriptions>
     <template #footer>
@@ -71,23 +71,15 @@
   </XModal>
 </template>
 <script setup lang="ts" name="Notice">
-// 全局相关的 import
-import { ref, unref } from 'vue'
-import { useI18n } from '@/hooks/web/useI18n'
-import { useMessage } from '@/hooks/web/useMessage'
-import { useVxeGrid } from '@/hooks/web/useVxeGrid'
-import { VxeGridInstance } from 'vxe-table'
-import { FormExpose } from '@/components/Form'
+import type { FormExpose } from '@/components/Form'
 // 业务相关的 import
 import * as NoticeApi from '@/api/system/notice'
 import { rules, allSchemas } from './notice.data'
-import { Editor } from '@/components/Editor'
 
 const { t } = useI18n() // 国际化
 const message = useMessage() // 消息弹窗
 // 列表相关的变量
-const xGrid = ref<VxeGridInstance>() // 列表 Grid Ref
-const { gridOptions, getList, deleteData } = useVxeGrid<NoticeApi.NoticeVO>({
+const [registerTable, { reload, deleteData }] = useXTable({
   allSchemas: allSchemas,
   getListApi: NoticeApi.getNoticePageApi,
   deleteApi: NoticeApi.deleteNoticeApi
@@ -98,7 +90,7 @@ const dialogTitle = ref('edit') // 弹出层标题
 const actionType = ref('') // 操作按钮的类型
 const actionLoading = ref(false) // 按钮 Loading
 const formRef = ref<FormExpose>() // 表单 Ref
-const detailRef = ref() // 详情 Ref
+const detailData = ref() // 详情 Ref
 
 // 设置标题
 const setDialogTile = (type: string) => {
@@ -125,12 +117,7 @@ const handleDetail = async (rowId: number) => {
   setDialogTile('detail')
   // 设置数据
   const res = await NoticeApi.getNoticeApi(rowId)
-  detailRef.value = res
-}
-
-// 删除操作
-const handleDelete = async (rowId: number) => {
-  await deleteData(xGrid, rowId)
+  detailData.value = res
 }
 
 // 提交新增/修改的表单
@@ -153,7 +140,7 @@ const submitForm = async () => {
         dialogVisible.value = false
       } finally {
         actionLoading.value = false
-        await getList(xGrid)
+        await reload()
       }
     }
   })

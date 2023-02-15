@@ -1,5 +1,5 @@
 import { Layout } from '@/utils/routerHelper'
-import { useI18n } from '@/hooks/web/useI18n'
+
 const { t } = useI18n()
 /**
 * redirect: noredirect        当设置 noredirect 的时候该路由在面包屑导航中不可被点击
@@ -64,14 +64,14 @@ const remainingRouter: AppRouteRecordRaw[] = [
         meta: {
           title: t('router.home'),
           icon: 'ep:home-filled',
-          noCache: true,
+          noCache: false,
           affix: true
         }
       }
     ]
   },
   {
-    path: '/userinfo',
+    path: '/user',
     component: Layout,
     name: 'UserInfo',
     meta: {
@@ -85,9 +85,21 @@ const remainingRouter: AppRouteRecordRaw[] = [
         meta: {
           canTo: true,
           hidden: true,
-          noTagsView: true,
+          noTagsView: false,
           icon: 'ep:user',
           title: t('common.profile')
+        }
+      },
+      {
+        path: 'notify-message',
+        component: () => import('@/views/system/notify/my/index.vue'),
+        name: 'MyNotifyMessage',
+        meta: {
+          canTo: true,
+          hidden: true,
+          noTagsView: false,
+          icon: 'ep:message',
+          title: '我的站内信'
         }
       }
     ]
@@ -177,6 +189,111 @@ const remainingRouter: AppRouteRecordRaw[] = [
       title: '500',
       noTagsView: true
     }
+  },
+  {
+    path: '/bpm',
+    component: Layout,
+    name: 'bpm',
+    meta: {
+      hidden: true
+    },
+    children: [
+      {
+        path: '/manager/form/edit',
+        component: () => import('@/views/bpm/form/formEditor.vue'),
+        name: 'bpmFormEditor',
+        meta: {
+          noCache: true,
+          hidden: true,
+          canTo: true,
+          title: '设计流程表单',
+          activeMenu: 'bpm/manager/form/formEditor'
+        }
+      },
+      {
+        path: '/manager/model/edit',
+        component: () => import('@/views/bpm/model/modelEditor.vue'),
+        name: 'modelEditor',
+        meta: {
+          noCache: true,
+          hidden: true,
+          canTo: true,
+          title: '设计流程',
+          activeMenu: 'bpm/manager/model/design'
+        }
+      },
+      {
+        path: '/manager/definition',
+        component: () => import('@/views/bpm/definition/index.vue'),
+        name: 'BpmProcessDefinitionList',
+        meta: {
+          noCache: true,
+          hidden: true,
+          canTo: true,
+          title: '流程定义',
+          activeMenu: 'bpm/definition/index'
+        }
+      },
+      {
+        path: '/manager/task-assign-rule',
+        component: () => import('@/views/bpm/taskAssignRule/index.vue'),
+        name: 'BpmTaskAssignRuleList',
+        meta: {
+          noCache: true,
+          hidden: true,
+          canTo: true,
+          title: '任务分配规则'
+        }
+      },
+      {
+        path: '/process-instance/create',
+        component: () => import('@/views/bpm/processInstance/create.vue'),
+        name: 'BpmProcessInstanceCreate',
+        meta: {
+          noCache: true,
+          hidden: true,
+          canTo: true,
+          title: '发起流程',
+          activeMenu: 'bpm/processInstance/create'
+        }
+      },
+      {
+        path: '/process-instance/detail',
+        component: () => import('@/views/bpm/processInstance/detail.vue'),
+        name: 'BpmProcessInstanceDetail',
+        meta: {
+          noCache: true,
+          hidden: true,
+          canTo: true,
+          title: '流程详情',
+          activeMenu: 'bpm/processInstance/detail'
+        }
+      },
+      {
+        path: '/bpm/oa/leave/create',
+        component: () => import('@/views/bpm/oa/leave/create.vue'),
+        name: 'OALeaveCreate',
+        meta: {
+          noCache: true,
+          hidden: true,
+          canTo: true,
+          title: '发起 OA 请假',
+          activeMenu: 'bpm/oa/leave/create'
+        }
+      },
+      {
+        path: '/bpm/oa/leave/detail',
+        component: () => import('@/views/bpm/oa/leave/detail.vue'),
+        name: 'OALeaveDetail',
+        meta: {
+          noCache: true,
+          hidden: true,
+          canTo: true,
+          title: '查看 OA 请假',
+          activeMenu: 'bpm/oa/leave/detail'
+        }
+      }
+    ]
   }
 ]
 

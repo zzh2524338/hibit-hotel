@@ -7,14 +7,14 @@ import cn.iocoder.yudao.module.hotel.dal.dataobject.roomtype.RoomTypeDO;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 
 /**
- * 房间类型 Service 接口
+ * 房型管理 Service 接口
  *
  * @author 芋道源码
  */
 public interface RoomTypeService {
 
     /**
-     * 创建房间类型
+     * 创建房型管理
      *
      * @param createReqVO 创建信息
      * @return 编号
@@ -22,32 +22,32 @@ public interface RoomTypeService {
     Long createRoomType(@Valid RoomTypeCreateReqVO createReqVO);
 
     /**
-     * 更新房间类型
+     * 更新房型管理
      *
      * @param updateReqVO 更新信息
      */
     void updateRoomType(@Valid RoomTypeUpdateReqVO updateReqVO);
 
     /**
-     * 删除房间类型
+     * 删除房型管理
      *
      * @param id 编号
      */
     void deleteRoomType(Long id);
 
     /**
-     * 获得房间类型
+     * 获得房型管理
      *
      * @param id 编号
-     * @return 房间类型
+     * @return 房型管理
      */
     RoomTypeDO getRoomType(Long id);
 
     /**
-     * 获得房间类型列表
+     * 获得房型管理列表
      *
      * @param ids 编号
-     * @return 房间类型列表
+     * @return 房型管理列表
      */
     List<RoomTypeDO> getRoomTypeListByIds(Collection<Long> ids);
 
@@ -59,18 +59,18 @@ public interface RoomTypeService {
     List<RoomTypeDO> getRoomTypeList();
 
     /**
-     * 获得房间类型分页
+     * 获得房型管理分页
      *
      * @param pageReqVO 分页查询
-     * @return 房间类型分页
+     * @return 房型管理分页
      */
     PageResult<RoomTypeDO> getRoomTypePage(RoomTypePageReqVO pageReqVO);
 
     /**
-     * 获得房间类型列表, 用于 Excel 导出
+     * 获得房型管理列表, 用于 Excel 导出
      *
      * @param exportReqVO 查询条件
-     * @return 房间类型列表
+     * @return 房型管理列表
      */
     List<RoomTypeDO> getRoomTypeList(RoomTypeExportReqVO exportReqVO);
 

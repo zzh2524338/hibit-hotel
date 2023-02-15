@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { propTypes } from '@/utils/propTypes'
-import { computed, useAttrs, useSlots } from 'vue'
 import { ElScrollbar } from 'element-plus'
 const slots = useSlots()
 
@@ -10,8 +9,8 @@ const props = defineProps({
   fullscreen: propTypes.bool.def(false),
   loading: propTypes.bool.def(false),
   title: propTypes.string.def('弹窗'),
-  width: propTypes.string.def('800'),
-  height: propTypes.string.def('480'),
+  width: propTypes.string.def('40%'),
+  height: propTypes.string.def('60%'),
   minWidth: propTypes.string.def('460'),
   minHeight: propTypes.string.def('320'),
   showFooter: propTypes.bool.def(true)

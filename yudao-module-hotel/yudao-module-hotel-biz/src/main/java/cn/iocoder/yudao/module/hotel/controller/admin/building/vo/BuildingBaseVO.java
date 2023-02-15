@@ -1,8 +1,10 @@
 package cn.iocoder.yudao.module.hotel.controller.admin.building.vo;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import java.util.*;
-import io.swagger.annotations.*;
+import java.time.LocalDateTime;
+import java.time.LocalDateTime;
 import javax.validation.constraints.*;
 
 /**
@@ -12,27 +14,27 @@ import javax.validation.constraints.*;
 @Data
 public class BuildingBaseVO {
 
-    @ApiModelProperty(value = "name", required = true)
+    @Schema(description = "name", required = true, example = "王五")
     @NotNull(message = "name不能为空")
     private String name;
 
-    @ApiModelProperty(value = "负责人", required = true)
+    @Schema(description = "负责人", required = true)
     @NotNull(message = "负责人不能为空")
     private String manager;
 
-    @ApiModelProperty(value = "电话", required = true)
+    @Schema(description = "电话", required = true)
     @NotNull(message = "电话不能为空")
     private String phone;
 
-    @ApiModelProperty(value = "总楼层", required = true)
+    @Schema(description = "总楼层", required = true)
     @NotNull(message = "总楼层不能为空")
     private Integer floorNum;
 
-    @ApiModelProperty(value = "地址", required = true)
+    @Schema(description = "地址", required = true)
     @NotNull(message = "地址不能为空")
     private String address;
 
-    @ApiModelProperty(value = "所属公司", required = true)
+    @Schema(description = "所属公司", required = true, example = "24139")
     @NotNull(message = "所属公司不能为空")
     private Long companyId;
 

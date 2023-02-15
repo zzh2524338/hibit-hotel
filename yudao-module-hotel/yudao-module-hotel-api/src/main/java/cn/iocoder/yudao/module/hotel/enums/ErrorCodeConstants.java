@@ -19,22 +19,16 @@ public interface ErrorCodeConstants {
     // ========== 房型  1010003000 ============
     ErrorCode ROOM_TYPE_NOT_EXISTS = new ErrorCode(1010003000, "该房型已经下架，请刷新页面重新获取");
 
+
     // ========== 房间信息  1010004000 ============
     ErrorCode ROOM_INFO_NOT_EXISTS = new ErrorCode(1010004000, "房间信息不存在");
 
-    // ========== 订单信息  1010005000 ============
-    ErrorCode ORDER_INFO_NOT_EXISTS = new ErrorCode(1010005000, "订单不存在");
-    ErrorCode GUEST_INFO_CANNOT_BE_NULL = new ErrorCode(1010005001, "请检查客人信息是否输入");
 
-    // ========== 会员信息 1010006000 ==========
-    ErrorCode MEMBER_INFO_NOT_EXISTS = new ErrorCode(1010006000, "会员信息不存在");
+    // ========== 房价类型  1010005000 ============
+    ErrorCode ROOM_RATE_TYPE_NOT_EXISTS = new ErrorCode(1010005000, "房价类型不存在");
 
-    // ========== 会员等级 1010007000 ==========
-    ErrorCode MEMBER_LEVEL_NOT_EXISTS = new ErrorCode(1010007000, "会员等级不存在");
 
-    // ========== 客史信息 1010008000 ==========
-    ErrorCode GUEST_INFO_NOT_EXISTS = new ErrorCode(1010008000, "客史信息不存在");
-    ErrorCode ID_CARD_INVALID = new ErrorCode(1010008001, "顾客{},身份证号码不正确，请检查:{}");
-
+    // ========== 房型价格  1010006000 ============
+    ErrorCode ROOM_TYPE_RATE_NOT_EXISTS = new ErrorCode(1010006000, "房型价格不存在");
 
 }

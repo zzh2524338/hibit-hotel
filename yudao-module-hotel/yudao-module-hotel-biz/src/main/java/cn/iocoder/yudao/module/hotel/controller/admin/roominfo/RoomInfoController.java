@@ -1,32 +1,31 @@
 package cn.iocoder.yudao.module.hotel.controller.admin.roominfo;
 
-import org.springframework.web.bind.annotation.*;
-import javax.annotation.Resource;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.security.access.prepost.PreAuthorize;
-import io.swagger.annotations.*;
-
-import javax.validation.constraints.*;
-import javax.validation.*;
-import javax.servlet.http.*;
-import java.util.*;
-import java.io.IOException;
-
-import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.pojo.CommonResult;
-import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
-
+import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.excel.core.util.ExcelUtils;
-
 import cn.iocoder.yudao.framework.operatelog.core.annotations.OperateLog;
-import static cn.iocoder.yudao.framework.operatelog.core.enums.OperateTypeEnum.*;
-
 import cn.iocoder.yudao.module.hotel.controller.admin.roominfo.vo.*;
-import cn.iocoder.yudao.module.hotel.dal.dataobject.roominfo.RoomInfoDO;
 import cn.iocoder.yudao.module.hotel.convert.roominfo.RoomInfoConvert;
+import cn.iocoder.yudao.module.hotel.dal.dataobject.roominfo.RoomInfoDO;
 import cn.iocoder.yudao.module.hotel.service.roominfo.RoomInfoService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
-@Api(tags = "管理后台 - 房间信息")
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.List;
+
+import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
+import static cn.iocoder.yudao.framework.operatelog.core.enums.OperateTypeEnum.EXPORT;
+
+@Tag(name = "管理后台 - 房间信息")
 @RestController
 @RequestMapping("/hotel/room-info")
 @Validated
@@ -36,14 +35,14 @@ public class RoomInfoController {
     private RoomInfoService roomInfoService;
 
     @PostMapping("/create")
-    @ApiOperation("创建房间信息")
+    @Operation(summary = "创建房间信息")
     @PreAuthorize("@ss.hasPermission('hotel:room-info:create')")
     public CommonResult<Long> createRoomInfo(@Valid @RequestBody RoomInfoCreateReqVO createReqVO) {
         return success(roomInfoService.createRoomInfo(createReqVO));
     }
 
     @PutMapping("/update")
-    @ApiOperation("更新房间信息")
+    @Operation(summary = "更新房间信息")
     @PreAuthorize("@ss.hasPermission('hotel:room-info:update')")
     public CommonResult<Boolean> updateRoomInfo(@Valid @RequestBody RoomInfoUpdateReqVO updateReqVO) {
         roomInfoService.updateRoomInfo(updateReqVO);
@@ -51,8 +50,8 @@ public class RoomInfoController {
     }
 
     @DeleteMapping("/delete")
-    @ApiOperation("删除房间信息")
-    @ApiImplicitParam(name = "id", value = "编号", required = true, dataTypeClass = Long.class)
+    @Operation(summary = "删除房间信息")
+    @Parameter(name = "id", description = "编号", required = true)
     @PreAuthorize("@ss.hasPermission('hotel:room-info:delete')")
     public CommonResult<Boolean> deleteRoomInfo(@RequestParam("id") Long id) {
         roomInfoService.deleteRoomInfo(id);
@@ -60,8 +59,8 @@ public class RoomInfoController {
     }
 
     @GetMapping("/get")
-    @ApiOperation("获得房间信息")
-    @ApiImplicitParam(name = "id", value = "编号", required = true, example = "1024", dataTypeClass = Long.class)
+    @Operation(summary = "获得房间信息")
+    @Parameter(name = "id", description = "编号", required = true, example = "1024")
     @PreAuthorize("@ss.hasPermission('hotel:room-info:query')")
     public CommonResult<RoomInfoRespVO> getRoomInfo(@RequestParam("id") Long id) {
         RoomInfoDO roomInfo = roomInfoService.getRoomInfo(id);
@@ -69,8 +68,8 @@ public class RoomInfoController {
     }
 
     @GetMapping("/list")
-    @ApiOperation("获得房间信息列表")
-    @ApiImplicitParam(name = "ids", value = "编号列表", required = true, example = "1024,2048", dataTypeClass = List.class)
+    @Operation(summary = "获得房间信息列表")
+    @Parameter(name = "ids", description = "编号列表", required = true, example = "1024,2048")
     @PreAuthorize("@ss.hasPermission('hotel:room-info:query')")
     public CommonResult<List<RoomInfoRespVO>> getRoomInfoList(@RequestParam("ids") Collection<Long> ids) {
         List<RoomInfoDO> list = roomInfoService.getRoomInfoList(ids);
@@ -78,7 +77,7 @@ public class RoomInfoController {
     }
 
     @GetMapping("/page")
-    @ApiOperation("获得房间信息分页")
+    @Operation(summary = "获得房间信息分页")
     @PreAuthorize("@ss.hasPermission('hotel:room-info:query')")
     public CommonResult<PageResult<RoomInfoRespVO>> getRoomInfoPage(@Valid RoomInfoPageReqVO pageVO) {
         PageResult<RoomInfoDO> pageResult = roomInfoService.getRoomInfoPage(pageVO);
@@ -86,7 +85,7 @@ public class RoomInfoController {
     }
 
     @GetMapping("/export-excel")
-    @ApiOperation("导出房间信息 Excel")
+    @Operation(summary = "导出房间信息 Excel")
     @PreAuthorize("@ss.hasPermission('hotel:room-info:export')")
     @OperateLog(type = EXPORT)
     public void exportRoomInfoExcel(@Valid RoomInfoExportReqVO exportReqVO,
