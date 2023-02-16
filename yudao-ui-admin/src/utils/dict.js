@@ -87,6 +87,7 @@ export const DICT_TYPE = {
   // ========== HOTEL 模块 ==========
   HOTEL_ROOM_STATUS: 'hotel_room_status', // 房间状态
   HOTEL_CARD_TYPE: 'hotel_card_type', // 证件类型
+  HOTEL_ROOM_CLEAN_STATUS: 'hotel_room_clean_status', // 证件类型
 
 }
 

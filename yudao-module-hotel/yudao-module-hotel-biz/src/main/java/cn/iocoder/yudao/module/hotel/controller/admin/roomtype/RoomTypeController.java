@@ -79,12 +79,20 @@ public class RoomTypeController {
         return success(RoomTypeConvert.INSTANCE.convert(roomType));
     }
 
-    @GetMapping("/list")
+    @GetMapping("/list/ids")
     @Operation(summary = "获得房型管理列表")
     @Parameter(name = "ids", description = "编号列表", required = true, example = "1024,2048")
     @PreAuthorize("@ss.hasPermission('hotel:room-type:query')")
     public CommonResult<List<RoomTypeRespVO>> getRoomTypeListById(@RequestParam("ids") Collection<Long> ids) {
         List<RoomTypeDO> list = roomTypeService.getRoomTypeListByIds(ids);
+        return success(RoomTypeConvert.INSTANCE.convertList(list));
+    }
+
+    @GetMapping("/list")
+    @Operation(description = "获得所有房间类型列表，没有条件")
+    @PreAuthorize("@ss.hasPermission('hotel:room-type:query')")
+    public CommonResult<List<RoomTypeRespVO>> getRoomTypeList() {
+        List<RoomTypeDO> list = roomTypeService.getRoomTypeList();
         return success(RoomTypeConvert.INSTANCE.convertList(list));
     }
 

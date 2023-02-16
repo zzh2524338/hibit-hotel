@@ -21,8 +21,8 @@ public class RoomInfoExportReqVO {
     @Schema(description = "楼层")
     private Integer floor;
 
-    @Schema(description = "状态")
-    private Integer statusId;
+    @Schema(description = "清洁状态")
+    private Integer cleanStatus;
 
     @Schema(description = "房间钥匙信息")
     private String keyInfo;

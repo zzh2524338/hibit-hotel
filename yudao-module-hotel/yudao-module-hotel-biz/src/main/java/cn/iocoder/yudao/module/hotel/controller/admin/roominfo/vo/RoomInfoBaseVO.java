@@ -24,9 +24,9 @@ public class RoomInfoBaseVO {
     @NotNull(message = "楼层不能为空")
     private Integer floor;
 
-    @Schema(description = "状态", required = true)
-    @NotNull(message = "状态不能为空")
-    private Integer status;
+    @Schema(description = "清洁状态", required = true)
+    @NotNull(message = "清洁状态不能为空")
+    private Integer cleanStatus;
 
     @Schema(description = "房间钥匙信息")
     private String keyInfo;

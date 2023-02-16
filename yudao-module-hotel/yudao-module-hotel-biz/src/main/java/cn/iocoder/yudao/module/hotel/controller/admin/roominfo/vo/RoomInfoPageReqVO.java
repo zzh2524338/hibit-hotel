@@ -27,7 +27,7 @@ public class RoomInfoPageReqVO extends PageParam {
     private Integer floor;
 
     @Schema(description = "状态")
-    private Integer status;
+    private Integer cleanStatus;
 
     @Schema(description = "房间钥匙信息")
     private String keyInfo;

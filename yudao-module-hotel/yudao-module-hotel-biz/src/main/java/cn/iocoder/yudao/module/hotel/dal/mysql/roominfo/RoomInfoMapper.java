@@ -23,7 +23,7 @@ public interface RoomInfoMapper extends BaseMapperX<RoomInfoDO> {
                 .eqIfPresent(RoomInfoDO::getNo, reqVO.getNo())
                 .eqIfPresent(RoomInfoDO::getRoomType, reqVO.getRoomType())
                 .eqIfPresent(RoomInfoDO::getFloor, reqVO.getFloor())
-                .eqIfPresent(RoomInfoDO::getStatus, reqVO.getStatus())
+                .eqIfPresent(RoomInfoDO::getCleanStatus, reqVO.getCleanStatus())
                 .eqIfPresent(RoomInfoDO::getKeyInfo, reqVO.getKeyInfo())
                 .betweenIfPresent(RoomInfoDO::getCreateTime, reqVO.getCreateTime())
                 .orderByDesc(RoomInfoDO::getId));
@@ -34,7 +34,7 @@ public interface RoomInfoMapper extends BaseMapperX<RoomInfoDO> {
                 .eqIfPresent(RoomInfoDO::getNo, reqVO.getNo())
                 .eqIfPresent(RoomInfoDO::getRoomType, reqVO.getRoomType())
                 .eqIfPresent(RoomInfoDO::getFloor, reqVO.getFloor())
-                .eqIfPresent(RoomInfoDO::getStatus, reqVO.getStatusId())
+                .eqIfPresent(RoomInfoDO::getCleanStatus, reqVO.getCleanStatus())
                 .eqIfPresent(RoomInfoDO::getKeyInfo, reqVO.getKeyInfo())
                 .betweenIfPresent(RoomInfoDO::getCreateTime, reqVO.getCreateTime())
                 .orderByDesc(RoomInfoDO::getId));

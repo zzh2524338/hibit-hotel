@@ -52,3 +52,12 @@ export function exportRoomTypeExcel(query) {
     responseType: 'blob'
   })
 }
+
+// 获得所有房间类型列表
+export function getRoomTypeList(query) {
+  return request({
+    url: '/hotel/room-type/list',
+    method: 'get',
+    params: query
+  })
+}

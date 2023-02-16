@@ -20,9 +20,9 @@
         <el-input v-model="queryParams.floor" placeholder="请输入楼层" clearable
                   @keyup.enter.native="handleQuery"/>
       </el-form-item>
-      <el-form-item label="状态" prop="status">
-        <el-select v-model="queryParams.status" placeholder="请选择状态" clearable size="small">
-          <el-option v-for="dict in this.getDictDatas(DICT_TYPE.HOTEL_ROOM_STATUS)"
+      <el-form-item label="清洁状态" prop="cleanStatus">
+        <el-select v-model="queryParams.cleanStatus" placeholder="请选择状态" clearable size="small">
+          <el-option v-for="dict in this.getDictDatas(DICT_TYPE.HOTEL_ROOM_CLEAN_STATUS)"
                      :key="dict.value" :label="dict.label" :value="dict.value"/>
         </el-select>
       </el-form-item>
@@ -58,9 +58,9 @@
       <el-table-column label="房间号" align="center" prop="no"/>
       <el-table-column label="房间类型" align="center" prop="roomType"/>
       <el-table-column label="楼层" align="center" prop="floor"/>
-      <el-table-column label="状态" align="center" prop="status">
+      <el-table-column label="清洁状态" align="center" prop="cleanStatus">
         <template slot-scope="scope">
-          <dict-tag :type="DICT_TYPE.HOTEL_ROOM_STATUS" :value="scope.row.status"/>
+          <dict-tag :type="DICT_TYPE.HOTEL_ROOM_CLEAN_STATUS" :value="scope.row.cleanStatus"/>
         </template>
       </el-table-column>
       <el-table-column label="房间钥匙信息" align="center" prop="keyInfo"/>
@@ -99,9 +99,9 @@
         <el-form-item label="楼层" prop="floor">
           <el-input v-model="form.floor" placeholder="请输入楼层" style="width: 40%"/>
         </el-form-item>
-        <el-form-item label="状态" prop="status">
-          <el-select v-model="form.status" placeholder="请选择状态">
-            <el-option v-for="dict in this.getDictDatas(DICT_TYPE.HOTEL_ROOM_STATUS)"
+        <el-form-item label="清洁状态" prop="cleanStatus">
+          <el-select v-model="form.cleanStatus" placeholder="请选择状态">
+            <el-option v-for="dict in this.getDictDatas(DICT_TYPE.HOTEL_ROOM_CLEAN_STATUS)"
                        :key="dict.value" :label="dict.label" :value="parseInt(dict.value)"/>
           </el-select>
         </el-form-item>
@@ -159,7 +159,7 @@ export default {
         no: null,
         roomType: null,
         floor: null,
-        status: null,
+        cleanStatus: null,
         keyInfo: null,
       },
       // 表单参数
@@ -169,7 +169,7 @@ export default {
         no: [{required: true, message: "房间号不能为空", trigger: "blur"}],
         roomType: [{required: true, message: "房间类型表不能为空", trigger: "change"}],
         floor: [{required: true, message: "楼层不能为空", trigger: "blur"}],
-        status: [{required: true, message: "状态不能为空", trigger: "change"}],
+        cleanStatus: [{required: true, message: "清洁状态不能为空", trigger: "change"}],
       }
     };
   },
@@ -210,7 +210,7 @@ export default {
         no: undefined,
         roomType: undefined,
         floor: undefined,
-        status: undefined,
+        cleanStatus: undefined,
         remark: undefined,
         keyInfo: undefined,
       };

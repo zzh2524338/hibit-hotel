@@ -145,7 +145,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
 
         // 4. 房间状态修改
         RoomInfoDO needUpdateRoom = RoomInfoDO.builder()
-                .status(ORDERED.getValue())
+                .cleanStatus(ORDERED.getValue())
                 .build();
 
         roomInfoMapper.update(needUpdateRoom,

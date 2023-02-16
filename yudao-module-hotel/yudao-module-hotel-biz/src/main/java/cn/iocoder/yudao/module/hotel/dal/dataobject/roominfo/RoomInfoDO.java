@@ -44,9 +44,9 @@ public class RoomInfoDO extends BaseDO {
      */
     private Integer floor;
     /**
-     * 状态
+     * 清洁状态
      */
-    private Integer status;
+    private Integer cleanStatus;
     /**
      * 备注
      */
