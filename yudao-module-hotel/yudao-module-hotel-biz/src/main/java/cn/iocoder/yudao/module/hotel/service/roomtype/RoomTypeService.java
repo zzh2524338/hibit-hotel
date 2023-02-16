@@ -1,10 +1,15 @@
 package cn.iocoder.yudao.module.hotel.service.roomtype;
 
-import java.util.*;
-import javax.validation.*;
-import cn.iocoder.yudao.module.hotel.controller.admin.roomtype.vo.*;
-import cn.iocoder.yudao.module.hotel.dal.dataobject.roomtype.RoomTypeDO;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.module.hotel.controller.admin.roomtype.vo.RoomTypeCreateReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.roomtype.vo.RoomTypeExportReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.roomtype.vo.RoomTypePageReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.roomtype.vo.RoomTypeUpdateReqVO;
+import cn.iocoder.yudao.module.hotel.dal.dataobject.roomtype.RoomTypeDO;
+
+import javax.validation.Valid;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * 房型管理 Service 接口

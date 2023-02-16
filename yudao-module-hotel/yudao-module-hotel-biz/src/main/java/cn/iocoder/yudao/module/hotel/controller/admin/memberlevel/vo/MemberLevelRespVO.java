@@ -1,19 +1,22 @@
 package cn.iocoder.yudao.module.hotel.controller.admin.memberlevel.vo;
 
-import lombok.*;
-import java.util.*;
-import io.swagger.annotations.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
-@ApiModel("管理后台 - 会员等级 Response VO")
+import java.util.Date;
+
+@Schema(description = "管理后台 - 会员等级 Response VO")
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class MemberLevelRespVO extends MemberLevelBaseVO {
 
-    @ApiModelProperty(value = "id", required = true)
+    @Schema(description = "id", required = true)
     private Long id;
 
-    @ApiModelProperty(value = "创建时间", required = true)
+    @Schema(description = "创建时间", required = true)
     private Date createTime;
 
 }

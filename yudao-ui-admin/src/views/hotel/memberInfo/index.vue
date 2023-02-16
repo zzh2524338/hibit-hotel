@@ -9,10 +9,10 @@
       <el-form-item label="电话" prop="phone">
         <el-input v-model="queryParams.phone" placeholder="请输入电话" clearable @keyup.enter.native="handleQuery"/>
       </el-form-item>
-      <el-form-item label="会员等级" prop="levelId">
-        <el-select v-model="queryParams.levelId" placeholder="请选择会员等级" clearable size="small">
+      <el-form-item label="会员类型" prop="levelId">
+        <el-select v-model="queryParams.levelId" placeholder="请选择会员类型" clearable size="small">
           <el-option
-            v-for="item in list"
+            v-for="item in levelList"
             :key="item.id"
             :label="item.name"
             :value="item.id"
@@ -50,6 +50,12 @@
       <el-table-column label="昵称" align="center" prop="nickName"/>
       <el-table-column label="姓名" align="center" prop="name"/>
       <el-table-column label="电话" align="center" prop="phone"/>
+      <el-table-column label="证件类型" align="center" prop="cardTypeId">
+        <template v-slot="scope">
+          <dict-tag :type="DICT_TYPE.HOTEL_CARD_TYPE" :value="scope.row.cardTypeId" />
+        </template>
+      </el-table-column>
+      <el-table-column label="证件号" align="center" prop="cardNo"/>
       <el-table-column label="会员等级" align="center" prop="levelName"/>
       <el-table-column label="性别" align="center" prop="gender"/>
       <el-table-column label="总花费" align="center" prop="cost"/>
@@ -87,6 +93,15 @@
         <el-form-item label="电话" prop="phone">
           <el-input v-model="form.phone" placeholder="请输入电话"/>
         </el-form-item>
+        <el-form-item label="证件类型" prop="cardTypeId">
+          <el-select v-model="form.cardTypeId" placeholder="请选择类型">
+            <el-option v-for="dict in this.getDictDatas(DICT_TYPE.HOTEL_CARD_TYPE)"
+                       :key="dict.value" :label="dict.label" :value="parseInt(dict.value)"/>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="证件号" prop="cardNo">
+          <el-input v-model="form.cardNo" placeholder="请输入证件号"/>
+        </el-form-item>
         <el-form-item label="会员等级" prop="levelId">
           <el-select v-model="form.levelId" placeholder="请选择会员等级">
             <el-option
@@ -121,11 +136,11 @@
 <script>
 import {
   createMemberInfo,
-  updateMemberInfo,
   deleteMemberInfo,
+  exportMemberInfoExcel,
   getMemberInfo,
   getMemberInfoPage,
-  exportMemberInfoExcel
+  updateMemberInfo
 } from "@/api/hotel/memberInfo";
 import {getMemberLevelPage} from "@/api/hotel/memberLevel";
 
@@ -146,6 +161,9 @@ export default {
       list: [],
       // 会员等级列表
       levelList: [],
+      // 证件类型列表
+      cardTypeList: [],
+
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -158,6 +176,8 @@ export default {
         phone: null,
         levelId: null,
         cost: null,
+        cardTypeId: null,
+        cardNo: null,
       },
       // 表单参数
       form: {},

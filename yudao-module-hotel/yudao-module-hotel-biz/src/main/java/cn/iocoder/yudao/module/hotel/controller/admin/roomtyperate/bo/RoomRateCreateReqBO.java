@@ -8,7 +8,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static cn.iocoder.yudao.framework.common.util.date.DateUtils.FORMAT_YEAR_MONTH_DAY;
@@ -18,6 +17,7 @@ import static cn.iocoder.yudao.framework.common.util.date.DateUtils.FORMAT_YEAR_
  */
 @Data
 public class RoomRateCreateReqBO {
+
     @Schema(description = "房型编号", required = true, example = "5239")
     @NotNull(message = "房型价格列表不能为空")
     private List<RoomRate> roomRateList;
@@ -40,6 +40,7 @@ public class RoomRateCreateReqBO {
 
     @Data
     public static class RoomRate {
+
         @Schema(description = "房型编号", example = "12")
         @NotNull(message = "房型编号不能为空")
         private Long roomTypeId;

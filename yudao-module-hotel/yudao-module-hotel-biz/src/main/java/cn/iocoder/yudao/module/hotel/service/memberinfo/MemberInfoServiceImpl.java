@@ -1,24 +1,25 @@
 package cn.iocoder.yudao.module.hotel.service.memberinfo;
 
+import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.module.hotel.controller.admin.memberinfo.vo.MemberInfoCreateReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.memberinfo.vo.MemberInfoExportReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.memberinfo.vo.MemberInfoPageReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.memberinfo.vo.MemberInfoUpdateReqVO;
+import cn.iocoder.yudao.module.hotel.convert.memberinfo.MemberInfoConvert;
+import cn.iocoder.yudao.module.hotel.dal.dataobject.memberinfo.MemberInfoDO;
 import cn.iocoder.yudao.module.hotel.dal.dataobject.memberlevel.MemberLevelDO;
+import cn.iocoder.yudao.module.hotel.dal.mysql.memberinfo.MemberInfoMapper;
 import cn.iocoder.yudao.module.hotel.dal.mysql.memberlevel.MemberLevelMapper;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
-
 import org.springframework.validation.annotation.Validated;
 
-import java.util.*;
-
-import cn.iocoder.yudao.module.hotel.controller.admin.memberinfo.vo.*;
-import cn.iocoder.yudao.module.hotel.dal.dataobject.memberinfo.MemberInfoDO;
-import cn.iocoder.yudao.framework.common.pojo.PageResult;
-
-import cn.iocoder.yudao.module.hotel.convert.memberinfo.MemberInfoConvert;
-import cn.iocoder.yudao.module.hotel.dal.mysql.memberinfo.MemberInfoMapper;
+import javax.annotation.Resource;
+import java.util.Collection;
+import java.util.List;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
-import static cn.iocoder.yudao.module.hotel.enums.ErrorCodeConstants.*;
+import static cn.iocoder.yudao.module.hotel.enums.ErrorCodeConstants.MEMBER_INFO_NOT_EXISTS;
+import static cn.iocoder.yudao.module.hotel.enums.ErrorCodeConstants.MEMBER_LEVEL_NOT_EXISTS;
 
 /**
  * 会员信息 Service 实现类

@@ -1,13 +1,15 @@
 package cn.iocoder.yudao.module.hotel.convert.roomratetype;
 
-import java.util.*;
-
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
-
+import cn.iocoder.yudao.module.hotel.controller.admin.roomratetype.vo.RoomRateTypeCreateReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.roomratetype.vo.RoomRateTypeExcelVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.roomratetype.vo.RoomRateTypeRespVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.roomratetype.vo.RoomRateTypeUpdateReqVO;
+import cn.iocoder.yudao.module.hotel.dal.dataobject.roomratetype.RoomRateTypeDO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
-import cn.iocoder.yudao.module.hotel.controller.admin.roomratetype.vo.*;
-import cn.iocoder.yudao.module.hotel.dal.dataobject.roomratetype.RoomRateTypeDO;
+
+import java.util.List;
 
 /**
  * 房价类型 Convert

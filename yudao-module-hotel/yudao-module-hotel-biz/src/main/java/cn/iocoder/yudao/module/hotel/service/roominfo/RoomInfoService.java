@@ -1,10 +1,15 @@
 package cn.iocoder.yudao.module.hotel.service.roominfo;
 
-import java.util.*;
-import javax.validation.*;
-import cn.iocoder.yudao.module.hotel.controller.admin.roominfo.vo.*;
-import cn.iocoder.yudao.module.hotel.dal.dataobject.roominfo.RoomInfoDO;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.module.hotel.controller.admin.roominfo.vo.RoomInfoCreateReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.roominfo.vo.RoomInfoExportReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.roominfo.vo.RoomInfoPageReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.roominfo.vo.RoomInfoUpdateReqVO;
+import cn.iocoder.yudao.module.hotel.dal.dataobject.roominfo.RoomInfoDO;
+
+import javax.validation.Valid;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * 房间信息 Service 接口

@@ -1,13 +1,15 @@
 package cn.iocoder.yudao.module.hotel.convert.memberinfo;
 
-import java.util.*;
-
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
-
+import cn.iocoder.yudao.module.hotel.controller.admin.memberinfo.vo.MemberInfoCreateReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.memberinfo.vo.MemberInfoExcelVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.memberinfo.vo.MemberInfoRespVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.memberinfo.vo.MemberInfoUpdateReqVO;
+import cn.iocoder.yudao.module.hotel.dal.dataobject.memberinfo.MemberInfoDO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
-import cn.iocoder.yudao.module.hotel.controller.admin.memberinfo.vo.*;
-import cn.iocoder.yudao.module.hotel.dal.dataobject.memberinfo.MemberInfoDO;
+
+import java.util.List;
 
 /**
  * 会员信息 Convert

@@ -1,22 +1,23 @@
 package cn.iocoder.yudao.module.hotel.controller.admin.order.vo;
 
-import lombok.*;
-import java.util.*;
-import io.swagger.annotations.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
-@ApiModel("管理后台 - 订单 Response VO")
+@Schema(description = "管理后台 - 订单 Response VO")
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class OrderInfoRespVO extends OrderInfoBaseVO {
 
-    @ApiModelProperty(value = "id", required = true)
+    @Schema(description = "id", required = true)
     private Long id;
 
-    @ApiModelProperty(value = "订单号", required = true)
+    @Schema(description = "订单号", required = true)
     private String uuid;
 
-    @ApiModelProperty(value = "订单状态", required = true)
+    @Schema(description = "订单状态", required = true)
     private Integer orderStatus;
 
 }

@@ -1,6 +1,7 @@
-package cn.iocoder.yudao.module.hotel.controller.admin.order.vo;
+package cn.iocoder.yudao.module.hotel.controller.admin.order.bo;
 
 import cn.iocoder.yudao.module.hotel.controller.admin.guestinfo.vo.GuestInfoCreateReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.order.vo.OrderInfoBaseVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -10,11 +11,11 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
 
-@Schema(description = "管理后台 - 订单创建 Request VO")
+@Schema(description = "酒店管理后台 - 订单创建 Request VO")
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class OrderInfoCreateReqVO extends OrderInfoBaseVO {
+public class OrderInfoCreateReqBO extends OrderInfoBaseVO {
 
     @Schema(description = "中介号")
     private String intermediaryNumber;

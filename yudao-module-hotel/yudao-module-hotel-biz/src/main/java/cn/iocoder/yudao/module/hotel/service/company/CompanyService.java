@@ -1,10 +1,15 @@
 package cn.iocoder.yudao.module.hotel.service.company;
 
-import java.util.*;
-import javax.validation.*;
-import cn.iocoder.yudao.module.hotel.controller.admin.company.vo.*;
-import cn.iocoder.yudao.module.hotel.dal.dataobject.company.CompanyDO;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.module.hotel.controller.admin.company.vo.CompanyCreateReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.company.vo.CompanyExportReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.company.vo.CompanyPageReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.company.vo.CompanyUpdateReqVO;
+import cn.iocoder.yudao.module.hotel.dal.dataobject.company.CompanyDO;
+
+import javax.validation.Valid;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * 公司信息 Service 接口

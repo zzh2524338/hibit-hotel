@@ -1,10 +1,15 @@
 package cn.iocoder.yudao.module.hotel.service.memberinfo;
 
-import java.util.*;
-import javax.validation.*;
-import cn.iocoder.yudao.module.hotel.controller.admin.memberinfo.vo.*;
-import cn.iocoder.yudao.module.hotel.dal.dataobject.memberinfo.MemberInfoDO;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.module.hotel.controller.admin.memberinfo.vo.MemberInfoCreateReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.memberinfo.vo.MemberInfoExportReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.memberinfo.vo.MemberInfoPageReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.memberinfo.vo.MemberInfoUpdateReqVO;
+import cn.iocoder.yudao.module.hotel.dal.dataobject.memberinfo.MemberInfoDO;
+
+import javax.validation.Valid;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * 会员信息 Service 接口
@@ -50,6 +55,7 @@ public interface MemberInfoService {
      * @return 会员信息
      */
     MemberInfoDO getMemberInfoByPhone(String number);
+
     /**
      * 获得会员信息列表
      *

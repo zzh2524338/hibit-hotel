@@ -1,10 +1,15 @@
 package cn.iocoder.yudao.module.hotel.service.roomratetype;
 
-import java.util.*;
-import javax.validation.*;
-import cn.iocoder.yudao.module.hotel.controller.admin.roomratetype.vo.*;
-import cn.iocoder.yudao.module.hotel.dal.dataobject.roomratetype.RoomRateTypeDO;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.module.hotel.controller.admin.roomratetype.vo.RoomRateTypeCreateReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.roomratetype.vo.RoomRateTypeExportReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.roomratetype.vo.RoomRateTypePageReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.roomratetype.vo.RoomRateTypeUpdateReqVO;
+import cn.iocoder.yudao.module.hotel.dal.dataobject.roomratetype.RoomRateTypeDO;
+
+import javax.validation.Valid;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * 房价类型 Service 接口

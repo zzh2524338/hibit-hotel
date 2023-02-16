@@ -1,13 +1,15 @@
 package cn.iocoder.yudao.module.hotel.convert.roominfo;
 
-import java.util.*;
-
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
-
+import cn.iocoder.yudao.module.hotel.controller.admin.roominfo.vo.RoomInfoCreateReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.roominfo.vo.RoomInfoExcelVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.roominfo.vo.RoomInfoRespVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.roominfo.vo.RoomInfoUpdateReqVO;
+import cn.iocoder.yudao.module.hotel.dal.dataobject.roominfo.RoomInfoDO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
-import cn.iocoder.yudao.module.hotel.controller.admin.roominfo.vo.*;
-import cn.iocoder.yudao.module.hotel.dal.dataobject.roominfo.RoomInfoDO;
+
+import java.util.List;
 
 /**
  * 房间信息 Convert

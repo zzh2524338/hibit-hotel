@@ -1,16 +1,18 @@
 package cn.iocoder.yudao.module.hotel.dal.dataobject.roomtyperate;
 
-import lombok.*;
-
-import java.time.LocalDate;
-import java.util.*;
-import java.math.BigDecimal;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.LocalDateTime;
-import java.time.LocalDateTime;
-import com.baomidou.mybatisplus.annotation.*;
 import cn.iocoder.yudao.framework.mybatis.core.dataobject.BaseDO;
+import com.baomidou.mybatisplus.annotation.KeySequence;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * 房型价格 DO
@@ -28,7 +30,7 @@ import cn.iocoder.yudao.framework.mybatis.core.dataobject.BaseDO;
 public class RoomTypeRateDO extends BaseDO {
 
     /**
-     *  编号
+     * 编号
      */
     @TableId
     private Long id;

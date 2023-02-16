@@ -1,13 +1,14 @@
 package cn.iocoder.yudao.module.hotel.dal.mysql.memberinfo;
 
-import java.util.*;
-
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
-import cn.iocoder.yudao.framework.mybatis.core.query.LambdaQueryWrapperX;
 import cn.iocoder.yudao.framework.mybatis.core.mapper.BaseMapperX;
+import cn.iocoder.yudao.framework.mybatis.core.query.LambdaQueryWrapperX;
+import cn.iocoder.yudao.module.hotel.controller.admin.memberinfo.vo.MemberInfoExportReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.memberinfo.vo.MemberInfoPageReqVO;
 import cn.iocoder.yudao.module.hotel.dal.dataobject.memberinfo.MemberInfoDO;
 import org.apache.ibatis.annotations.Mapper;
-import cn.iocoder.yudao.module.hotel.controller.admin.memberinfo.vo.*;
+
+import java.util.List;
 
 /**
  * 会员信息 Mapper

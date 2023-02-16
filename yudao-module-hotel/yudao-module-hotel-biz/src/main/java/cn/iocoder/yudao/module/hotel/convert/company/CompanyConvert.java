@@ -1,13 +1,15 @@
 package cn.iocoder.yudao.module.hotel.convert.company;
 
-import java.util.*;
-
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
-
+import cn.iocoder.yudao.module.hotel.controller.admin.company.vo.CompanyCreateReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.company.vo.CompanyExcelVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.company.vo.CompanyRespVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.company.vo.CompanyUpdateReqVO;
+import cn.iocoder.yudao.module.hotel.dal.dataobject.company.CompanyDO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
-import cn.iocoder.yudao.module.hotel.controller.admin.company.vo.*;
-import cn.iocoder.yudao.module.hotel.dal.dataobject.company.CompanyDO;
+
+import java.util.List;
 
 /**
  * 公司信息 Convert

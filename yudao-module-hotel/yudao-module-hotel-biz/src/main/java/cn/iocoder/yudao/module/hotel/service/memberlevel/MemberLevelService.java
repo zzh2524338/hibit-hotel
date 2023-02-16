@@ -1,10 +1,15 @@
 package cn.iocoder.yudao.module.hotel.service.memberlevel;
 
-import java.util.*;
-import javax.validation.*;
-import cn.iocoder.yudao.module.hotel.controller.admin.memberlevel.vo.*;
-import cn.iocoder.yudao.module.hotel.dal.dataobject.memberlevel.MemberLevelDO;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.module.hotel.controller.admin.memberlevel.vo.MemberLevelCreateReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.memberlevel.vo.MemberLevelExportReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.memberlevel.vo.MemberLevelPageReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.memberlevel.vo.MemberLevelUpdateReqVO;
+import cn.iocoder.yudao.module.hotel.dal.dataobject.memberlevel.MemberLevelDO;
+
+import javax.validation.Valid;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * 会员等级 Service 接口
@@ -65,6 +70,7 @@ public interface MemberLevelService {
      * @return 会员等级列表
      */
     List<MemberLevelDO> getAllMemberLevelList();
+
     /**
      * 获得会员等级分页
      *

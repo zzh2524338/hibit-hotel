@@ -1,10 +1,15 @@
 package cn.iocoder.yudao.module.hotel.service.order;
 
-import java.util.*;
-import javax.validation.*;
-import cn.iocoder.yudao.module.hotel.controller.admin.order.vo.*;
-import cn.iocoder.yudao.module.hotel.dal.dataobject.order.OrderInfoDO;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.module.hotel.controller.admin.order.vo.OrderInfoCreateReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.order.vo.OrderInfoExportReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.order.vo.OrderInfoPageReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.order.vo.OrderInfoUpdateReqVO;
+import cn.iocoder.yudao.module.hotel.dal.dataobject.order.OrderInfoDO;
+
+import javax.validation.Valid;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * 订单 Service 接口

@@ -1,15 +1,10 @@
 package cn.iocoder.yudao.module.hotel.controller.admin.roomtyperate.vo;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
-import java.util.*;
-import java.math.BigDecimal;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.LocalDateTime;
-import java.time.LocalDateTime;
-
 import com.alibaba.excel.annotation.ExcelProperty;
+import lombok.Data;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * 房型价格 Excel VO

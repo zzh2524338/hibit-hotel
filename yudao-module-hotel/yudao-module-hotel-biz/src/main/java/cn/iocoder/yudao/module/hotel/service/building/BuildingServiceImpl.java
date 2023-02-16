@@ -1,19 +1,22 @@
 package cn.iocoder.yudao.module.hotel.service.building;
 
+import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.module.hotel.controller.admin.building.vo.BuildingCreateReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.building.vo.BuildingExportReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.building.vo.BuildingPageReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.building.vo.BuildingUpdateReqVO;
+import cn.iocoder.yudao.module.hotel.convert.building.BuildingConvert;
+import cn.iocoder.yudao.module.hotel.dal.dataobject.building.BuildingDO;
+import cn.iocoder.yudao.module.hotel.dal.mysql.building.BuildingMapper;
 import org.springframework.stereotype.Service;
-import javax.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.*;
-import cn.iocoder.yudao.module.hotel.controller.admin.building.vo.*;
-import cn.iocoder.yudao.module.hotel.dal.dataobject.building.BuildingDO;
-import cn.iocoder.yudao.framework.common.pojo.PageResult;
-
-import cn.iocoder.yudao.module.hotel.convert.building.BuildingConvert;
-import cn.iocoder.yudao.module.hotel.dal.mysql.building.BuildingMapper;
+import javax.annotation.Resource;
+import java.util.Collection;
+import java.util.List;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
-import static cn.iocoder.yudao.module.hotel.enums.ErrorCodeConstants.*;
+import static cn.iocoder.yudao.module.hotel.enums.ErrorCodeConstants.BUILDING_NOT_EXISTS;
 
 /**
  * 公司分部 Service 实现类

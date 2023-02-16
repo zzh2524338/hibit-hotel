@@ -1,32 +1,43 @@
 package cn.iocoder.yudao.module.hotel.controller.admin.roomtyperate;
 
-import cn.iocoder.yudao.module.hotel.controller.admin.roomtyperate.bo.RoomRateCreateReqBO;
-import org.springframework.web.bind.annotation.*;
-import javax.annotation.Resource;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.security.access.prepost.PreAuthorize;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Operation;
-
-import javax.validation.*;
-import javax.servlet.http.*;
-import java.util.*;
-import java.io.IOException;
-
-import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.pojo.CommonResult;
-import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
-
+import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.excel.core.util.ExcelUtils;
-
 import cn.iocoder.yudao.framework.operatelog.core.annotations.OperateLog;
-import static cn.iocoder.yudao.framework.operatelog.core.enums.OperateTypeEnum.*;
-
-import cn.iocoder.yudao.module.hotel.controller.admin.roomtyperate.vo.*;
-import cn.iocoder.yudao.module.hotel.dal.dataobject.roomtyperate.RoomTypeRateDO;
+import cn.iocoder.yudao.module.hotel.controller.admin.roomtyperate.bo.RoomRateCreateReqBO;
+import cn.iocoder.yudao.module.hotel.controller.admin.roomtyperate.vo.RoomTypeRateCreateReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.roomtyperate.vo.RoomTypeRateExcelVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.roomtyperate.vo.RoomTypeRateExportReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.roomtyperate.vo.RoomTypeRateListRespVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.roomtyperate.vo.RoomTypeRatePageReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.roomtyperate.vo.RoomTypeRateRespVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.roomtyperate.vo.RoomTypeRateUpdateReqVO;
 import cn.iocoder.yudao.module.hotel.convert.roomtyperate.RoomTypeRateConvert;
+import cn.iocoder.yudao.module.hotel.dal.dataobject.roomtyperate.RoomTypeRateDO;
 import cn.iocoder.yudao.module.hotel.service.roomtyperate.RoomTypeRateService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.List;
+
+import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
+import static cn.iocoder.yudao.framework.operatelog.core.enums.OperateTypeEnum.EXPORT;
 
 @Tag(name = "管理后台 - 房型价格")
 @RestController
@@ -108,7 +119,7 @@ public class RoomTypeRateController {
     @PreAuthorize("@ss.hasPermission('hotel:room-type-rate:export')")
     @OperateLog(type = EXPORT)
     public void exportRoomTypeRateExcel(@Valid RoomTypeRateExportReqVO exportReqVO,
-              HttpServletResponse response) throws IOException {
+            HttpServletResponse response) throws IOException {
         List<RoomTypeRateDO> list = roomTypeRateService.getRoomTypeRateList(exportReqVO);
         // 导出 Excel
         List<RoomTypeRateExcelVO> datas = RoomTypeRateConvert.INSTANCE.convertList02(list);

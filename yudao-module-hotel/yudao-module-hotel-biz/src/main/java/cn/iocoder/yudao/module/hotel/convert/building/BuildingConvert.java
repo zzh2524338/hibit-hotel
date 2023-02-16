@@ -1,13 +1,15 @@
 package cn.iocoder.yudao.module.hotel.convert.building;
 
-import java.util.*;
-
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
-
+import cn.iocoder.yudao.module.hotel.controller.admin.building.vo.BuildingCreateReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.building.vo.BuildingExcelVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.building.vo.BuildingRespVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.building.vo.BuildingUpdateReqVO;
+import cn.iocoder.yudao.module.hotel.dal.dataobject.building.BuildingDO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
-import cn.iocoder.yudao.module.hotel.controller.admin.building.vo.*;
-import cn.iocoder.yudao.module.hotel.dal.dataobject.building.BuildingDO;
+
+import java.util.List;
 
 /**
  * 公司分部 Convert

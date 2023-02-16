@@ -1,11 +1,10 @@
 package cn.iocoder.yudao.module.hotel.controller.admin.memberinfo.vo;
 
-import lombok.*;
-import java.util.*;
-import java.math.BigDecimal;
-import io.swagger.annotations.*;
-
 import com.alibaba.excel.annotation.ExcelProperty;
+import lombok.Data;
+
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * 会员信息 Excel VO

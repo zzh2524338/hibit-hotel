@@ -1,19 +1,22 @@
 package cn.iocoder.yudao.module.hotel.service.company;
 
+import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.module.hotel.controller.admin.company.vo.CompanyCreateReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.company.vo.CompanyExportReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.company.vo.CompanyPageReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.company.vo.CompanyUpdateReqVO;
+import cn.iocoder.yudao.module.hotel.convert.company.CompanyConvert;
+import cn.iocoder.yudao.module.hotel.dal.dataobject.company.CompanyDO;
+import cn.iocoder.yudao.module.hotel.dal.mysql.company.CompanyMapper;
 import org.springframework.stereotype.Service;
-import javax.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.*;
-import cn.iocoder.yudao.module.hotel.controller.admin.company.vo.*;
-import cn.iocoder.yudao.module.hotel.dal.dataobject.company.CompanyDO;
-import cn.iocoder.yudao.framework.common.pojo.PageResult;
-
-import cn.iocoder.yudao.module.hotel.convert.company.CompanyConvert;
-import cn.iocoder.yudao.module.hotel.dal.mysql.company.CompanyMapper;
+import javax.annotation.Resource;
+import java.util.Collection;
+import java.util.List;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
-import static cn.iocoder.yudao.module.hotel.enums.ErrorCodeConstants.*;
+import static cn.iocoder.yudao.module.hotel.enums.ErrorCodeConstants.COMPANY_NOT_EXISTS;
 
 /**
  * 公司信息 Service 实现类

@@ -2,16 +2,23 @@ package cn.iocoder.yudao.module.hotel.service.order;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
-import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.IdUtil;
+import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.module.hotel.controller.admin.guestinfo.vo.GuestInfoCreateReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.order.vo.OrderInfoCreateReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.order.vo.OrderInfoExportReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.order.vo.OrderInfoPageReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.order.vo.OrderInfoUpdateReqVO;
+import cn.iocoder.yudao.module.hotel.convert.order.OrderInfoConvert;
 import cn.iocoder.yudao.module.hotel.dal.dataobject.guestinfo.GuestInfoDO;
 import cn.iocoder.yudao.module.hotel.dal.dataobject.memberinfo.MemberInfoDO;
 import cn.iocoder.yudao.module.hotel.dal.dataobject.memberlevel.MemberLevelDO;
+import cn.iocoder.yudao.module.hotel.dal.dataobject.order.OrderInfoDO;
 import cn.iocoder.yudao.module.hotel.dal.dataobject.roominfo.RoomInfoDO;
 import cn.iocoder.yudao.module.hotel.dal.dataobject.roomtype.RoomTypeDO;
 import cn.iocoder.yudao.module.hotel.dal.mysql.guestinfo.GuestInfoMapper;
 import cn.iocoder.yudao.module.hotel.dal.mysql.memberinfo.MemberInfoMapper;
+import cn.iocoder.yudao.module.hotel.dal.mysql.order.OrderInfoMapper;
 import cn.iocoder.yudao.module.hotel.dal.mysql.roominfo.RoomInfoMapper;
 import cn.iocoder.yudao.module.hotel.dal.mysql.roomtype.RoomTypeMapper;
 import cn.iocoder.yudao.module.hotel.service.guestinfo.GuestInfoService;
@@ -21,26 +28,21 @@ import cn.iocoder.yudao.module.hotel.service.roominfo.RoomInfoService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
-
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
-import cn.iocoder.yudao.module.hotel.controller.admin.order.vo.*;
-import cn.iocoder.yudao.module.hotel.dal.dataobject.order.OrderInfoDO;
-import cn.iocoder.yudao.framework.common.pojo.PageResult;
-
-import cn.iocoder.yudao.module.hotel.convert.order.OrderInfoConvert;
-import cn.iocoder.yudao.module.hotel.dal.mysql.order.OrderInfoMapper;
-
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
-import static cn.iocoder.yudao.module.hotel.enums.ErrorCodeConstants.*;
-import static cn.iocoder.yudao.module.hotel.enums.RoomStatusEnum.CHECK_IN;
+import static cn.iocoder.yudao.module.hotel.enums.ErrorCodeConstants.GUEST_INFO_CANNOT_BE_NULL;
+import static cn.iocoder.yudao.module.hotel.enums.ErrorCodeConstants.MEMBER_INFO_NOT_EXISTS;
+import static cn.iocoder.yudao.module.hotel.enums.ErrorCodeConstants.ORDER_INFO_NOT_EXISTS;
+import static cn.iocoder.yudao.module.hotel.enums.ErrorCodeConstants.ROOM_TYPE_NOT_EXISTS;
 import static cn.iocoder.yudao.module.hotel.enums.RoomStatusEnum.ORDERED;
 
 /**
@@ -155,7 +157,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         OrderInfoDO orderInfo = OrderInfoConvert.INSTANCE.convert(createReqVO);
         // 原价从库中查询防止篡改
         orderInfo.setUuid(IdUtil.getSnowflakeNextIdStr());
-        orderInfo.setOriginalPrice(roomTypeDO.getPrice());
+        // orderInfo.setOriginalPrice(roomTypeDO.getPrice());
         orderInfoMapper.insert(orderInfo);
         // 返回
         return orderInfo.getId();

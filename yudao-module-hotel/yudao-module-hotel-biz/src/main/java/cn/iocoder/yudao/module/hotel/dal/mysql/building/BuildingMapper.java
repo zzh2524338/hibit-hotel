@@ -1,13 +1,14 @@
 package cn.iocoder.yudao.module.hotel.dal.mysql.building;
 
-import java.util.*;
-
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
-import cn.iocoder.yudao.framework.mybatis.core.query.LambdaQueryWrapperX;
 import cn.iocoder.yudao.framework.mybatis.core.mapper.BaseMapperX;
+import cn.iocoder.yudao.framework.mybatis.core.query.LambdaQueryWrapperX;
+import cn.iocoder.yudao.module.hotel.controller.admin.building.vo.BuildingExportReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.building.vo.BuildingPageReqVO;
 import cn.iocoder.yudao.module.hotel.dal.dataobject.building.BuildingDO;
 import org.apache.ibatis.annotations.Mapper;
-import cn.iocoder.yudao.module.hotel.controller.admin.building.vo.*;
+
+import java.util.List;
 
 /**
  * 公司分部 Mapper

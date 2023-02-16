@@ -1,46 +1,53 @@
 package cn.iocoder.yudao.module.hotel.controller.admin.memberinfo.vo;
 
-import lombok.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
 
-import java.math.BigInteger;
-import java.util.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import io.swagger.annotations.*;
-import javax.validation.constraints.*;
 
 /**
-* 会员信息 Base VO，提供给添加、修改、详细的子 VO 使用
-* 如果子 VO 存在差异的字段，请不要添加到这里，影响 Swagger 文档生成
-*/
+ * 会员信息 Base VO，提供给添加、修改、详细的子 VO 使用
+ * 如果子 VO 存在差异的字段，请不要添加到这里，影响 Swagger 文档生成
+ */
 @Data
 public class MemberInfoBaseVO {
 
-    @ApiModelProperty(value = "昵称", required = true)
-    @NotNull(message = "昵称不能为空")
+    @Schema(description = "昵称", required = true)
+    // @NotNull(message = "昵称不能为空")
     private String nickName;
 
-    @ApiModelProperty(value = "姓名", required = true)
+    @Schema(description = "姓名", required = true)
     @NotNull(message = "姓名不能为空")
     private String name;
 
-    @ApiModelProperty(value = "电话", required = true)
+    @Schema(description = "电话", required = true)
     @NotNull(message = "电话不能为空")
     private String phone;
 
-    @ApiModelProperty(value = "会员等级", required = true)
+    @Schema(description = "会员等级", required = true)
     @NotNull(message = "会员等级不能为空")
     private Long levelId;
 
-    @ApiModelProperty(value = "性别", required = true)
-    @NotNull(message = "性别不能为空")
+    @Schema(description = "性别", required = true)
+    // @NotNull(message = "性别不能为空")
     private Integer gender;
 
-    @ApiModelProperty(value = "总花费", required = true)
+    @Schema(description = "总花费", required = true)
     @NotNull(message = "总花费不能为空")
     private BigDecimal cost;
 
-    @ApiModelProperty(value = "积分", required = true)
+    @Schema(description = "积分", required = true)
     @NotNull(message = "积分不能为空")
     private Long points;
+
+    @Schema(description = "证件号", required = true)
+    // @NotBlank(message = "证件号不能为空")
+    private String cardNo;
+
+    @Schema(description = "证件类型", required = true)
+    // @NotNull(message = "证件类型不能为空")
+    private Integer cardTypeId;
 
 }

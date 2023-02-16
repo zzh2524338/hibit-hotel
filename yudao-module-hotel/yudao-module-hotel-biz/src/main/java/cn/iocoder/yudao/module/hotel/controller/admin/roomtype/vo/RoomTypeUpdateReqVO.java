@@ -1,9 +1,11 @@
 package cn.iocoder.yudao.module.hotel.controller.admin.roomtype.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
-import java.util.*;
-import javax.validation.constraints.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
+import javax.validation.constraints.NotNull;
 
 @Schema(description = "管理后台 - 房型管理更新 Request VO")
 @Data

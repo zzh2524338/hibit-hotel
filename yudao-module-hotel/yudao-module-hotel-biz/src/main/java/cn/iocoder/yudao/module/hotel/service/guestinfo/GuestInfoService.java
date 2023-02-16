@@ -1,12 +1,15 @@
 package cn.iocoder.yudao.module.hotel.service.guestinfo;
 
-import java.util.*;
-import javax.validation.*;
-
-import cn.iocoder.yudao.module.hotel.controller.admin.guestinfo.vo.*;
-import cn.iocoder.yudao.module.hotel.dal.dataobject.guestinfo.GuestInfoDO;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
-import com.baomidou.mybatisplus.extension.service.IService;
+import cn.iocoder.yudao.module.hotel.controller.admin.guestinfo.vo.GuestInfoCreateReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.guestinfo.vo.GuestInfoExportReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.guestinfo.vo.GuestInfoPageReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.guestinfo.vo.GuestInfoUpdateReqVO;
+import cn.iocoder.yudao.module.hotel.dal.dataobject.guestinfo.GuestInfoDO;
+
+import javax.validation.Valid;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * 客史信息 Service 接口
@@ -79,6 +82,7 @@ public interface GuestInfoService {
 
     /**
      * 保存订单传来的客人信息
+     *
      * @param guestInfoCreateReqVOS 客人信息
      */
     void saveGuestInfo(List<GuestInfoCreateReqVO> guestInfoCreateReqVOS);

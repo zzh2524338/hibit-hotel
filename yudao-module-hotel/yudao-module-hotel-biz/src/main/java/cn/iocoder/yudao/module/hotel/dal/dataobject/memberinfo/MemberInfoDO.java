@@ -1,10 +1,17 @@
 package cn.iocoder.yudao.module.hotel.dal.dataobject.memberinfo;
 
-import lombok.*;
-import java.util.*;
-import java.math.BigDecimal;
-import com.baomidou.mybatisplus.annotation.*;
 import cn.iocoder.yudao.framework.mybatis.core.dataobject.BaseDO;
+import com.baomidou.mybatisplus.annotation.KeySequence;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+import java.math.BigDecimal;
 
 /**
  * 会员信息 DO
@@ -34,6 +41,15 @@ public class MemberInfoDO extends BaseDO {
      * 姓名
      */
     private String name;
+    /**
+     * 证件类型外键
+     */
+    private Long cardTypeId;
+
+    /**
+     * 证件编号
+     */
+    private String cardNo;
     /**
      * 电话
      */

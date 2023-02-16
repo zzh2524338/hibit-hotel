@@ -1,13 +1,11 @@
 package cn.iocoder.yudao.module.hotel.controller.admin.roomtyperate.vo;
 
-import lombok.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
-import java.util.*;
-import io.swagger.v3.oas.annotations.media.Schema;
-import cn.iocoder.yudao.framework.common.pojo.PageParam;
 import java.time.LocalDateTime;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import static cn.iocoder.yudao.framework.common.util.date.DateUtils.FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND;
 

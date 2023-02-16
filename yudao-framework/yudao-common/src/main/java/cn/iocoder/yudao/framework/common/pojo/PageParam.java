@@ -8,7 +8,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
-@Schema(description="分页参数")
+@Schema(description ="分页参数")
 @Data
 public class PageParam implements Serializable {
 
