@@ -38,7 +38,7 @@ public class RoomInfoDO extends BaseDO {
     /**
      * 房间类型表
      */
-    private Integer roomType;
+    private Integer roomTypeId;
     /**
      * 楼层
      */

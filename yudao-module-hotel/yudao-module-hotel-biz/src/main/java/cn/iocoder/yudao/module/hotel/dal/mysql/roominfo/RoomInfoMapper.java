@@ -21,7 +21,7 @@ public interface RoomInfoMapper extends BaseMapperX<RoomInfoDO> {
     default PageResult<RoomInfoDO> selectPage(RoomInfoPageReqVO reqVO) {
         return selectPage(reqVO, new LambdaQueryWrapperX<RoomInfoDO>()
                 .eqIfPresent(RoomInfoDO::getNo, reqVO.getNo())
-                .eqIfPresent(RoomInfoDO::getRoomType, reqVO.getRoomType())
+                .eqIfPresent(RoomInfoDO::getRoomTypeId, reqVO.getRoomTypeId())
                 .eqIfPresent(RoomInfoDO::getFloor, reqVO.getFloor())
                 .eqIfPresent(RoomInfoDO::getCleanStatus, reqVO.getCleanStatus())
                 .eqIfPresent(RoomInfoDO::getKeyInfo, reqVO.getKeyInfo())
@@ -32,7 +32,7 @@ public interface RoomInfoMapper extends BaseMapperX<RoomInfoDO> {
     default List<RoomInfoDO> selectList(RoomInfoExportReqVO reqVO) {
         return selectList(new LambdaQueryWrapperX<RoomInfoDO>()
                 .eqIfPresent(RoomInfoDO::getNo, reqVO.getNo())
-                .eqIfPresent(RoomInfoDO::getRoomType, reqVO.getRoomType())
+                .eqIfPresent(RoomInfoDO::getRoomTypeId, reqVO.getRoomType())
                 .eqIfPresent(RoomInfoDO::getFloor, reqVO.getFloor())
                 .eqIfPresent(RoomInfoDO::getCleanStatus, reqVO.getCleanStatus())
                 .eqIfPresent(RoomInfoDO::getKeyInfo, reqVO.getKeyInfo())

@@ -18,7 +18,7 @@ public class RoomInfoBaseVO {
 
     @Schema(description = "房间类型表", required = true)
     @NotNull(message = "房间类型表不能为空")
-    private Integer roomType;
+    private Integer roomTypeId;
 
     @Schema(description = "楼层", required = true)
     @NotNull(message = "楼层不能为空")

@@ -21,7 +21,7 @@ public class RoomInfoPageReqVO extends PageParam {
     private String no;
 
     @Schema(description = "房间类型表")
-    private Integer roomType;
+    private Integer roomTypeId;
 
     @Schema(description = "楼层")
     private Integer floor;

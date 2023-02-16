@@ -56,7 +56,11 @@
     <el-table v-loading="loading" :data="list">
       <el-table-column label="id" align="center" prop="id"/>
       <el-table-column label="房间号" align="center" prop="no"/>
-      <el-table-column label="房间类型" align="center" prop="roomType"/>
+      <el-table-column label="房间类型" align="center" prop="roomTypeId">
+        <template v-slot="scope">
+          <el-tag> {{ getRoomTypeName(scope.row.roomTypeId) }}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="楼层" align="center" prop="floor"/>
       <el-table-column label="清洁状态" align="center" prop="cleanStatus">
         <template slot-scope="scope">
@@ -85,9 +89,9 @@
         <el-form-item label="房间号" prop="no">
           <el-input v-model="form.no" placeholder="请输入房间号"/>
         </el-form-item>
-        <el-form-item label="房间类型" prop="roomType">
-          <el-select v-model="form.roomType" placeholder="请选择房间类型表">
-<!--            <el-option label="请选择字典生成" value=""/>-->
+        <el-form-item label="房间类型" prop="roomTypeId">
+          <el-select v-model="form.roomTypeId" placeholder="请选择房间类型表">
+            <!--            <el-option label="请选择字典生成" value=""/>-->
             <el-option
               v-for="item in roomTypeList"
               :key="item.id"
@@ -123,11 +127,11 @@
 <script>
 import {
   createRoomInfo,
-  updateRoomInfo,
   deleteRoomInfo,
+  exportRoomInfoExcel,
   getRoomInfo,
   getRoomInfoPage,
-  exportRoomInfoExcel
+  updateRoomInfo
 } from "@/api/hotel/roomInfo";
 import {getRoomTypeList} from "@/api/hotel/roomType";
 
@@ -147,7 +151,7 @@ export default {
       // 房间信息列表
       list: [],
       // 房间类型列表
-      roomTypeList:[],
+      roomTypeList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -157,7 +161,7 @@ export default {
         pageNo: 1,
         pageSize: 10,
         no: null,
-        roomType: null,
+        roomTypeId: null,
         floor: null,
         cleanStatus: null,
         keyInfo: null,
@@ -167,7 +171,7 @@ export default {
       // 表单校验
       rules: {
         no: [{required: true, message: "房间号不能为空", trigger: "blur"}],
-        roomType: [{required: true, message: "房间类型表不能为空", trigger: "change"}],
+        roomTypeId: [{required: true, message: "房间类型表不能为空", trigger: "change"}],
         floor: [{required: true, message: "楼层不能为空", trigger: "blur"}],
         cleanStatus: [{required: true, message: "清洁状态不能为空", trigger: "change"}],
       }
@@ -198,6 +202,20 @@ export default {
         this.loading = false;
       })
     },
+
+    /**
+     * 根据给定的 房间类型编号 返回房间类型名称
+     * @param roomTypeId 房间类型编号
+     * @returns {*|string} 房间类型名称
+     */
+    getRoomTypeName(roomTypeId) {
+      for (const item of this.roomTypeList) {
+        if (item.id === roomTypeId) {
+          return item.name;
+        }
+      }
+      return '未知的房型';
+    },
     /** 取消按钮 */
     cancel() {
       this.open = false;
@@ -208,7 +226,7 @@ export default {
       this.form = {
         id: undefined,
         no: undefined,
-        roomType: undefined,
+        roomTypeId: undefined,
         floor: undefined,
         cleanStatus: undefined,
         remark: undefined,
