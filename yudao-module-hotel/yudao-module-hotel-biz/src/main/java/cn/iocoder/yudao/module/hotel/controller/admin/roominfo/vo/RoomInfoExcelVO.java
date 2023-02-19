@@ -3,6 +3,7 @@ package cn.iocoder.yudao.module.hotel.controller.admin.roominfo.vo;
 import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -32,6 +33,6 @@ public class RoomInfoExcelVO {
     private String keyInfo;
 
     @ExcelProperty("创建时间")
-    private Date createTime;
+    private LocalDateTime createTime;
 
 }

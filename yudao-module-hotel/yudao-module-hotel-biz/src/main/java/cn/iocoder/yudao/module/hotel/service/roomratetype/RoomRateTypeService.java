@@ -57,6 +57,13 @@ public interface RoomRateTypeService {
     List<RoomRateTypeDO> getRoomRateTypeList(Collection<Long> ids);
 
     /**
+     * 获得房价类型列表
+     *
+     * @return 房价类型列表
+     */
+    List<RoomRateTypeDO> getRoomRateTypeList();
+
+    /**
      * 获得房价类型分页
      *
      * @param pageReqVO 分页查询

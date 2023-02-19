@@ -45,4 +45,8 @@ public interface ErrorCodeConstants {
     ErrorCode ORDER_INFO_NOT_EXISTS = new ErrorCode(1010010000, "订单信息不存在");
     ErrorCode GUEST_INFO_CANNOT_BE_NULL = new ErrorCode(1010010000, "客人信息不能为空");
 
+    // ========== 客史信息 1010011000 ==========
+    ErrorCode GUEST_HISTORY_NOT_EXISTS = new ErrorCode(1010011000, "客史信息不存在");
+
+
 }

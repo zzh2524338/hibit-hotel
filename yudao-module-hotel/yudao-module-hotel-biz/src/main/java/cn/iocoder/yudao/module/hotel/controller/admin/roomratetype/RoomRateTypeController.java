@@ -79,15 +79,22 @@ public class RoomRateTypeController {
         return success(RoomRateTypeConvert.INSTANCE.convert(roomRateType));
     }
 
-    @GetMapping("/list")
+    @GetMapping("/list/ids")
     @Operation(summary = "获得房价类型列表")
     @Parameter(name = "ids", description = "编号列表", required = true, example = "1024,2048")
     @PreAuthorize("@ss.hasPermission('hotel:room-rate-type:query')")
-    public CommonResult<List<RoomRateTypeRespVO>> getRoomRateTypeList(@RequestParam("ids") Collection<Long> ids) {
+    public CommonResult<List<RoomRateTypeRespVO>> getRoomRateTypeListByIds(@RequestParam("ids") Collection<Long> ids) {
         List<RoomRateTypeDO> list = roomRateTypeService.getRoomRateTypeList(ids);
         return success(RoomRateTypeConvert.INSTANCE.convertList(list));
     }
 
+    @GetMapping("/list")
+    @Operation(summary = "获得房价类型列表")
+    @PreAuthorize("@ss.hasPermission('hotel:room-rate-type:query')")
+    public CommonResult<List<RoomRateTypeRespVO>> getRoomRateTypeList() {
+        List<RoomRateTypeDO> list = roomRateTypeService.getRoomRateTypeList();
+        return success(RoomRateTypeConvert.INSTANCE.convertList(list));
+    }
     @GetMapping("/page")
     @Operation(summary = "获得房价类型分页")
     @PreAuthorize("@ss.hasPermission('hotel:room-rate-type:query')")

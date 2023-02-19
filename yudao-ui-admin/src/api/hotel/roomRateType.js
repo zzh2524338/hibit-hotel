@@ -52,3 +52,13 @@ export function exportRoomRateTypeExcel(query) {
     responseType: 'blob'
   })
 }
+
+// 获得所有房间价格类型列表
+export function getRoomRateTypeList(query) {
+  return request({
+    url: '/hotel/room-rate-type/list',
+    method: 'get',
+    params: query
+  })
+}
+

@@ -75,6 +75,10 @@ public class RoomRateTypeServiceImpl implements RoomRateTypeService {
     }
 
     @Override
+    public List<RoomRateTypeDO> getRoomRateTypeList() {
+        return roomRateTypeMapper.selectList();
+    }
+    @Override
     public PageResult<RoomRateTypeDO> getRoomRateTypePage(RoomRateTypePageReqVO pageReqVO) {
         return roomRateTypeMapper.selectPage(pageReqVO);
     }
