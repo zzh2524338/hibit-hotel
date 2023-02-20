@@ -8,13 +8,22 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static cn.iocoder.yudao.framework.common.util.date.DateUtils.FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND;
 
-@Schema(description = "酒店管理后台 - 订单创建中的客人信息")
+@Schema(description = "酒店管理后台 - 订单创建更新")
 @Data
 @ToString(callSuper = true)
 public class OrderInfoBaseBO {
+    @Schema(description = "订单ID")
+    private Long orderNo;
+
+    @Schema(description = "中介ID")
+    private String agencyCode;
+
+    @Schema(description = "客人信息")
+    private List<OrderInfoBookGuest> orderInfoBookGuests;
 
     @Schema(description = "房单类型")
     private Integer folioType;
@@ -37,7 +46,7 @@ public class OrderInfoBaseBO {
 
     @Schema(description = "房价类型ID")
     @NotNull(message = "房价类型不能为空")
-    private Integer roomRateTypeId;
+    private Long roomRateTypeId;
 
     @Schema(description = "到店时间")
     @NotNull(message = "到店时间不能为空")
@@ -66,9 +75,6 @@ public class OrderInfoBaseBO {
 
     @Schema(description = "是否爆单预订(没房仍预定)")
     private Boolean ignoreRoomStatus = false;
-
-    @Schema(description = "订单ID")
-    private Long orderNo;
 
     @Schema(description = "销售员Id")
     private Long sellerId;

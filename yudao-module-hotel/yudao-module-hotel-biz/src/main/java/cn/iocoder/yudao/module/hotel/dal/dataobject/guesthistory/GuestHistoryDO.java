@@ -1,14 +1,18 @@
 package cn.iocoder.yudao.module.hotel.dal.dataobject.guesthistory;
 
-import lombok.*;
+import cn.iocoder.yudao.framework.mybatis.core.dataobject.BaseDO;
+import com.baomidou.mybatisplus.annotation.KeySequence;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDate;
-import java.util.*;
 import java.time.LocalDateTime;
-import java.time.LocalDateTime;
-import java.time.LocalDateTime;
-import com.baomidou.mybatisplus.annotation.*;
-import cn.iocoder.yudao.framework.mybatis.core.dataobject.BaseDO;
 
 /**
  * 客史信息 DO
@@ -52,9 +56,9 @@ public class GuestHistoryDO extends BaseDO {
      */
     private String cardNo;
     /**
-     * 身份证
+     * 证件类型
      */
-    private Long cardType;
+    private Integer cardType;
     /**
      * 地址
      */
@@ -75,5 +79,10 @@ public class GuestHistoryDO extends BaseDO {
      * 入住次数
      */
     private Integer checkinNum;
+
+    /**
+     * 邮箱
+     */
+    private String email;
 
 }

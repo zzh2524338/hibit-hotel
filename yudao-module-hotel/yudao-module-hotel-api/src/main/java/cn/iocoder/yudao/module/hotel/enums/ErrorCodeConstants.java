@@ -29,14 +29,14 @@ public interface ErrorCodeConstants {
 
 
     // ========== 房型价格  1010006000 ============
-    ErrorCode ROOM_TYPE_RATE_NOT_EXISTS = new ErrorCode(1010006000, "房型价格不存在");
+    ErrorCode ROOM_TYPE_RATE_NOT_EXISTS = new ErrorCode(1010006000, "没有查询到当前房型的价格,房型为:{}, 请检查是否设置");
 
     // ========== 会员等级信息  1010007000 ============
     ErrorCode MEMBER_LEVEL_NOT_EXISTS = new ErrorCode(1010007000, "该会员等级不存在");
 
     // ========== 客人信息  1010008000 ============
     ErrorCode GUEST_INFO_NOT_EXISTS = new ErrorCode(1010008000, "房型价格不存在");
-    ErrorCode ID_CARD_INVALID = new ErrorCode(1010008001, "身份证信息输入错误");
+    ErrorCode ID_CARD_INVALID = new ErrorCode(1010008001, "{},的身份证信息输入错误, 请检查:{}");
 
     // ========== 会员信息  1010009000 ============
     ErrorCode MEMBER_INFO_NOT_EXISTS = new ErrorCode(1010009000, "改会员不存在");

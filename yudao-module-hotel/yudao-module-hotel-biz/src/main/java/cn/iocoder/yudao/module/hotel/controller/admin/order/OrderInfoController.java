@@ -4,6 +4,7 @@ import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.excel.core.util.ExcelUtils;
 import cn.iocoder.yudao.framework.operatelog.core.annotations.OperateLog;
+import cn.iocoder.yudao.module.hotel.controller.admin.order.bo.OrderInfoBaseBO;
 import cn.iocoder.yudao.module.hotel.controller.admin.order.vo.OrderInfoCreateReqVO;
 import cn.iocoder.yudao.module.hotel.controller.admin.order.vo.OrderInfoExcelVO;
 import cn.iocoder.yudao.module.hotel.controller.admin.order.vo.OrderInfoExportReqVO;
@@ -46,11 +47,18 @@ public class OrderInfoController {
     @Resource
     private OrderInfoService orderInfoService;
 
+    // @PostMapping("/create")
+    // @Operation(summary = "创建订单")
+    // @PreAuthorize("@ss.hasPermission('hotel:order-info:create')")
+    // public CommonResult<Long> createOrderInfo(@Valid @RequestBody OrderInfoCreateReqVO createReqVO) {
+    //     return success(orderInfoService.createOrderInfo(createReqVO));
+    // }
+
     @PostMapping("/create")
     @Operation(summary = "创建订单")
     @PreAuthorize("@ss.hasPermission('hotel:order-info:create')")
-    public CommonResult<Long> createOrderInfo(@Valid @RequestBody OrderInfoCreateReqVO createReqVO) {
-        return success(orderInfoService.createOrderInfo(createReqVO));
+    public CommonResult<Long> createOrderInfo(@Valid @RequestBody OrderInfoBaseBO req) {
+        return success(orderInfoService.createOrderInfo(req));
     }
 
     @PutMapping("/update")

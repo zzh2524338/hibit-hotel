@@ -1,6 +1,7 @@
 package cn.iocoder.yudao.module.hotel.service.order;
 
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.module.hotel.controller.admin.order.bo.OrderInfoBaseBO;
 import cn.iocoder.yudao.module.hotel.controller.admin.order.vo.OrderInfoCreateReqVO;
 import cn.iocoder.yudao.module.hotel.controller.admin.order.vo.OrderInfoExportReqVO;
 import cn.iocoder.yudao.module.hotel.controller.admin.order.vo.OrderInfoPageReqVO;
@@ -26,6 +27,13 @@ public interface OrderInfoService {
      */
     Long createOrderInfo(@Valid OrderInfoCreateReqVO createReqVO);
 
+    /**
+     * 创建订单
+     *
+     * @param createReqVO 创建信息
+     * @return 编号
+     */
+    Long createOrderInfo(@Valid OrderInfoBaseBO createReqVO);
     /**
      * 更新订单
      *

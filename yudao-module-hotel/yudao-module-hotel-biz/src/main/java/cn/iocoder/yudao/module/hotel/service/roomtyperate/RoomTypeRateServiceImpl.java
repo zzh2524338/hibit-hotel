@@ -119,6 +119,7 @@ public class RoomTypeRateServiceImpl implements RoomTypeRateService {
 
     private void validateRoomTypeRateExists(Long id) {
         if (roomTypeRateMapper.selectById(id) == null) {
+            log.error("查询房型价格报错，房间类型不存在，roomTypeRateId:{}", id);
             throw exception(ROOM_TYPE_RATE_NOT_EXISTS);
         }
     }
