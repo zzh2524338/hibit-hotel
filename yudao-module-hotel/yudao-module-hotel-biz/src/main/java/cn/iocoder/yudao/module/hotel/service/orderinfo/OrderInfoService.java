@@ -1,12 +1,13 @@
-package cn.iocoder.yudao.module.hotel.service.order;
+package cn.iocoder.yudao.module.hotel.service.orderinfo;
 
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
+
 import cn.iocoder.yudao.module.hotel.controller.admin.order.bo.OrderInfoBaseBO;
-import cn.iocoder.yudao.module.hotel.controller.admin.order.vo.OrderInfoCreateReqVO;
-import cn.iocoder.yudao.module.hotel.controller.admin.order.vo.OrderInfoExportReqVO;
-import cn.iocoder.yudao.module.hotel.controller.admin.order.vo.OrderInfoPageReqVO;
-import cn.iocoder.yudao.module.hotel.controller.admin.order.vo.OrderInfoUpdateReqVO;
-import cn.iocoder.yudao.module.hotel.dal.dataobject.order.OrderInfoDO;
+import cn.iocoder.yudao.module.hotel.controller.admin.orderinfo.vo.OrderInfoCreateReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.orderinfo.vo.OrderInfoExportReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.orderinfo.vo.OrderInfoPageReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.orderinfo.vo.OrderInfoUpdateReqVO;
+import cn.iocoder.yudao.module.hotel.dal.dataobject.orderinfo.OrderInfoDO;
 
 import javax.validation.Valid;
 import java.util.Collection;

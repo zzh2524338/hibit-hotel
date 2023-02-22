@@ -25,13 +25,15 @@ public class OrderInfoBaseBO {
     @Schema(description = "客人信息")
     private List<OrderInfoBookGuest> orderInfoBookGuests;
 
+    @Schema(description = "房单id")
+    private Long folioId;
     @Schema(description = "房单类型")
     private Integer folioType;
 
     @Schema(description = "订单来源(大类)")
-    private String sourceId;
+    private Integer sourceId;
     @Schema(description = "订单来源(小类)")
-    private String subSourceId;
+    private Integer subSourceId;
 
     @Schema(description = "是否担保")
     private Boolean assure;
@@ -57,6 +59,9 @@ public class OrderInfoBaseBO {
     @DateTimeFormat(pattern = FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND)
     private LocalDateTime departTime;
 
+    @Schema(description = "预定人")
+    @NotBlank(message = "预定人")
+    private String bookingPerson;
     @Schema(description = "联系人")
     @NotBlank(message = "联系人不能为空")
     private String contractName;
@@ -68,7 +73,7 @@ public class OrderInfoBaseBO {
     private String remark;
 
     @Schema(description = "客源(大类)")
-    @NotBlank(message = "客源不能为空(大类)")
+    @NotNull(message = "客源不能为空(大类)")
     private Integer guestsSourceId;
     @Schema(description = "客源(小类)")
     private Integer guestsSubSourceId;

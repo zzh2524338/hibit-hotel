@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.module.hotel.dal.mysql.roomtyperate;
 
+import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.mybatis.core.mapper.BaseMapperX;
 import cn.iocoder.yudao.framework.mybatis.core.query.LambdaQueryWrapperX;
@@ -40,10 +41,17 @@ public interface RoomTypeRateMapper extends BaseMapperX<RoomTypeRateDO> {
     }
 
     default RoomTypeRateDO selectOneByTypeIdAndAccDate(Long roomRateTypeId, Long roomTypeId, LocalDateTime start) {
+        LocalDateTime beginOfDay = LocalDateTimeUtil.beginOfDay(start);
+        LocalDateTime endOfDay = LocalDateTimeUtil.endOfDay(start);
+
         return selectOne(new LambdaQueryWrapperX<RoomTypeRateDO>()
                 .eq(RoomTypeRateDO::getRoomRateTypeId, roomRateTypeId)
                 .eq(RoomTypeRateDO::getRoomTypeId, roomTypeId)
-                .eq(RoomTypeRateDO::getAccDate, start));
+                .between(RoomTypeRateDO::getAccDate, beginOfDay, endOfDay));
+    }
+
+    default RoomTypeRateDO selectTodayRateByRoomTypeAndRateType(Long roomRateTypeId, Long roomTypeId) {
+        return this.selectOneByTypeIdAndAccDate(roomRateTypeId, roomTypeId, LocalDateTime.now());
     }
 
 }

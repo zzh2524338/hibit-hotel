@@ -41,6 +41,8 @@ public interface GuestHistoryConvert {
             @Mapping(source = "name", target = "guestName"),
             @Mapping(source = "mobile", target = "phone")
     })
+    GuestHistoryDO convertList03(GuestCheckInInformation guestCheckInInformation);
+
     List<GuestHistoryDO> convertList03(List<GuestCheckInInformation> list);
 
 }

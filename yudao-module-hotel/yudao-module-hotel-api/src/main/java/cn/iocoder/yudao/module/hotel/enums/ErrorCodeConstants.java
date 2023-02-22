@@ -29,7 +29,7 @@ public interface ErrorCodeConstants {
 
 
     // ========== 房型价格  1010006000 ============
-    ErrorCode ROOM_TYPE_RATE_NOT_EXISTS = new ErrorCode(1010006000, "没有查询到当前房型的价格,房型为:{}, 请检查是否设置");
+    ErrorCode ROOM_TYPE_RATE_NOT_EXISTS = new ErrorCode(1010006000, "没有查询到当前房型今日的价格,房型为:{}, 请检查是否设置");
 
     // ========== 会员等级信息  1010007000 ============
     ErrorCode MEMBER_LEVEL_NOT_EXISTS = new ErrorCode(1010007000, "该会员等级不存在");

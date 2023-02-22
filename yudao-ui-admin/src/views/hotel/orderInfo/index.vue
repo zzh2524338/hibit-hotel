@@ -3,45 +3,45 @@
 
     <!-- 搜索工作栏 -->
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="订单号" prop="uuid">
-        <el-input v-model="queryParams.uuid" placeholder="请输入订单号" clearable @keyup.enter.native="handleQuery"/>
+      <el-form-item label="订单状态" prop="status">
+        <el-select v-model="queryParams.status" placeholder="请选择订单状态" clearable size="small">
+          <el-option label="请选择字典生成" value=""/>
+        </el-select>
       </el-form-item>
-      <el-form-item label="预定人" prop="orderGuestName">
-        <el-input v-model="queryParams.orderGuestName" placeholder="请输入预定人电话" clearable
+      <el-form-item label="预定人名称" prop="bookingPerson">
+        <el-input v-model="queryParams.bookingPerson" placeholder="请输入预定人名称" clearable
                   @keyup.enter.native="handleQuery"/>
       </el-form-item>
-      <el-form-item label="联系人" prop="contactPerson">
-        <el-input v-model="queryParams.contactPerson" placeholder="请输入联系人" clearable
+      <el-form-item label="联系人" prop="contactName">
+        <el-input v-model="queryParams.contactName" placeholder="请输入联系人" clearable
                   @keyup.enter.native="handleQuery"/>
       </el-form-item>
       <el-form-item label="联系电话" prop="contactNumber">
         <el-input v-model="queryParams.contactNumber" placeholder="请输入联系电话" clearable
                   @keyup.enter.native="handleQuery"/>
       </el-form-item>
-      <el-form-item label="房间信息" prop="roomInfo">
-        <el-input v-model="queryParams.roomInfo" placeholder="请输入房间信息" clearable
-                  @keyup.enter.native="handleQuery"/>
+      <el-form-item label="是否担保" prop="assure">
+        <el-select v-model="queryParams.assure" placeholder="请选择是否担保" clearable size="small">
+          <el-option label="请选择字典生成" value=""/>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="担保时间" prop="assureTime">
+        <el-date-picker v-model="queryParams.assureTime" style="width: 240px" value-format="yyyy-MM-dd HH:mm:ss"
+                        type="daterange"
+                        range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"
+                        :default-time="['00:00:00', '23:59:59']"/>
+      </el-form-item>
+      <el-form-item label="入住时间" prop="arrivalTime">
+        <el-date-picker clearable v-model="queryParams.arrivalTime" type="date" value-format="yyyy-MM-dd"
+                        placeholder="选择入住时间"/>
+      </el-form-item>
+      <el-form-item label="离店时间" prop="departTime">
+        <el-date-picker clearable v-model="queryParams.departTime" type="date" value-format="yyyy-MM-dd"
+                        placeholder="选择离店时间"/>
       </el-form-item>
       <el-form-item label="会员信息快照" prop="memberInfo">
         <el-input v-model="queryParams.memberInfo" placeholder="请输入会员信息快照" clearable
                   @keyup.enter.native="handleQuery"/>
-      </el-form-item>
-      <el-form-item label="订单来源" prop="guestSourceId">
-        <el-input v-model="queryParams.guestSourceId" placeholder="请输入订单来源" clearable
-                  @keyup.enter.native="handleQuery"/>
-      </el-form-item>
-      <el-form-item label="订单状态" prop="orderStatus">
-        <el-select v-model="queryParams.orderStatus" placeholder="请选择订单状态" clearable size="small">
-          <el-option label="请选择字典生成" value=""/>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="入住时间" prop="checkInTime">
-        <el-date-picker clearable v-model="queryParams.checkInTime" type="date" value-format="yyyy-MM-dd"
-                        placeholder="选择入住时间"/>
-      </el-form-item>
-      <el-form-item label="离店时间" prop="checkOutTime">
-        <el-date-picker clearable v-model="queryParams.checkOutTime" type="date" value-format="yyyy-MM-dd"
-                        placeholder="选择离店时间"/>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" @click="handleQuery">搜索</el-button>
@@ -68,26 +68,33 @@
     <!-- 列表 -->
     <el-table v-loading="loading" :data="list">
       <el-table-column label="id" align="center" prop="id"/>
-      <el-table-column label="订单号" align="center" prop="uuid"/>
-      <el-table-column label="预定人名称" align="center" prop="orderGuestName"/>
-      <el-table-column label="联系人" align="center" prop="contactPerson"/>
+      <el-table-column label="订单状态" align="center" prop="status"/>
+      <el-table-column label="预定人名称" align="center" prop="bookingPerson"/>
+      <el-table-column label="联系人" align="center" prop="contactName"/>
       <el-table-column label="联系电话" align="center" prop="contactNumber"/>
+      <el-table-column label="订单来源" align="center" prop="sourceId"/>
+      <el-table-column label="是否担保" align="center" prop="assure"/>
+      <el-table-column label="担保时间" align="center" prop="assureTime" width="180">
+        <template v-slot="scope">
+          <span>{{ parseTime(scope.row.assureTime) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="房价类型" align="center" prop="roomRateTypeId"/>
+      <el-table-column label="入住时间" align="center" prop="arrivalTime" width="180">
+        <template v-slot="scope">
+          <span>{{ parseTime(scope.row.arrivalTime) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="离店时间" align="center" prop="departTime" width="180">
+        <template v-slot="scope">
+          <span>{{ parseTime(scope.row.departTime) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="是否爆单预定" align="center" prop="ignoreRoomStatus"/>
+      <el-table-column label="备注信息" align="center" prop="remark"/>
       <el-table-column label="房间信息" align="center" prop="roomInfo"/>
-      <el-table-column label="会员信息快照" align="center" prop="memberInfo"/>
-      <el-table-column label="订单来源" align="center" prop="guestSourceId"/>
-      <el-table-column label="订单状态" align="center" prop="orderStatus"/>
-      <el-table-column label="入住时间" align="center" prop="checkInTime" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.checkInTime) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="离店时间" align="center" prop="checkOutTime" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.checkOutTime) }}</span>
-        </template>
-      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
+        <template v-slot="scope">
           <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
                      v-hasPermi="['hotel:order-info:update']">修改
           </el-button>
@@ -102,18 +109,18 @@
                 @pagination="getList"/>
 
     <!-- 对话框(添加 / 修改) -->
-    <el-dialog :title="title" :visible.sync="open" width="600px" v-dialogDrag append-to-body>
+    <el-dialog :title="title" :visible.sync="open" width="700px" v-dialogDrag append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="预定人" prop="orderGuestName">
-          <el-input v-model="form.orderGuestName" placeholder="请输入预定人姓名" size="40px"/>
+        <el-form-item label="预定人" prop="bookingPerson">
+          <el-input v-model="form.bookingPerson" placeholder="请输入预定人"/>
         </el-form-item>
-
         <el-row>
           <el-col :span="10">
-            <el-form-item label="联系人" prop="contactPerson">
-              <el-input v-model="form.contactPerson" placeholder="联系人姓名"/>
+            <el-form-item label="联系人" prop="contactName">
+              <el-input v-model="form.contactName" placeholder="请输入联系人"/>
             </el-form-item>
           </el-col>
+
           <el-col :span="14">
             <el-form-item label="联系电话" prop="contactNumber">
               <el-input v-model="form.contactNumber" placeholder="请输入联系电话"/>
@@ -121,71 +128,84 @@
           </el-col>
         </el-row>
 
-        <el-form-item label="中介号" prop="intermediaryNumber">
-          <el-input v-model="form.intermediaryNumber" placeholder="请输入中介号"/>
+        <el-form-item label="中介号" prop="agencyCode">
+          <el-input v-model="form.agencyCode" placeholder="请输入中介号"/>
+        </el-form-item>
+        <el-form-item label="客人信息" prop="bookingGuestInfo">
+          <el-input v-model="form.bookingGuestInfo" placeholder="请输入客人信息"/>
+        </el-form-item>
+
+        <el-form-item label="订单来源" prop="sourceId">
+          <el-input v-model="form.sourceId" placeholder="请输入订单来源"/>
+        </el-form-item>
+        <el-form-item label="订单来源(小类)" prop="sourceSubId">
+          <el-input v-model="form.sourceSubId" placeholder="请输入订单来源(小类)"/>
         </el-form-item>
 
         <el-row>
           <el-col :span="8">
-            <el-form-item label="类型" prop="roomTypeId">
-              <el-select v-model="form.roomTypeId" filterable placeholder="请选择房间类型" clearable size="small"
-                         @change="roomTypeChange" @clear="clearRoomType">
-                <el-option
-                  v-for="item in roomTypeList"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.id"
-                />
+            <el-form-item label="是否担保" prop="assure">
+              <el-select v-model="queryParams.assure" placeholder="是否担保" clearable size="small">
+                <el-option v-for="dict in this.getDictDatas(DICT_TYPE.HOTEL_ASSURE)"
+                           :key="dict.value" :label="dict.label" :value="dict.value"/>
               </el-select>
             </el-form-item>
           </el-col>
 
-          <el-col :span="6">
-            <p align="center"> 原价: {{ getOriginalPrice }}, 余:{{ this.roomListStatus1.length }}</p>
-          </el-col>
-
-          <el-col :span="10">
-            <el-form-item label="房间号" prop="roomNo">
-              <el-select v-model="form.roomNo" placeholder="请输入房间号" size="small" clearable filterable>
-                <el-option v-for="item in roomListStatus1 "
-                           :key="item.id" :label="item.label" :value="item.no"/>
-              </el-select>
+          <el-col :span="16">
+            <el-form-item label="担保时间" prop="assureTime">
+              <!--              <el-time-select clearable v-model="form.assureTime" type="date" value-format="timestamp"-->
+              <!--                              placeholder="选择担保时间"/>-->
+              <el-time-select
+                v-model="form.assureTime"
+                :picker-options="{start: '00:30', step: '00:30', end: '23:00'}"
+                placeholder="选择时间">
+              </el-time-select>
             </el-form-item>
           </el-col>
         </el-row>
 
-        <el-form-item label="客人信息" prop="guestInfos">
-          <TableForm :config="config" @submit="submit" ref="formList" style="margin:20px;"/>
+        <el-form-item label="房价类型" prop="roomRateTypeId">
+          <el-input v-model="form.roomRateTypeId" placeholder="请输入房价类型"/>
         </el-form-item>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="入住时间" prop="arrivalTime">
+              <el-date-picker clearable v-model="form.arrivalTime" type="date" value-format="timestamp"
+                              placeholder="选择入住时间"/>
+            </el-form-item>
+          </el-col>
 
-        <el-form-item label="会员信息" prop="memberInfo">
-          <el-input v-model="form.memberInfo" placeholder="请输入会员信息"/>
+          <el-col :span="12">
+            <el-form-item label="离店时间" prop="departTime">
+              <el-date-picker clearable v-model="form.departTime" type="date" value-format="timestamp"
+                              placeholder="选择离店时间"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-form-item label="客源" prop="guestsSourceId">
+          <el-input v-model="form.guestsSourceId" placeholder="请输入客源"/>
+        </el-form-item>
+        <el-form-item label="客源(小类)" prop="guestsSubSourceId">
+          <el-input v-model="form.guestsSubSourceId" placeholder="请输入客源(小类)"/>
         </el-form-item>
         <el-form-item label="订单来源" prop="guestSourceId">
           <el-input v-model="form.guestSourceId" placeholder="请输入订单来源"/>
         </el-form-item>
-        <el-form-item label="备注信息" prop="remark">
-          <el-input v-model="form.remark" placeholder="请输入备注信息"/>
-        </el-form-item>
-
-        <el-form-item label="折后实际价格" prop="discountPrice">
-          <el-input v-model="form.discountPrice" placeholder="请输入折后实际价格"/>
-        </el-form-item>
-        <el-form-item label="实际付款" prop="actuallyPaid">
-          <el-input v-model="form.actuallyPaid" placeholder="请输入实际付款"/>
-        </el-form-item>
-        <el-form-item label="订单状态" prop="orderStatus">
-          <el-radio-group v-model="form.orderStatus">
+        <el-form-item label="是否爆单预定" prop="ignoreRoomStatus">
+          <el-radio-group v-model="form.ignoreRoomStatus">
             <el-radio label="1">请选择字典生成</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="入住时间" prop="checkInTime">
-          <el-date-picker clearable v-model="form.checkInTime" type="date" value-format="timestamp"
-                          placeholder="选择入住时间"/>
+        <el-form-item label="备注信息" prop="remark">
+          <el-input v-model="form.remark" placeholder="请输入备注信息"/>
         </el-form-item>
-        <el-form-item label="离店时间" prop="checkOutTime">
-          <el-date-picker clearable v-model="form.checkOutTime" type="date" value-format="timestamp"
-                          placeholder="选择离店时间"/>
+        <el-form-item label="房间信息" prop="roomInfo">
+          <el-input v-model="form.roomInfo" placeholder="请输入房间信息"/>
+        </el-form-item>
+        <el-form-item label="会员信息快照" prop="memberInfo">
+          <el-input v-model="form.memberInfo" placeholder="请输入会员信息快照"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -199,98 +219,18 @@
 <script>
 import {
   createOrderInfo,
-  updateOrderInfo,
   deleteOrderInfo,
+  exportOrderInfoExcel,
   getOrderInfo,
   getOrderInfoPage,
-  exportOrderInfoExcel
+  updateOrderInfo
 } from "@/api/hotel/orderInfo";
-import roomInfo from "@/views/hotel/roomInfo";
-import {getRoomTypeList} from "@/api/hotel/roomType";
-import {getRoomInfoPage} from "@/api/hotel/roomInfo";
-import TableForm from "@/components/Hotel/TableForm";
-
-const
-  columns = [
-    {
-      prop: 'name',
-      label: '姓名',
-      attr: {width: '120'},
-      edit: true,
-      rules: [{required: true, message: '请输入姓名'}]
-    },
-    {
-      prop: 'idCard',
-      label: '证件号',
-      attr: {width: '120'},
-      edit: true,
-    },
-    // {
-    //   prop: 'authOrganization',
-    //   label: '颁证机构',
-    //   attr: {minWidth: '140'},
-    //   edit: true,
-    // },
-    // {
-    //   prop: 'gender',
-    //   label: '性别',
-    //   attr: {width: '60'},
-    //   type: 'select',
-    //   edit: true,
-    //   options: [{label: '男', value: '1'}, {label: '女', value: '2'}]
-    // },
-    // {
-    //   prop: 'phone',
-    //   label: '手机号',
-    //   attr: {minWidth: '110'},
-    //   edit: true,
-    // },
-    // {prop: 'birthday', label: '出生日期', attr: {minWidth: '110'}, edit: true, type: 'date', required: false},
-
-    // {
-    //   prop: 'costRate',
-    //   label: '成本利率',
-    //   attr: {minWidth: '110'},
-    //   edit: true,
-    //   type: 'select',
-    //   options: [{label: '5%', value: '5'}, {label: '10%', value: '10'}]
-    // },
-    // {prop: 'company', label: '所属公司', attr: {minWidth: '110'}, edit: true},
-    // {
-    //   prop: 'product',
-    //   label: '产品',
-    //   attr: {minWidth: '110'},
-    //   edit: true,
-    //   type: 'checkbox',
-    //   options: [{label: '橘子', value: 'orange'}, {label: '苹果', value: 'apple'}]
-    // },
-    // {prop: 'lock', label: '锁定', attr: {minWidth: '110'}, edit: true, type: 'switch'},
-    // {
-    //   prop: 'search', label: '搜索', attr: {minWidth: '110'}, edit: true, type: 'mixInput', cb: row => {
-    //     console.log(row)
-    //   }
-    // },
-    {prop: 'opt', label: '操作', attr: {minWidth: '110'}, edit: true},
-  ]
 
 export default {
   name: "OrderInfo",
-  components: {
-    TableForm
-  },
-
-  props: {
-    originalPrice: {
-      type: [Number, String],
-      default: 0
-    }
-  },
+  components: {},
   data() {
     return {
-      config: {
-        columns,
-        data: [],
-      },
       // 遮罩层
       loading: true,
       // 导出遮罩层
@@ -301,85 +241,46 @@ export default {
       total: 0,
       // 订单列表
       list: [],
-      // 房间类型列表
-      roomTypeList: [],
-      // 根据房间类型查询房间信息
-      roomListByType: [],
-      // 所有可用房间，空净
-      roomListStatus1: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
       open: false,
       // 查询参数
-      tableData: [/*{
-        layerNo: 1,
-        layerStyle: '卷积层',
-        kernelSize: 3,
-        kernelCount: 20,
-        stepSize: 20,
-      }*/],
       queryParams: {
         pageNo: 1,
         pageSize: 10,
-        uuid: null,
-        orderGuestName: null,
-        contactPerson: null,
+        status: null,
+        bookingPerson: null,
+        contactName: null,
         contactNumber: null,
-        roomInfo: null,
+        assure: "false",
+        assureTime: [],
+        arrivalTime: null,
+        departTime: [],
         memberInfo: null,
-        guestSourceId: null,
-        orderStatus: null,
-        checkInTime: null,
-        checkOutTime: null,
-        roomType: null
-      },
-      // 客人信息
-      guestInfo: {
-        name: null,
-        idCard: null,
-        address: null,
-        issuingAuthority: null
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {
-        orderGuestName: [{required: true, message: "预定人名称不能为空", trigger: "blur"}],
-        contactPerson: [{required: true, message: "联系人不能为空", trigger: "blur"}],
+        uuid: [{required: true, message: "订单号不能为空", trigger: "blur"}],
+        status: [{required: true, message: "订单状态不能为空", trigger: "blur"}],
+        bookingPerson: [{required: true, message: "预定人名称不能为空", trigger: "blur"}],
+        contactName: [{required: true, message: "联系人不能为空", trigger: "blur"}],
         contactNumber: [{required: true, message: "联系电话不能为空", trigger: "blur"}],
-
-        roomTypeId: [{required: true, message: "房间类型不能为空", trigger: "blur"}],
-        roomInfo: [{required: true, message: "房间信息不能为空", trigger: "blur"}],
-        no: [{required: true, message: "房间号不能为空", trigger: "blur"}],
-        roomId: [{required: true, message: "房间编号不能为空", trigger: "blur"}],
-        memberInfo: [{required: true, message: "会员信息快照不能为空", trigger: "blur"}],
+        sourceId: [{required: true, message: "请选择订单来源", trigger: "blur"}],
+        roomRateTypeId: [{required: true, message: "房价类型不能为空", trigger: "blur"}],
+        arrivalTime: [{required: true, message: "入住时间不能为空", trigger: "blur"}],
+        departTime: [{required: true, message: "离店时间不能为空", trigger: "blur"}],
         guestSourceId: [{required: true, message: "订单来源不能为空", trigger: "blur"}],
-        originalPrice: [{required: true, message: "原价不能为空", trigger: "blur"}],
-        discountPrice: [{required: true, message: "折后实际价格不能为空", trigger: "blur"}],
-        actuallyPaid: [{required: true, message: "实际付款不能为空", trigger: "blur"}],
-        orderStatus: [{required: true, message: "订单状态不能为空", trigger: "blur"}],
-        checkInTime: [{required: true, message: "入住时间不能为空", trigger: "blur"}],
-        // guestInfos: [{required: true, message: "客人信息不能为空", trigger: "blur"}],
-        checkOutTime: [{required: true, message: "离店时间不能为空", trigger: "blur"}],
+        ignoreRoomStatus: [{required: true, message: "是否爆单预定不能为空", trigger: "blur"}],
+        roomInfo: [{required: true, message: "房间信息不能为空", trigger: "blur"}],
+        memberInfo: [{required: true, message: "会员信息快照不能为空", trigger: "blur"}],
       }
     };
   },
   created() {
     this.getList();
-  },
-  mounted() {
-    this.getRoomTypeList();
-  },
-  computed: {
-    getOriginalPrice() {
-      let roomType = this.roomTypeList.find(roomType => roomType.id === this.form.roomTypeId);
-      if (roomType) {
-        return roomType.price
-      } else {
-        return '--';
-      }
-    }
   },
   methods: {
     /** 查询列表 */
@@ -392,87 +293,41 @@ export default {
         this.loading = false;
       });
     },
-    getRoomTypeList() {
-      this.loading = true;
-
-      getRoomTypeList().then(response => {
-        this.roomTypeList = response.data;
-        this.loading = false;
-      })
-    },
-
-    // 清空房间类型时触发
-    clearRoomType() {
-      console.log("safdasdfasd");
-      this.form.roomType = '';
-      this.roomListStatus1 = [];
-      this.form.roomId = '';
-    },
-
-    // 更换房间类型:
-    roomTypeChange(value) {
-      this.loading = true;
-      //  清空房间号
-      this.form.roomInfo = '';
-      this.roomListStatus1 = [];
-      getRoomInfoPage({
-        pageNo: 1,
-        pageSize: 200,
-        roomType: value,
-        // 默认只查询空净
-        status: 1,
-      }).then(response => {
-        this.roomListStatus1 = response.data.list;
-        this.loading = false;
-      })
-    },
     /** 取消按钮 */
     cancel() {
       this.open = false;
       this.reset();
     },
-
-    submit(res) {
-      this.form.xx = res
-      console.log(res)
-    },
-
     /** 表单重置 */
     reset() {
       this.form = {
         id: undefined,
-        orderGuestName: undefined,
-        contactPerson: undefined,
+        uuid: undefined,
+        status: undefined,
+        bookingPerson: undefined,
+        contactName: undefined,
         contactNumber: undefined,
-        intermediaryNumber: undefined,
-
-        // 房间信息
-        roomTypeId: undefined,
-        roomTyeName: undefined,
-        roomNo: undefined,
-        // 入住客人信息
-        guestName: undefined,
-        guestNumber: undefined,
-        guestIdCard: undefined,
-        // 身份证地址
-        guestAddress: undefined,
-        // 身份证签发机关
-        guestIssuingAuthority: undefined,
-
-        memberInfo: undefined,
+        agencyCode: undefined,
+        bookingGuestInfo: undefined,
+        folioId: undefined,
+        folioType: undefined,
+        sourceId: undefined,
+        sourceSubId: undefined,
+        assure: undefined,
+        assureTime: undefined,
+        roomRateTypeId: undefined,
+        arrivalTime: undefined,
+        departTime: undefined,
+        guestsSourceId: undefined,
+        guestsSubSourceId: undefined,
         guestSourceId: undefined,
+        ignoreRoomStatus: undefined,
         remark: undefined,
-        originalPrice: undefined,
-        discountPrice: undefined,
-        actuallyPaid: undefined,
-        orderStatus: undefined,
-        checkInTime: undefined,
-        guestInfo: undefined,
-        checkOutTime: undefined,
+        roomInfo: undefined,
+        memberInfo: undefined,
       };
       this.resetForm("form");
     },
-
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNo = 1;
@@ -488,7 +343,6 @@ export default {
       this.reset();
       this.open = true;
       this.title = "添加订单";
-
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -499,21 +353,9 @@ export default {
         this.open = true;
         this.title = "修改订单";
       });
-
-      const data = [
-        {repaymentMethod: '201602', productPer: '1', price: '5', company: '谷歌上海', date: '2021-01-03', lock: false},
-        {repaymentMethod: '201601', productPer: '3', costRate: '10', price: '', company: '雅虎北京', lock: true}
-      ]
-      // 模拟调接口回显数据
-      setTimeout(() => {
-        this.$refs.formList.setData(data)
-      }, 2000)
     },
     /** 提交按钮 */
     submitForm() {
-      console.log(this.$refs["formList"])
-      console.log(this.$refs["formList"].form.list)
-      this.form.guestInfos = this.$refs["formList"].form.list;
       this.$refs["form"].validate(valid => {
         if (!valid) {
           return;

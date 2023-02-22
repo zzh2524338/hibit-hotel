@@ -88,13 +88,28 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" v-dialogDrag append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="房型编号" prop="roomTypeId">
-          <el-input v-model="form.roomTypeId" placeholder="请输入房型编号"/>
+          <el-select v-model="form.roomTypeId" placeholder="请选择房型" clearable size="small">
+            <el-option
+              v-for="item in roomTypeList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
         </el-form-item>
-        <el-form-item label="房价类型编号" prop="roomRateTypeId">
-          <el-input v-model="form.roomRateTypeId" placeholder="请输入房价类型编号"/>
+        <el-form-item label="房价类型" prop="roomRateTypeId">
+          <el-select v-model="form.roomRateTypeId" placeholder="请选择房价" clearable size="small">
+            <el-option
+              v-for="item in roomRateTypeList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
+<!--          <el-input v-model="form.roomRateTypeId" placeholder="请输入房价类型编号"/>-->
         </el-form-item>
-        <el-form-item label="现在折扣价格" prop="roomRate">
-          <el-input v-model="form.roomRate" placeholder="请输入现在折扣价格"/>
+        <el-form-item label="价格" prop="roomRate">
+          <el-input v-model="form.roomRate" placeholder="请输入价格"/>
         </el-form-item>
         <el-form-item label="生效日期" prop="accDate">
           <el-date-picker clearable v-model="form.accDate" type="date" value-format="timestamp"

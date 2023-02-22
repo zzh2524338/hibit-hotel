@@ -10,7 +10,6 @@ import javax.validation.constraints.NotNull;
 
 @Schema(description = "酒店管理后台 - 订单创建中的客人信息")
 @Data
-@ToString(callSuper = true)
 public class GuestCheckInInformation {
     @Schema(description = "客人编号")
     private String guestId;

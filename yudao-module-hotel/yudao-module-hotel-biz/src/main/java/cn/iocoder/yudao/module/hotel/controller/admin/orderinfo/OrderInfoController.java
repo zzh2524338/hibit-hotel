@@ -1,19 +1,21 @@
-package cn.iocoder.yudao.module.hotel.controller.admin.order;
+package cn.iocoder.yudao.module.hotel.controller.admin.orderinfo;
 
 import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.excel.core.util.ExcelUtils;
 import cn.iocoder.yudao.framework.operatelog.core.annotations.OperateLog;
 import cn.iocoder.yudao.module.hotel.controller.admin.order.bo.OrderInfoBaseBO;
-import cn.iocoder.yudao.module.hotel.controller.admin.order.vo.OrderInfoCreateReqVO;
-import cn.iocoder.yudao.module.hotel.controller.admin.order.vo.OrderInfoExcelVO;
-import cn.iocoder.yudao.module.hotel.controller.admin.order.vo.OrderInfoExportReqVO;
-import cn.iocoder.yudao.module.hotel.controller.admin.order.vo.OrderInfoPageReqVO;
-import cn.iocoder.yudao.module.hotel.controller.admin.order.vo.OrderInfoRespVO;
-import cn.iocoder.yudao.module.hotel.controller.admin.order.vo.OrderInfoUpdateReqVO;
-import cn.iocoder.yudao.module.hotel.convert.order.OrderInfoConvert;
-import cn.iocoder.yudao.module.hotel.dal.dataobject.order.OrderInfoDO;
-import cn.iocoder.yudao.module.hotel.service.order.OrderInfoService;
+
+
+import cn.iocoder.yudao.module.hotel.controller.admin.orderinfo.vo.OrderInfoExcelVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.orderinfo.vo.OrderInfoExportReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.orderinfo.vo.OrderInfoPageReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.orderinfo.vo.OrderInfoRespVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.orderinfo.vo.OrderInfoUpdateReqVO;
+import cn.iocoder.yudao.module.hotel.convert.orderinfo.OrderInfoConvert;
+import cn.iocoder.yudao.module.hotel.dal.dataobject.orderinfo.OrderInfoDO;
+
+import cn.iocoder.yudao.module.hotel.service.orderinfo.OrderInfoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -71,7 +73,7 @@ public class OrderInfoController {
 
     @DeleteMapping("/delete")
     @Operation(summary = "删除订单")
-    @Parameter(name = "id 编号", required = true)
+    @Parameter(name = "id", description = "编号", required = true)
     @PreAuthorize("@ss.hasPermission('hotel:order-info:delete')")
     public CommonResult<Boolean> deleteOrderInfo(@RequestParam("id") Long id) {
         orderInfoService.deleteOrderInfo(id);
@@ -80,7 +82,7 @@ public class OrderInfoController {
 
     @GetMapping("/get")
     @Operation(summary = "获得订单")
-    @Parameter(name = "id 编号", required = true, example = "1024")
+    @Parameter(name = "id", description = "编号", required = true, example = "1024")
     @PreAuthorize("@ss.hasPermission('hotel:order-info:query')")
     public CommonResult<OrderInfoRespVO> getOrderInfo(@RequestParam("id") Long id) {
         OrderInfoDO orderInfo = orderInfoService.getOrderInfo(id);
@@ -89,7 +91,7 @@ public class OrderInfoController {
 
     @GetMapping("/list")
     @Operation(summary = "获得订单列表")
-    @Parameter(name = "ids 编号列表", required = true, example = "1024,2048")
+    @Parameter(name = "ids", description = "编号列表", required = true, example = "1024,2048")
     @PreAuthorize("@ss.hasPermission('hotel:order-info:query')")
     public CommonResult<List<OrderInfoRespVO>> getOrderInfoList(@RequestParam("ids") Collection<Long> ids) {
         List<OrderInfoDO> list = orderInfoService.getOrderInfoList(ids);
@@ -109,7 +111,7 @@ public class OrderInfoController {
     @PreAuthorize("@ss.hasPermission('hotel:order-info:export')")
     @OperateLog(type = EXPORT)
     public void exportOrderInfoExcel(@Valid OrderInfoExportReqVO exportReqVO,
-            HttpServletResponse response) throws IOException {
+              HttpServletResponse response) throws IOException {
         List<OrderInfoDO> list = orderInfoService.getOrderInfoList(exportReqVO);
         // 导出 Excel
         List<OrderInfoExcelVO> datas = OrderInfoConvert.INSTANCE.convertList02(list);
