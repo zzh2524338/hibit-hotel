@@ -1,15 +1,10 @@
 package cn.iocoder.yudao.module.hotel.dal.dataobject.orderinfo;
 
 import lombok.*;
-import java.util.*;
-import java.time.LocalDateTime;
-import java.time.LocalDateTime;
+
 import java.time.LocalDateTime;
 import java.math.BigDecimal;
-import java.math.BigDecimal;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.LocalDateTime;
+
 import com.baomidou.mybatisplus.annotation.*;
 import cn.iocoder.yudao.framework.mybatis.core.dataobject.BaseDO;
 
@@ -76,7 +71,7 @@ public class OrderInfoDO extends BaseDO {
     /**
      * 订单来源(小类)
      */
-    private Integer sourceSubId;
+    private Integer subSourceId;
     /**
      * 是否担保
      */
@@ -109,10 +104,6 @@ public class OrderInfoDO extends BaseDO {
      * 客源(小类)
      */
     private Integer guestsSubSourceId;
-    /**
-     * 订单来源
-     */
-    private Integer guestSourceId;
     /**
      * 是否爆单预定
      */

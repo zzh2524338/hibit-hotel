@@ -3,10 +3,10 @@
 
     <!-- 搜索工作栏 -->
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="房间号" prop="no">
-        <el-input v-model="queryParams.no" placeholder="请输入房间号" clearable @keyup.enter.native="handleQuery"/>
+      <el-form-item label="订单号" prop="orderId">
+        <el-input v-model="queryParams.orderId" placeholder="请输入订单号" clearable @keyup.enter.native="handleQuery"/>
       </el-form-item>
-      <el-form-item label="房间类型" prop="roomType">
+      <el-form-item label="房间类型" prop="roomTypeId">
         <el-select v-model="queryParams.roomTypeId" placeholder="请选择房间类型表" clearable size="small">
           <el-option
             v-for="item in roomTypeList"
@@ -16,19 +16,22 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="楼层" prop="floor">
-        <el-input v-model="queryParams.floor" placeholder="请输入楼层" clearable
+      <el-form-item label="房间信息" prop="roomId">
+        <el-input v-model="queryParams.roomId" placeholder="请输入房间信息" clearable
                   @keyup.enter.native="handleQuery"/>
       </el-form-item>
-      <el-form-item label="清洁状态" prop="cleanStatus">
-        <el-select v-model="queryParams.cleanStatus" placeholder="请选择状态" clearable size="small">
-          <el-option v-for="dict in this.getDictDatas(DICT_TYPE.HOTEL_ROOM_CLEAN_STATUS)"
-                     :key="dict.value" :label="dict.label" :value="dict.value"/>
+      <el-form-item label="房单状态" prop="status">
+        <el-select v-model="queryParams.status" placeholder="请选择房单状态" clearable size="small">
+          <el-option label="请选择字典生成" value=""/>
         </el-select>
       </el-form-item>
-      <el-form-item label="房间钥匙信息" prop="keyInfo">
-        <el-input v-model="queryParams.keyInfo" placeholder="请输入房间钥匙信息" clearable
-                  @keyup.enter.native="handleQuery"/>
+      <el-form-item label="到店时间" prop="arrivalTime">
+        <el-date-picker clearable v-model="queryParams.arrivalTime" type="date" value-format="yyyy-MM-dd"
+                        placeholder="选择到店时间"/>
+      </el-form-item>
+      <el-form-item label="离店时间" prop="departTime">
+        <el-date-picker clearable v-model="queryParams.departTime" type="date" value-format="yyyy-MM-dd"
+                        placeholder="选择离店时间"/>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" @click="handleQuery">搜索</el-button>
@@ -40,13 +43,13 @@
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleAdd"
-                   v-hasPermi="['hotel:room-info:create']">新增
+                   v-hasPermi="['hotel:folio-info:create']">新增
         </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport"
                    :loading="exportLoading"
-                   v-hasPermi="['hotel:room-info:export']">导出
+                   v-hasPermi="['hotel:folio-info:export']">导出
         </el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
@@ -55,26 +58,33 @@
     <!-- 列表 -->
     <el-table v-loading="loading" :data="list">
       <el-table-column label="id" align="center" prop="id"/>
-      <el-table-column label="房间号" align="center" prop="no"/>
+      <el-table-column label="订单号" align="center" prop="orderId"/>
       <el-table-column label="房间类型" align="center" prop="roomTypeId">
         <template v-slot="scope">
           <el-tag> {{ getRoomTypeName(scope.row.roomTypeId) }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="楼层" align="center" prop="floor"/>
-      <el-table-column label="清洁状态" align="center" prop="cleanStatus">
-        <template slot-scope="scope">
-          <dict-tag :type="DICT_TYPE.HOTEL_ROOM_CLEAN_STATUS" :value="scope.row.cleanStatus"/>
+      <el-table-column label="房间信息" align="center" prop="roomId"/>
+      <el-table-column label="房单状态" align="center" prop="status"/>
+      <el-table-column label="备注" align="center" prop="remark"/>
+      <el-table-column label="客人信息" align="center" prop="guestInfo"/>
+      <el-table-column label="到店时间" align="center" prop="arrivalTime" width="180">
+        <template v-slot="scope">
+          <span>{{ parseTime(scope.row.arrivalTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="房间钥匙信息" align="center" prop="keyInfo"/>
+      <el-table-column label="离店时间" align="center" prop="departTime" width="180">
+        <template v-slot="scope">
+          <span>{{ parseTime(scope.row.departTime) }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
+        <template v-slot="scope">
           <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
-                     v-hasPermi="['hotel:room-info:update']">修改
+                     v-hasPermi="['hotel:folio-info:update']">修改
           </el-button>
           <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
-                     v-hasPermi="['hotel:room-info:delete']">删除
+                     v-hasPermi="['hotel:folio-info:delete']">删除
           </el-button>
         </template>
       </el-table-column>
@@ -86,33 +96,42 @@
     <!-- 对话框(添加 / 修改) -->
     <el-dialog :title="title" :visible.sync="open" width="500px" v-dialogDrag append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="房间号" prop="no">
-          <el-input v-model="form.no" placeholder="请输入房间号"/>
+        <el-form-item label="订单号" prop="orderId">
+          <el-input v-model="form.orderId" placeholder="请输入订单号"/>
         </el-form-item>
         <el-form-item label="房间类型" prop="roomTypeId">
-          <el-select v-model="form.roomTypeId" placeholder="请选择房间类型表">
-            <el-option
-              v-for="item in roomTypeList"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            />
+          <el-select v-model="form.roomTypeId" placeholder="请选择房间类型">
+            <el-select v-model="queryParams.roomTypeId" placeholder="请选择房间类型表" clearable size="small">
+              <el-option
+                v-for="item in roomTypeList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              />
+            </el-select>
           </el-select>
         </el-form-item>
-        <el-form-item label="楼层" prop="floor">
-          <el-input v-model="form.floor" placeholder="请输入楼层" style="width: 40%"/>
+        <el-form-item label="房间信息" prop="roomId">
+          <el-input v-model="form.roomId" placeholder="请输入房间信息"/>
         </el-form-item>
-        <el-form-item label="清洁状态" prop="cleanStatus">
-          <el-select v-model="form.cleanStatus" placeholder="请选择状态">
-            <el-option v-for="dict in this.getDictDatas(DICT_TYPE.HOTEL_ROOM_CLEAN_STATUS)"
-                       :key="dict.value" :label="dict.label" :value="parseInt(dict.value)"/>
-          </el-select>
+        <el-form-item label="房单状态" prop="status">
+          <el-radio-group v-model="form.status">
+            <el-radio label="1">请选择字典生成</el-radio>
+          </el-radio-group>
         </el-form-item>
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" placeholder="请输入备注"/>
         </el-form-item>
-        <el-form-item label="房间钥匙信息" prop="keyInfo">
-          <el-input v-model="form.keyInfo" placeholder="请输入房间钥匙信息"/>
+        <el-form-item label="客人信息" prop="guestInfo">
+          <el-input v-model="form.guestInfo" placeholder="请输入客人信息"/>
+        </el-form-item>
+        <el-form-item label="到店时间" prop="arrivalTime">
+          <el-date-picker clearable v-model="form.arrivalTime" type="date" value-format="timestamp"
+                          placeholder="选择到店时间"/>
+        </el-form-item>
+        <el-form-item label="离店时间" prop="departTime">
+          <el-date-picker clearable v-model="form.departTime" type="date" value-format="timestamp"
+                          placeholder="选择离店时间"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -125,17 +144,17 @@
 
 <script>
 import {
-  createRoomInfo,
-  deleteRoomInfo,
-  exportRoomInfoExcel,
-  getRoomInfo,
-  getRoomInfoPage,
-  updateRoomInfo
-} from "@/api/hotel/roomInfo";
+  createFolioInfo,
+  deleteFolioInfo,
+  exportFolioInfoExcel,
+  getFolioInfo,
+  getFolioInfoPage,
+  updateFolioInfo
+} from "@/api/hotel/folioInfo";
 import {getRoomTypeList} from "@/api/hotel/roomType";
 
 export default {
-  name: "RoomInfo",
+  name: "FolioInfo",
   components: {},
   data() {
     return {
@@ -147,7 +166,7 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 房间信息列表
+      // 房单信息列表
       list: [],
       // 房间类型列表
       roomTypeList: [],
@@ -159,35 +178,36 @@ export default {
       queryParams: {
         pageNo: 1,
         pageSize: 10,
-        no: null,
+        orderId: null,
         roomTypeId: null,
-        floor: null,
-        cleanStatus: null,
-        keyInfo: null,
+        roomId: null,
+        status: null,
+        arrivalTime: null,
+        departTime: null,
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {
-        no: [{required: true, message: "房间号不能为空", trigger: "blur"}],
-        roomTypeId: [{required: true, message: "房间类型表不能为空", trigger: "change"}],
-        floor: [{required: true, message: "楼层不能为空", trigger: "blur"}],
-        cleanStatus: [{required: true, message: "清洁状态不能为空", trigger: "change"}],
+        orderId: [{required: true, message: "订单号不能为空", trigger: "blur"}],
+        roomTypeId: [{required: true, message: "房间类型不能为空", trigger: "change"}],
+        roomId: [{required: true, message: "房间信息不能为空", trigger: "blur"}],
+        status: [{required: true, message: "房单状态不能为空", trigger: "blur"}],
       }
     };
   },
   created() {
+    this.getRoomTypeList();
     this.getList();
   },
   mounted() {
-    this.getRoomTypeList();
   },
   methods: {
     /** 查询列表 */
     getList() {
       this.loading = true;
       // 执行查询
-      getRoomInfoPage(this.queryParams).then(response => {
+      getFolioInfoPage(this.queryParams).then(response => {
         this.list = response.data.list;
         this.total = response.data.total;
         this.loading = false;
@@ -205,7 +225,6 @@ export default {
         this.loading = false;
       })
     },
-
     /**
      * 根据给定的 房间类型编号 返回房间类型名称
      * @param roomTypeId 房间类型编号
@@ -219,6 +238,7 @@ export default {
       }
       return '未知的房型';
     },
+
     /** 取消按钮 */
     cancel() {
       this.open = false;
@@ -228,12 +248,14 @@ export default {
     reset() {
       this.form = {
         id: undefined,
-        no: undefined,
+        orderId: undefined,
         roomTypeId: undefined,
-        floor: undefined,
-        cleanStatus: undefined,
+        roomId: undefined,
+        status: undefined,
         remark: undefined,
-        keyInfo: undefined,
+        guestInfo: undefined,
+        arrivalTime: undefined,
+        departTime: undefined,
       };
       this.resetForm("form");
     },
@@ -251,16 +273,16 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加房间信息";
+      this.title = "添加房单信息";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
       const id = row.id;
-      getRoomInfo(id).then(response => {
+      getFolioInfo(id).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改房间信息";
+        this.title = "修改房单信息";
       });
     },
     /** 提交按钮 */
@@ -271,7 +293,7 @@ export default {
         }
         // 修改的提交
         if (this.form.id != null) {
-          updateRoomInfo(this.form).then(response => {
+          updateFolioInfo(this.form).then(response => {
             this.$modal.msgSuccess("修改成功");
             this.open = false;
             this.getList();
@@ -279,7 +301,7 @@ export default {
           return;
         }
         // 添加的提交
-        createRoomInfo(this.form).then(response => {
+        createFolioInfo(this.form).then(response => {
           this.$modal.msgSuccess("新增成功");
           this.open = false;
           this.getList();
@@ -289,8 +311,8 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const id = row.id;
-      this.$modal.confirm('是否确认删除房间信息编号为"' + id + '"的数据项?').then(function () {
-        return deleteRoomInfo(id);
+      this.$modal.confirm('是否确认删除房单信息编号为"' + id + '"的数据项?').then(function () {
+        return deleteFolioInfo(id);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
@@ -303,11 +325,11 @@ export default {
       let params = {...this.queryParams};
       params.pageNo = undefined;
       params.pageSize = undefined;
-      this.$modal.confirm('是否确认导出所有房间信息数据项?').then(() => {
+      this.$modal.confirm('是否确认导出所有房单信息数据项?').then(() => {
         this.exportLoading = true;
-        return exportRoomInfoExcel(params);
+        return exportFolioInfoExcel(params);
       }).then(response => {
-        this.$download.excel(response, '房间信息.xls');
+        this.$download.excel(response, '房单信息.xls');
         this.exportLoading = false;
       }).catch(() => {
       });

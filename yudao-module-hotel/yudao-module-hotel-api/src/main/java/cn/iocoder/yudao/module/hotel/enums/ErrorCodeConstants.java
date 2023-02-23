@@ -48,5 +48,8 @@ public interface ErrorCodeConstants {
     // ========== 客史信息 1010011000 ==========
     ErrorCode GUEST_HISTORY_NOT_EXISTS = new ErrorCode(1010011000, "客史信息不存在");
 
+    // ========== 客史信息 1010012000 ==========
+    ErrorCode FOLIO_INFO_NOT_EXISTS = new ErrorCode(1010012000, "房单信息不存在");
+
 
 }

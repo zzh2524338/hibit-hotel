@@ -64,7 +64,7 @@ public class OrderInfoBaseBO {
     private String bookingPerson;
     @Schema(description = "联系人")
     @NotBlank(message = "联系人不能为空")
-    private String contractName;
+    private String contactName;
     @Schema(description = "联系电话")
     @NotBlank(message = "联系电话不能为空")
     private String mobile;

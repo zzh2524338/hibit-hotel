@@ -1,9 +1,11 @@
 package cn.iocoder.yudao.module.hotel.service.orderinfo;
 
 import cn.hutool.core.util.EnumUtil;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.IdcardUtil;
 import cn.hutool.core.util.IdcardUtil.Idcard;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.framework.common.util.json.JsonUtils;
 import cn.iocoder.yudao.module.hotel.controller.admin.order.bo.GuestCheckInInformation;
 import cn.iocoder.yudao.module.hotel.controller.admin.order.bo.OrderInfoBaseBO;
 import cn.iocoder.yudao.module.hotel.controller.admin.order.bo.OrderInfoBookGuest;
@@ -13,11 +15,13 @@ import cn.iocoder.yudao.module.hotel.controller.admin.orderinfo.vo.OrderInfoPage
 import cn.iocoder.yudao.module.hotel.controller.admin.orderinfo.vo.OrderInfoUpdateReqVO;
 import cn.iocoder.yudao.module.hotel.convert.guesthistory.GuestHistoryConvert;
 import cn.iocoder.yudao.module.hotel.convert.orderinfo.OrderInfoConvert;
+import cn.iocoder.yudao.module.hotel.dal.dataobject.folioinfo.FolioInfoDO;
 import cn.iocoder.yudao.module.hotel.dal.dataobject.guesthistory.GuestHistoryDO;
 import cn.iocoder.yudao.module.hotel.dal.dataobject.orderinfo.OrderInfoDO;
 import cn.iocoder.yudao.module.hotel.dal.dataobject.roomratetype.RoomRateTypeDO;
 import cn.iocoder.yudao.module.hotel.dal.dataobject.roomtype.RoomTypeDO;
 import cn.iocoder.yudao.module.hotel.dal.dataobject.roomtyperate.RoomTypeRateDO;
+import cn.iocoder.yudao.module.hotel.dal.mysql.folioinfo.FolioInfoMapper;
 import cn.iocoder.yudao.module.hotel.dal.mysql.guesthistory.GuestHistoryMapper;
 import cn.iocoder.yudao.module.hotel.dal.mysql.guestinfo.GuestInfoMapper;
 import cn.iocoder.yudao.module.hotel.dal.mysql.memberinfo.MemberInfoMapper;
@@ -27,6 +31,7 @@ import cn.iocoder.yudao.module.hotel.dal.mysql.roomratetype.RoomRateTypeMapper;
 import cn.iocoder.yudao.module.hotel.dal.mysql.roomtype.RoomTypeMapper;
 import cn.iocoder.yudao.module.hotel.dal.mysql.roomtyperate.RoomTypeRateMapper;
 import cn.iocoder.yudao.module.hotel.enums.CardTypeEnum;
+import cn.iocoder.yudao.module.hotel.enums.OrderStatusEnum;
 import cn.iocoder.yudao.module.hotel.service.guesthistory.GuestHistoryService;
 import cn.iocoder.yudao.module.hotel.service.guestinfo.GuestInfoService;
 import cn.iocoder.yudao.module.hotel.service.memberinfo.MemberInfoService;
@@ -92,6 +97,8 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     private GuestHistoryService guestHistoryService;
     @Resource
     private GuestHistoryMapper guestHistoryMapper;
+    @Resource
+    private FolioInfoMapper folioInfoMapper;
 
 
     @Override
@@ -218,11 +225,30 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             this.processGuestInfo(orderInfoBookGuest);
         }
 
-        // 创建订单
+        String orderUuid = IdUtil.getSnowflakeNextIdStr();
+        // 保存订单信息
         OrderInfoDO orderInfoDO = OrderInfoConvert.INSTANCE.convert(req);
+        orderInfoDO.setUuid(orderUuid)
+                .setStatus(OrderStatusEnum.ORDERED.getValue())
+                .setOriginalPrice(orderAccountSum)
+                .setRoomInfo(JsonUtils.toJsonString(req.getOrderInfoBookGuests()));
 
+        orderInfoMapper.insert(orderInfoDO);
+
+        // 保存房单
+        this.saveFolioInfo(req, orderInfoDO.getId());
     }
 
+    /**
+     * 处理房价，查询数据库中的信息，并与前端传入的比较
+     * 用于计算订单总价
+     *
+     * @param req
+     * @param orderAccountSum
+     * @param roomTypeId
+     * @param frontendRoomRate
+     * @return
+     */
     private BigDecimal processRoomRate(OrderInfoBaseBO req, BigDecimal orderAccountSum, Long roomTypeId,
             String frontendRoomRate) {
         // 房间类型
@@ -249,6 +275,37 @@ public class OrderInfoServiceImpl implements OrderInfoService {
 
         orderAccountSum = orderAccountSum.add(roomRate);
         return orderAccountSum;
+    }
+
+
+    /**
+     * 保存房单信息
+     */
+    private void saveFolioInfo(OrderInfoBaseBO req, Long orderId) {
+
+        List<FolioInfoDO> folioInfoDOS = req.getOrderInfoBookGuests()
+                .stream()
+                .map(
+                        orderInfoBookGuest -> {
+                            Long roomId = orderInfoBookGuest.getRoomId();
+
+                            return new FolioInfoDO()
+                                    // 如果有id 就说明排房了
+                                    .setStatus(roomId == null ? 1 : 2)
+                                    .setOrderId(orderId)
+                                    .setRoomId(roomId)
+                                    .setArrivalTime(orderInfoBookGuest.getArrivalTime())
+                                    .setDepartTime(orderInfoBookGuest.getDepartTime())
+                                    .setRoomTypeId(orderInfoBookGuest.getRoomTypeId())
+                                    .setGuestInfo(JsonUtils.toJsonString(orderInfoBookGuest.getGuestCheckInInfoList()));
+                        }
+                )
+                .collect(Collectors.toList());
+
+        log.info("saveFolioInfos: size:{}", folioInfoDOS.size());
+
+        folioInfoMapper.insertBatch(folioInfoDOS);
+        log.info("save folioInfos successfully");
     }
 
     /**

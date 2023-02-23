@@ -36,6 +36,7 @@ public interface OrderInfoConvert {
 
     @Mappings({
                 @Mapping(source = "orderNo", target = "id"),
+                @Mapping(source = "mobile", target = "contactNumber"),
             }
     )
     OrderInfoDO convert(OrderInfoBaseBO bean);

@@ -109,28 +109,93 @@
                 @pagination="getList"/>
 
     <!-- 对话框(添加 / 修改) -->
-    <el-dialog :title="title" :visible.sync="open" width="700px" v-dialogDrag append-to-body>
+    <el-dialog :title="title" :visible.sync="open" width="1000px" v-dialogDrag append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="预定人" prop="bookingPerson">
-          <el-input v-model="form.bookingPerson" placeholder="请输入预定人"/>
-        </el-form-item>
-        <el-row>
-          <el-col :span="10">
+        <el-row :gutter="20">
+          <el-col :span="6">
+            <el-form-item label="预定人" prop="bookingPerson">
+              <el-input v-model="form.bookingPerson" placeholder="请输入预定人"/>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="6">
+            <el-button type="primary" @click="queryMemberInfo(form.id)">查询</el-button>
+          </el-col>
+        </el-row>
+
+        <el-row :gutter="20">
+          <el-col :span="6">
             <el-form-item label="联系人" prop="contactName">
               <el-input v-model="form.contactName" placeholder="请输入联系人"/>
             </el-form-item>
           </el-col>
 
-          <el-col :span="14">
+          <el-col :span="6">
             <el-form-item label="联系电话" prop="contactNumber">
               <el-input v-model="form.contactNumber" placeholder="请输入联系电话"/>
             </el-form-item>
           </el-col>
+
+          <el-col :span="6">
+            <el-form-item label="中介号" prop="agencyCode">
+              <el-input v-model="form.agencyCode" placeholder="请输入中介号"/>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="6">
+            <el-form-item label="房价类型" prop="roomRateTypeId">
+              <el-input v-model="form.roomRateTypeId" placeholder="请输入房价类型"/>
+            </el-form-item>
+          </el-col>
         </el-row>
 
-        <el-form-item label="中介号" prop="agencyCode">
-          <el-input v-model="form.agencyCode" placeholder="请输入中介号"/>
-        </el-form-item>
+        <el-row :gutter="20">
+          <el-col :span="6">
+            <el-form-item label="入住时间" prop="arrivalTime">
+              <el-date-picker clearable editable v-model="form.arrivalTime" type="date" value-format="timestamp"
+                              placeholder="选择入住时间" size="small"/>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="6">
+            <el-form-item label="离店时间" prop="departTime">
+              <el-date-picker clearable v-model="form.departTime" type="date" value-format="timestamp"
+                              placeholder="选择离店时间" size="small"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="是否担保" prop="assure" custom-class="assure-selector">
+              <el-select v-model="queryParams.assure" placeholder="是否担保" clearable size="small">
+                <el-option v-for="dict in this.getDictDatas(DICT_TYPE.HOTEL_ASSURE)"
+                           :key="dict.value" :label="dict.label" :value="dict.value"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="6">
+            <el-form-item label="担保时间" prop="assureTime">
+              <el-time-select
+                v-model="form.assureTime"
+                :picker-options="{start: '00:30', step: '00:30', end: '23:00'}"
+                placeholder="选择担保时间" size="small">
+              </el-time-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row :gutter="20">
+          <el-col :span="6">
+            <el-form-item label="会员卡号" prop="memberId">
+              <el-input v-model="form.memberId" disabled="true"/>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="6">
+            <el-form-item label="会员类型" prop="memberTypeId">
+              <el-input v-model="form.memberTypeId" disabled="true"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-form-item label="客人信息" prop="bookingGuestInfo">
           <el-input v-model="form.bookingGuestInfo" placeholder="请输入客人信息"/>
         </el-form-item>
@@ -142,47 +207,6 @@
           <el-input v-model="form.sourceSubId" placeholder="请输入订单来源(小类)"/>
         </el-form-item>
 
-        <el-row>
-          <el-col :span="8">
-            <el-form-item label="是否担保" prop="assure">
-              <el-select v-model="queryParams.assure" placeholder="是否担保" clearable size="small">
-                <el-option v-for="dict in this.getDictDatas(DICT_TYPE.HOTEL_ASSURE)"
-                           :key="dict.value" :label="dict.label" :value="dict.value"/>
-              </el-select>
-            </el-form-item>
-          </el-col>
-
-          <el-col :span="16">
-            <el-form-item label="担保时间" prop="assureTime">
-              <!--              <el-time-select clearable v-model="form.assureTime" type="date" value-format="timestamp"-->
-              <!--                              placeholder="选择担保时间"/>-->
-              <el-time-select
-                v-model="form.assureTime"
-                :picker-options="{start: '00:30', step: '00:30', end: '23:00'}"
-                placeholder="选择时间">
-              </el-time-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-form-item label="房价类型" prop="roomRateTypeId">
-          <el-input v-model="form.roomRateTypeId" placeholder="请输入房价类型"/>
-        </el-form-item>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="入住时间" prop="arrivalTime">
-              <el-date-picker clearable v-model="form.arrivalTime" type="date" value-format="timestamp"
-                              placeholder="选择入住时间"/>
-            </el-form-item>
-          </el-col>
-
-          <el-col :span="12">
-            <el-form-item label="离店时间" prop="departTime">
-              <el-date-picker clearable v-model="form.departTime" type="date" value-format="timestamp"
-                              placeholder="选择离店时间"/>
-            </el-form-item>
-          </el-col>
-        </el-row>
 
         <el-form-item label="客源" prop="guestsSourceId">
           <el-input v-model="form.guestsSourceId" placeholder="请输入客源"/>
@@ -377,6 +401,13 @@ export default {
         });
       });
     },
+    /**
+     * 查询顾客信息，包括会员信息
+     */
+    queryMemberInfo(memberId) {
+      this.open = true;
+      this.title = "请选择预订会员";
+    },
     /** 删除按钮操作 */
     handleDelete(row) {
       const id = row.id;
@@ -406,3 +437,12 @@ export default {
   }
 };
 </script>
+<style>
+.el-date-editor.el-input, .el-date-editor.el-input__inner {
+  width: 140px;
+}
+
+.assure-selector {
+
+}
+</style>

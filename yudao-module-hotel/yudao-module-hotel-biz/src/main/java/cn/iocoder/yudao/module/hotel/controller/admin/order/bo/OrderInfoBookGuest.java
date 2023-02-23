@@ -29,6 +29,8 @@ public class OrderInfoBookGuest {
     @Schema(description = "是否忽略房间状态")
     private Boolean ignoreRoomStatus;
 
+    @Schema(description = "房间编号")
+    private Long roomId;
     @Schema(description = "房间号")
     private String roomNo;
 

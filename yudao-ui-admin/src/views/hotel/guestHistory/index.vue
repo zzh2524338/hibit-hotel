@@ -175,6 +175,7 @@ export default {
         phone: null,
         cardNo: null,
         memberId: null,
+        memberTypeId: null,
         latestCheckin: null,
         checkinNum: null,
       },
