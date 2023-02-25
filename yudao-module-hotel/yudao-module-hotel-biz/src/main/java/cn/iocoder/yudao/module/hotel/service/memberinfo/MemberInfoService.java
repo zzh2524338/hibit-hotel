@@ -5,6 +5,7 @@ import cn.iocoder.yudao.module.hotel.controller.admin.memberinfo.vo.MemberInfoCr
 import cn.iocoder.yudao.module.hotel.controller.admin.memberinfo.vo.MemberInfoExportReqVO;
 import cn.iocoder.yudao.module.hotel.controller.admin.memberinfo.vo.MemberInfoPageReqVO;
 import cn.iocoder.yudao.module.hotel.controller.admin.memberinfo.vo.MemberInfoUpdateReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.memberinfo.vo.MemberInfoVO;
 import cn.iocoder.yudao.module.hotel.dal.dataobject.memberinfo.MemberInfoDO;
 
 import javax.validation.Valid;
@@ -71,6 +72,14 @@ public interface MemberInfoService {
      * @return 会员信息分页
      */
     PageResult<MemberInfoDO> getMemberInfoPage(MemberInfoPageReqVO pageReqVO);
+
+    /**
+     * 获得会员信息分页
+     *
+     * @param pageReqVO 分页查询
+     * @return 会员信息分页
+     */
+    PageResult<MemberInfoVO> getMemberInfoPageByName(MemberInfoPageReqVO pageReqVO);
 
     /**
      * 获得会员信息列表, 用于 Excel 导出

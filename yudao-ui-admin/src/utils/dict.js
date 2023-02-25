@@ -89,6 +89,8 @@ export const DICT_TYPE = {
   HOTEL_CARD_TYPE: 'hotel_card_type', // 证件类型
   HOTEL_ROOM_CLEAN_STATUS: 'hotel_room_clean_status', // 证件类型
   HOTEL_ASSURE: 'hotel_assure', // 是否担保
+  HOTEL_ORDER_SOURCE: 'hotel_order_source', // 订单来源
+  HOTEL_GUEST_TYPE: 'hotel_guest_type', // 客源结构
 
 }
 

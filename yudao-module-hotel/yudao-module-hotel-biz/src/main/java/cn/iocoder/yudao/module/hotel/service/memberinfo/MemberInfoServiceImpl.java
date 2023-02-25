@@ -5,27 +5,34 @@ import cn.iocoder.yudao.module.hotel.controller.admin.memberinfo.vo.MemberInfoCr
 import cn.iocoder.yudao.module.hotel.controller.admin.memberinfo.vo.MemberInfoExportReqVO;
 import cn.iocoder.yudao.module.hotel.controller.admin.memberinfo.vo.MemberInfoPageReqVO;
 import cn.iocoder.yudao.module.hotel.controller.admin.memberinfo.vo.MemberInfoUpdateReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.memberinfo.vo.MemberInfoVO;
 import cn.iocoder.yudao.module.hotel.convert.memberinfo.MemberInfoConvert;
 import cn.iocoder.yudao.module.hotel.dal.dataobject.memberinfo.MemberInfoDO;
 import cn.iocoder.yudao.module.hotel.dal.dataobject.memberlevel.MemberLevelDO;
 import cn.iocoder.yudao.module.hotel.dal.mysql.memberinfo.MemberInfoMapper;
 import cn.iocoder.yudao.module.hotel.dal.mysql.memberlevel.MemberLevelMapper;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import javax.annotation.Resource;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
 import static cn.iocoder.yudao.module.hotel.enums.ErrorCodeConstants.MEMBER_INFO_NOT_EXISTS;
 import static cn.iocoder.yudao.module.hotel.enums.ErrorCodeConstants.MEMBER_LEVEL_NOT_EXISTS;
+import static cn.iocoder.yudao.module.hotel.enums.ErrorCodeConstants.MEMBER_NAME_CANNOT_BE_BLANK;
 
 /**
  * 会员信息 Service 实现类
  *
  * @author hibit
  */
+@Slf4j
 @Service
 @Validated
 public class MemberInfoServiceImpl implements MemberInfoService {
@@ -87,6 +94,33 @@ public class MemberInfoServiceImpl implements MemberInfoService {
     @Override
     public List<MemberInfoDO> getMemberInfoList(Collection<Long> ids) {
         return memberInfoMapper.selectBatchIds(ids);
+    }
+
+    @Override
+    public PageResult<MemberInfoVO> getMemberInfoPageByName(MemberInfoPageReqVO pageReqVO) {
+        if (StringUtils.isBlank(pageReqVO.getName())) {
+            log.error("getMemberInfoPageByName 报错，pageReqVO:{}", pageReqVO);
+            throw exception(MEMBER_NAME_CANNOT_BE_BLANK);
+        }
+        PageResult<MemberInfoDO> memberInfoDOPageResult = memberInfoMapper.selectPageByNameOrMobileOrCard(pageReqVO);
+
+        Map<Long, MemberLevelDO> memberLevelDOMap = memberLevelMapper.selectList()
+                .stream()
+                .collect(Collectors.toMap(MemberLevelDO::getId, v -> v));
+
+        List<MemberInfoVO> memberInfoVOS = memberInfoDOPageResult.getList()
+                .stream()
+                .map(memberInfoDO -> {
+                    MemberInfoVO memberInfoVO = MemberInfoConvert.INSTANCE.convert02(memberInfoDO);
+                    MemberLevelDO memberLevelDO = memberLevelDOMap.get(memberInfoDO.getLevelId());
+                    if (memberLevelDO != null) {
+                        memberInfoVO.setLevelName(memberLevelDO.getName());
+                    }
+                    return memberInfoVO;
+                })
+                .toList();
+
+        return new PageResult<>(memberInfoVOS, memberInfoDOPageResult.getTotal());
     }
 
     @Override

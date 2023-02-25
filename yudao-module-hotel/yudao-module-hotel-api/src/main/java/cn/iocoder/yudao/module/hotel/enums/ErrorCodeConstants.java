@@ -29,7 +29,8 @@ public interface ErrorCodeConstants {
 
 
     // ========== 房型价格  1010006000 ============
-    ErrorCode ROOM_TYPE_RATE_NOT_EXISTS = new ErrorCode(1010006000, "没有查询到当前房型今日的价格,房型为:{}, 请检查是否设置");
+    ErrorCode ROOM_TYPE_RATE_NOT_EXISTS = new ErrorCode(1010006000,
+            "没有查询到当前房型今日的价格,房型为:{}, 请检查是否设置");
 
     // ========== 会员等级信息  1010007000 ============
     ErrorCode MEMBER_LEVEL_NOT_EXISTS = new ErrorCode(1010007000, "该会员等级不存在");
@@ -39,7 +40,9 @@ public interface ErrorCodeConstants {
     ErrorCode ID_CARD_INVALID = new ErrorCode(1010008001, "{},的身份证信息输入错误, 请检查:{}");
 
     // ========== 会员信息  1010009000 ============
-    ErrorCode MEMBER_INFO_NOT_EXISTS = new ErrorCode(1010009000, "改会员不存在");
+    ErrorCode MEMBER_INFO_NOT_EXISTS = new ErrorCode(1010009000, "该会员不存在");
+    ErrorCode MEMBER_NAME_CANNOT_BE_BLANK = new ErrorCode(1010009001, "会员名称不能为空");
+
 
     // ========== 订单信息  1010010000 ============
     ErrorCode ORDER_INFO_NOT_EXISTS = new ErrorCode(1010010000, "订单信息不存在");

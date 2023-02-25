@@ -5,6 +5,7 @@ import cn.iocoder.yudao.module.hotel.controller.admin.memberinfo.vo.MemberInfoCr
 import cn.iocoder.yudao.module.hotel.controller.admin.memberinfo.vo.MemberInfoExcelVO;
 import cn.iocoder.yudao.module.hotel.controller.admin.memberinfo.vo.MemberInfoRespVO;
 import cn.iocoder.yudao.module.hotel.controller.admin.memberinfo.vo.MemberInfoUpdateReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.memberinfo.vo.MemberInfoVO;
 import cn.iocoder.yudao.module.hotel.dal.dataobject.memberinfo.MemberInfoDO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -26,6 +27,7 @@ public interface MemberInfoConvert {
     MemberInfoDO convert(MemberInfoUpdateReqVO bean);
 
     MemberInfoRespVO convert(MemberInfoDO bean);
+    MemberInfoVO convert02(MemberInfoDO bean);
 
     List<MemberInfoRespVO> convertList(List<MemberInfoDO> list);
 

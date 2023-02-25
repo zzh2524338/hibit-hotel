@@ -43,6 +43,14 @@ export function getMemberInfoPage(query) {
   })
 }
 
+export function getMemberInfoPageByName(query) {
+  return request({
+    url: '/hotel/member-info/page/name',
+    method: 'get',
+    params: query
+  })
+}
+
 // 导出会员信息 Excel
 export function exportMemberInfoExcel(query) {
   return request({

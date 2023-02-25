@@ -10,6 +10,7 @@ import cn.iocoder.yudao.module.hotel.controller.admin.memberinfo.vo.MemberInfoEx
 import cn.iocoder.yudao.module.hotel.controller.admin.memberinfo.vo.MemberInfoPageReqVO;
 import cn.iocoder.yudao.module.hotel.controller.admin.memberinfo.vo.MemberInfoRespVO;
 import cn.iocoder.yudao.module.hotel.controller.admin.memberinfo.vo.MemberInfoUpdateReqVO;
+import cn.iocoder.yudao.module.hotel.controller.admin.memberinfo.vo.MemberInfoVO;
 import cn.iocoder.yudao.module.hotel.convert.memberinfo.MemberInfoConvert;
 import cn.iocoder.yudao.module.hotel.dal.dataobject.memberinfo.MemberInfoDO;
 import cn.iocoder.yudao.module.hotel.service.memberinfo.MemberInfoService;
@@ -39,21 +40,21 @@ import static cn.iocoder.yudao.framework.operatelog.core.enums.OperateTypeEnum.E
 
 @Tag(name = "管理后台 - 会员信息")
 @RestController
-@RequestMapping("/hotel/member-info")
+@RequestMapping("/hotel")
 @Validated
 public class MemberInfoController {
 
     @Resource
     private MemberInfoService memberInfoService;
 
-    @PostMapping("/create")
+    @PostMapping("member-info/create")
     @Operation(summary = "创建会员信息")
     @PreAuthorize("@ss.hasPermission('hotel:member-info:create')")
     public CommonResult<Long> createMemberInfo(@Valid @RequestBody MemberInfoCreateReqVO createReqVO) {
         return success(memberInfoService.createMemberInfo(createReqVO));
     }
 
-    @PutMapping("/update")
+    @PutMapping("member-info/update")
     @Operation(summary = "更新会员信息")
     @PreAuthorize("@ss.hasPermission('hotel:member-info:update')")
     public CommonResult<Boolean> updateMemberInfo(@Valid @RequestBody MemberInfoUpdateReqVO updateReqVO) {
@@ -61,7 +62,7 @@ public class MemberInfoController {
         return success(true);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("member-info/delete")
     @Operation(summary = "删除会员信息")
     @Parameter(name = "编号", required = true)
     @PreAuthorize("@ss.hasPermission('hotel:member-info:delete')")
@@ -70,7 +71,7 @@ public class MemberInfoController {
         return success(true);
     }
 
-    @GetMapping("/get")
+    @GetMapping("member-info/get")
     @Operation(summary = "获得会员信息")
     @Parameter(name = "id 编号", required = true, example = "1024")
     @PreAuthorize("@ss.hasPermission('hotel:member-info:query')")
@@ -79,7 +80,7 @@ public class MemberInfoController {
         return success(MemberInfoConvert.INSTANCE.convert(memberInfo));
     }
 
-    @GetMapping("/list")
+    @GetMapping("member-info/list")
     @Operation(summary = "获得会员信息列表")
     @Parameter(name = "ids 编号列表", required = true, example = "1024,2048")
     @PreAuthorize("@ss.hasPermission('hotel:member-info:query')")
@@ -88,7 +89,7 @@ public class MemberInfoController {
         return success(MemberInfoConvert.INSTANCE.convertList(list));
     }
 
-    @GetMapping("/page")
+    @GetMapping("member-info/page")
     @Operation(summary = "获得会员信息分页")
     @PreAuthorize("@ss.hasPermission('hotel:member-info:query')")
     public CommonResult<PageResult<MemberInfoRespVO>> getMemberInfoPage(@Valid MemberInfoPageReqVO pageVO) {
@@ -96,7 +97,13 @@ public class MemberInfoController {
         return success(MemberInfoConvert.INSTANCE.convertPage(pageResult));
     }
 
-    @GetMapping("/export-excel")
+    @GetMapping("member-info/page/name")
+    @Operation(summary = "获得会员信息分页")
+    @PreAuthorize("@ss.hasPermission('hotel:member-info:query')")
+    public CommonResult<PageResult<MemberInfoVO>> getMemberInfoPageByName(@Valid MemberInfoPageReqVO pageVO) {
+        return success(memberInfoService.getMemberInfoPageByName(pageVO));
+    }
+    @GetMapping("member-info/export-excel")
     @Operation(summary = "导出会员信息 Excel")
     @PreAuthorize("@ss.hasPermission('hotel:member-info:export')")
     @OperateLog(type = EXPORT)
